@@ -81,7 +81,7 @@ export const PublicHeroPage: React.FC = () => {
           </div>
 
           {/* Right Column: Floating Mock Card Presentation */}
-          <div className="lg:col-span-5 flex justify-center items-center">
+          <div className="lg:col-span-5 flex justify-center items-center hidden lg:block">
             <div className="relative w-full max-w-[380px] hover:scale-[1.02] transition-transform duration-500">
 
               {/* Back ambient circles */}
@@ -89,7 +89,7 @@ export const PublicHeroPage: React.FC = () => {
               <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full bg-emerald-500/5 blur-2xl"></div>
 
               {/* Floating Active Question Card Mock */}
-              <div className="relative bg-[#121212] rounded-xl border border-zinc-800 p-6 shadow-2xl z-10">
+              <div className="relative bg-[#121212] rounded-xl border border-zinc-700 p-6 shadow-2xl z-10">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500">
                     MARKET SIZING
@@ -114,8 +114,8 @@ export const PublicHeroPage: React.FC = () => {
               </div>
 
               {/* Stack effect behind active card */}
-              <div className="absolute top-4 left-4 right-4 h-full bg-[#121212]/75 border border-zinc-800/60 rounded-xl -z-10 shadow-lg transform rotate-2"></div>
-              <div className="absolute top-8 left-8 right-8 h-full bg-[#121212]/40 border border-zinc-800/30 rounded-xl -z-20 shadow-md transform -rotate-3"></div>
+              <div className="absolute top-4 left-4 right-4 h-full bg-[#121212]/75 border border-zinc-700/60 rounded-xl -z-10 shadow-lg transform rotate-2"></div>
+              <div className="absolute top-8 left-8 right-8 h-full bg-[#121212]/40 border border-zinc-700/30 rounded-xl -z-20 shadow-md transform -rotate-3"></div>
 
             </div>
           </div>
@@ -268,7 +268,7 @@ export const PublicHeroPage: React.FC = () => {
       </section > */}
 
       {/* Footer banner block */}
-      <footer className="bg-[#050505] text-zinc-400 py-6 px-6 mt-auto text-center border-t border-zinc-850">
+      <footer className="bg-[#050505] text-zinc-400 py-5 px-6 mt-auto text-center border-t border-zinc-850">
         <div className="max-w-2xl mx-auto flex flex-col items-center gap-6">
           {/* <h2 className="font-serif italic text-white text-2xl sm:text-3xl leading-tight">
             Ready to think in parameters?
@@ -288,7 +288,7 @@ export const PublicHeroPage: React.FC = () => {
             <div>&copy; 2026 Soham Banerjee. Version 1.0</div>
             <div>PLAY.SIDELOWER.IN</div>
           </div> */}
-          <div className="mt-6 pt-3 w-full text-[10px] text-zinc-650 font-mono flex items-center justify-between">
+          <div className="mt-0 pt-3 w-full text-[10px] text-zinc-650 font-mono flex items-center justify-between">
             <div>&copy; 2026 Soham Banerjee. Version 1.0</div>
             <div>PLAY.SIDELOWER.IN</div>
           </div>

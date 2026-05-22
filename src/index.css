@@ -114,7 +114,7 @@ body {
 
 .hero-dot-drift {
   background-color: #0A0A0A;
-  background-image: radial-gradient(circle, #1F1F22 1px, transparent 1px);
+  background-image: radial-gradient(circle, #2f2f4c 1.5px, transparent 5px);
   background-size: 24px 24px;
   animation: bgDrift 20s linear infinite;
 }
