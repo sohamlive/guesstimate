@@ -6,7 +6,7 @@
   --font-display: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
-  
+
   /* Core Palette for Sophisticated Dark */
   --color-bg-base: #0A0A0A;
   --color-bg-canvas: #0D0D0D;
@@ -15,11 +15,11 @@
   --color-bg-card: #121212;
   --color-bg-surface: #141414;
   --color-bg-muted: #1A1A1A;
-  
+
   --color-brand-primary: #FFFFFF;
   --color-brand-primary-hover: #E4E4E7;
   --color-brand-primary-light: #18181B;
-  
+
   --color-brand-accent: #FFFFFF;
   --color-brand-accent-hover: #E4E4E7;
 }
@@ -27,14 +27,16 @@
 /* Custom Base styles to match Sophisticated Dark & Light */
 body {
   background-color: #0A0A0A;
-  color: #D4D4D8; /* zinc-300 */
+  color: #D4D4D8;
+  /* zinc-300 */
   font-family: var(--font-sans);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.light {
   background-color: #F9F9FB;
-  color: #3F3F46; /* zinc-700 */
+  color: #3F3F46;
+  /* zinc-700 */
 }
 
 /* Custom scrollbars for Dark & Light Themes */
@@ -42,13 +44,16 @@ body.light {
   width: 6px;
   height: 6px;
 }
+
 body:not(.light) ::-webkit-scrollbar-track {
   background: #050505;
 }
+
 body:not(.light) ::-webkit-scrollbar-thumb {
   background: #27272A;
   border-radius: 3px;
 }
+
 body:not(.light) ::-webkit-scrollbar-thumb:hover {
   background: #3F3F46;
 }
@@ -56,35 +61,37 @@ body:not(.light) ::-webkit-scrollbar-thumb:hover {
 body.light ::-webkit-scrollbar-track {
   background: #F1F1F4;
 }
+
 body.light ::-webkit-scrollbar-thumb {
   background: #D4D4D8;
   border-radius: 3px;
 }
+
 body.light ::-webkit-scrollbar-thumb:hover {
   background: #A1A1AA;
 }
 
 /* Custom card category dot grids - modified to look premium dark in Sophisticated Dark */
 .card-population {
-  background-color: #241B18; 
+  background-color: #241B18;
   background-image: radial-gradient(circle, #3D2D28 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
 .card-market-sizing {
-   background-color: #1B1826; 
+  background-color: #1B1826;
   background-image: radial-gradient(circle, #332A47 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
 .card-fermi-estimate {
-  background-color: #171E1B; 
+  background-color: #171E1B;
   background-image: radial-gradient(circle, #25332F 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
 .card-scientific {
-  background-color: #181D24; 
+  background-color: #181D24;
   background-image: radial-gradient(circle, #263142 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
@@ -109,22 +116,27 @@ body.light .card-population {
   background-color: #FFF9F6;
   background-image: radial-gradient(circle, #FBE0D3 1.5px, transparent 1.5px);
 }
+
 body.light .card-market-sizing {
   background-color: #F8F6FF;
   background-image: radial-gradient(circle, #E1DBFA 1.5px, transparent 1.5px);
 }
+
 body.light .card-fermi-estimate {
   background-color: #F3FCF9;
   background-image: radial-gradient(circle, #CFEFE7 1.5px, transparent 1.5px);
 }
+
 body.light .card-scientific {
   background-color: #F4FAFF;
   background-image: radial-gradient(circle, #D2E7FC 1.5px, transparent 1.5px);
 }
+
 body.light .card-default {
   background-color: #FAFAFA;
   background-image: radial-gradient(circle, #E4E4E7 1.5px, transparent 1.5px);
 }
+
 body.light .card-solved {
   background-color: #F2F2F2;
   background-image: radial-gradient(circle, #DBDBDB 1.5px, transparent 1.5px);
@@ -132,27 +144,27 @@ body.light .card-solved {
   opacity: 0.9;
 }
 
-/* Subtly animated drifting background for the Hero section in dark mode */
 @keyframes bgDrift {
   0% {
     background-position: 0px 0px;
   }
 
   100% {
-    background-position: 36px 36px;
+    background-position: 24px 24px;
   }
 }
 
 .hero-dot-drift {
-  background-color: #0A0A0A;
-  background-image: radial-gradient(circle, #2f2f4c 1.5px, transparent 5px);
+  background-color: #000000;
+  /* Fuzzy adjustment: Solid color until 1.5px, then smoothly fades out to transparent by 5px */
+  background-image: radial-gradient(circle at center, #7877c64d 1.5px, #7876c626 3.5px, transparent 5px);
   background-size: 24px 24px;
-  animation: bgDrift 20s linear infinite;
+  animation: bgDrift 10s linear infinite;
   transition: background-color 0.3s ease;
 }
 
 body.light .hero-dot-drift {
   background-color: #FAFAFB;
-  background-image: radial-gradient(circle, #D4D4E8 2px, transparent 5px);
+  /* Light mode alternative: Soft slate-indigo glow shadow */
+  background-image: radial-gradient(circle at center, #5a5d934d 1.5px, #5a5d931a 3.5px, transparent 5px);
 }
-

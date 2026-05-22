@@ -298,13 +298,6 @@ export const UserDashboard: React.FC = () => {
           <div className="flex items-center gap-3 shrink-0">
 
             {/* Theme toggle Button */}
-            {/* <button
-              onClick={toggleTheme}
-              className={`p-2 border transition-all rounded-xl cursor-pointer ${isLight ? 'border-zinc-300 text-zinc-700 bg-zinc-100 hover:bg-zinc-200' : 'border-zinc-850 text-zinc-300 bg-zinc-900 hover:bg-zinc-800/80'}`}
-              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
-            >
-              {isLight ? <Moon size={14} /> : <Sun size={14} />}
-            </button> */}
             <button
               onClick={toggleTheme}
               className={`p-2 border transition-all duration-200 rounded-xl cursor-pointer ${isLight
@@ -461,15 +454,15 @@ export const UserDashboard: React.FC = () => {
       </section>
 
       {/* Main card grid container */}
-      <main className="flex-grow max-w-7xl mx-auto px-6 py-8 w-full flex flex-col justify-between">
+      <main className="grow max-w-7xl mx-auto px-6 py-8 w-full flex flex-col justify-between">
 
         {loading ? (
           /* Skeletons loader */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className={`rounded-xl p-5 min-h-[190px] animate-pulse flex flex-col justify-between border ${isLight ? 'bg-white border-zinc-250' : 'bg-[#121212] border-zinc-805/85 border-zinc-800/80'}`}>
+              <div key={i} className={`rounded-xl p-5 min-h-[190px] animate-pulse flex flex-col justify-between border ${isLight ? 'bg-white border-zinc-250' : 'bg-bg-card border-zinc-805/85 border-zinc-800/80'}`}>
                 <div className={`h-4 rounded-md w-1/3 mb-4 ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
-                <div className="space-y-2 flex-grow">
+                <div className="space-y-2 grow">
                   <div className={`h-4 rounded-md w-full ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
                   <div className={`h-4 rounded-md w-4/5 ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
                 </div>

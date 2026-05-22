@@ -47,27 +47,57 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
   //       return 'card-default border border-zinc-850 shadow-lg shadow-black/30';
   //   }
   // };
+
+  // ------------------------------
+  // GOOD CARD BACKGROUND
+  // ------------------------------
+  // const getCardBgClass = () => {
+  //   if (progressStatus === 'solved') {
+  //     return 'card-solved border border-zinc-300 dark:border-zinc-800/80 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-sm';
+  //   }
+
+  //   switch (question.category_name) {
+  //     case 'Population':
+  //       return 'card-population border border-[#ED946D]/30 hover:border-[#ED946D]/80 shadow-lg shadow-black/30 hover:shadow-[#ED946D]/10';
+
+  //     case 'Market Sizing':
+  //       return 'card-market-sizing border border-[#A594DC]/30 hover:border-[#A594DC]/80 shadow-lg shadow-black/30 hover:shadow-[#A594DC]/10';
+
+  //     case 'Fermi Estimate':
+  //       return 'card-fermi-estimate border border-[#76BCB2]/30 hover:border-[#76BCB2]/80 shadow-lg shadow-black/30 hover:shadow-[#76BCB2]/10';
+
+  //     case 'Scientific':
+  //       return 'card-scientific border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 hover:shadow-[#74A9DF]/10';
+
+  //     default:
+  //       // Assuming border-zinc-800 for fallback, lighting up to a clean zinc-600
+  //       return 'card-default border border-zinc-300 dark:border-zinc-800 hover:border-zinc-450 dark:hover:border-zinc-600 shadow-lg shadow-black/30 hover:shadow-white/5';
+  //   }
+  // };
+
   const getCardBgClass = () => {
     if (progressStatus === 'solved') {
-      return 'card-solved border border-zinc-300 dark:border-zinc-800/80 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-sm';
+      // Solved state uses a subtle white glow in dark mode so it stands out calmly, rather than a colored glow
+      return 'card-solved border border-zinc-300 dark:border-zinc-800/80 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-sm dark:shadow-white/[0.02] dark:hover:shadow-white/[0.06]';
     }
 
     switch (question.category_name) {
       case 'Population':
-        return 'card-population border border-[#ED946D]/30 hover:border-[#ED946D]/80 shadow-lg shadow-black/30 hover:shadow-[#ED946D]/10';
+        return 'card-population border border-[#ED946D]/30 hover:border-[#ED946D]/80 shadow-lg shadow-black/30 dark:shadow-[#ED946D]/5 hover:shadow-[#ED946D]/10 dark:hover:shadow-[#ED946D]/20';
 
       case 'Market Sizing':
-        return 'card-market-sizing border border-[#A594DC]/30 hover:border-[#A594DC]/80 shadow-lg shadow-black/30 hover:shadow-[#A594DC]/10';
+        return 'card-market-sizing border border-[#A594DC]/30 hover:border-[#A594DC]/80 shadow-lg shadow-black/30 dark:shadow-[#A594DC]/5 hover:shadow-[#A594DC]/10 dark:hover:shadow-[#A594DC]/20';
 
       case 'Fermi Estimate':
-        return 'card-fermi-estimate border border-[#76BCB2]/30 hover:border-[#76BCB2]/80 shadow-lg shadow-black/30 hover:shadow-[#76BCB2]/10';
+        return 'card-fermi-estimate border border-[#76BCB2]/30 hover:border-[#76BCB2]/80 shadow-lg shadow-black/30 dark:shadow-[#76BCB2]/5 hover:shadow-[#76BCB2]/10 dark:hover:shadow-[#76BCB2]/20';
 
       case 'Scientific':
-        return 'card-scientific border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 hover:shadow-[#74A9DF]/10';
+        return 'card-scientific border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 dark:shadow-[#74A9DF]/5 hover:shadow-[#74A9DF]/10 dark:hover:shadow-[#74A9DF]/20';
 
       default:
-        // Assuming border-zinc-800 for fallback, lighting up to a clean zinc-600
-        return 'card-default border border-zinc-300 dark:border-zinc-800 hover:border-zinc-450 dark:hover:border-zinc-600 shadow-lg shadow-black/30 hover:shadow-white/5';
+        // Fixed the invalid 'hover:border-zinc-450' to standard 'hover:border-zinc-400'
+        // Uses a generic soft white/zinc halo in dark mode
+        return 'card-default border border-zinc-300 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-lg shadow-black/30 dark:shadow-white/[0.02] hover:shadow-zinc-400/10 dark:hover:shadow-white/[0.08]';
     }
   };
 
@@ -128,7 +158,7 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
       </div>
 
       {/* Question prompt */}
-      <div className="flex-grow flex items-center mb-5">
+      <div className="grow flex items-center mb-5">
         <h3 className={`font-serif text-base sm:text-lg leading-relaxed line-clamp-3 ${isLight ? 'text-zinc-900' : 'text-white'
           }`}>
           "{question.question}"

@@ -24,12 +24,22 @@ export const PublicHeroPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
+            {/* <button
               onClick={toggleTheme}
               className={`p-2 border transition-all rounded-lg cursor-pointer ${isLight ? 'border-zinc-300 text-zinc-700 hover:bg-zinc-150 hover:text-zinc-950' : 'border-zinc-700 text-zinc-300 hover:bg-zinc-900/80 hover:text-white'}`}
               title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
             >
               {isLight ? <Moon size={16} /> : <Sun size={16} />}
+            </button> */}
+            <button
+              onClick={toggleTheme}
+              className={`p-2 border transition-all duration-200 rounded-xl cursor-pointer ${isLight
+                ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
+                : 'border-zinc-800 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
+                }`}
+              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {isLight ? <Moon size={14} /> : <Sun size={14} />}
             </button>
             <button
               onClick={() => navigate('/login')}
@@ -48,12 +58,12 @@ export const PublicHeroPage: React.FC = () => {
           {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col gap-6 text-left">
 
-            <h1 className={`font-serif italic leading-tight tracking-tight text-4xl sm:text-5xl lg:text-6xl ${isLight ? 'text-zinc-950' : 'text-white'}`}>
+            <h1 className={`font-serif italic leading-tight tracking-tight text-4xl sm:text-5xl lg:text-6xl backdrop-blur-[1px] ${isLight ? 'text-zinc-950' : 'text-white'}`}>
               Sharpen Your <br className="hidden sm:inline" />
               <span className={`not-italic font-sans font-light ${isLight ? 'text-zinc-550' : 'text-zinc-400'}`}>Guesstimate</span> Thinking.
             </h1>
 
-            <p className={`font-sans text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed ${isLight ? 'text-zinc-650' : 'text-zinc-450'}`}>
+            <p className={`font-sans text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed backdrop-blur-[1px] ${isLight ? 'text-zinc-650' : 'text-zinc-450'}`}>
               From Enrico Fermi estimating an atomic blast's yield with scraps of paper in 1945, to modern market-sizing and scientific bounds. This is the home for your back-of-the-envelope calculations. Structure complex problems, filter by complexity, and map your progress.
             </p>
 
@@ -101,8 +111,8 @@ export const PublicHeroPage: React.FC = () => {
               </div>
 
               {/* Stack effect behind active card */}
-              <div className={`absolute top-4 left-4 right-4 h-full border rounded-xl -z-10 shadow-lg transform rotate-2 transition-colors ${isLight ? 'bg-white border-zinc-200/80' : 'bg-[#121212]/75 border-zinc-700/60'}`}></div>
-              <div className={`absolute top-8 left-8 right-8 h-full border rounded-xl -z-20 shadow-md transform -rotate-3 transition-colors ${isLight ? 'bg-white/65 border-zinc-200/40' : 'bg-[#121212]/40 border-zinc-700/30'}`}></div>
+              <div className={`absolute top-4 left-4 right-4 h-full border rounded-xl -z-10 shadow-lg transform rotate-2 transition-colors ${isLight ? 'bg-white border-zinc-200/80' : 'bg-bg-card/90 border-zinc-700/60'}`}></div>
+              <div className={`absolute top-8 left-8 right-8 h-full border rounded-xl -z-20 shadow-md transform -rotate-3 transition-colors ${isLight ? 'bg-white/65 border-zinc-200/40' : 'bg-bg-card/70 border-zinc-700/30'}`}></div>
 
             </div>
           </div>
@@ -114,20 +124,20 @@ export const PublicHeroPage: React.FC = () => {
       <section className={`border-y transition-colors duration-300 py-8 px-6 ${isLight ? 'bg-zinc-100/50 border-zinc-250 text-zinc-850' : 'bg-[#050505] border-zinc-800/80 text-white'}`}>
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center font-mono">
           <div>
-            <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">50+</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Analytical Challenges</span>
+            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">50+</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Analytical Challenges</span>
           </div>
           <div>
-            <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">4</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Core Classifications</span>
+            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">4</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Core Classifications</span>
           </div>
           <div>
-            <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">3</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Difficulty Levels</span>
+            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">3</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Difficulty Levels</span>
           </div>
           <div>
-            <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">100%</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Personal Progress Tracker</span>
+            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">100%</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Personal Progress Tracker</span>
           </div>
         </div>
       </section>
