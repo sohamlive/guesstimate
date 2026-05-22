@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { Question, Category, Profile, UserProgress, Difficulty, QuestionStatus } from '../types';
 import { db } from '../lib/db';
 import { ContentStudioModal } from '../components/ContentStudioModal';
 import { UserStudioModal } from '../components/UserStudioModal';
 import {
   Users, BarChart2, ShieldAlert, Edit, Trash2, Award, Plus,
-  Search, SlidersHorizontal, RotateCcw, AlertCircle, LogOut, CheckCircle, RefreshCw, BarChart3, ChevronLeft, ChevronRight, HelpCircle, X
+  Search, SlidersHorizontal, RotateCcw, AlertCircle, LogOut, CheckCircle, RefreshCw, BarChart3, ChevronLeft, ChevronRight, HelpCircle, X,
+  Sun, Moon
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 export const AdminDashboard: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+  const isLight = theme === 'light';
   const { session, logout } = useAuth();
   const adminName = session?.profile?.first_name || 'Admin';
 
@@ -173,29 +177,29 @@ export const AdminDashboard: React.FC = () => {
   const paginatedProfiles = filteredProfiles.slice((uPage - 1) * rowsPerPage, uPage * rowsPerPage);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-zinc-300 flex flex-col select-none">
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight ? 'bg-[#FAFAFB] text-zinc-700' : 'bg-[#0A0A0A] text-zinc-300'}`}>
 
       {/* Header bar */}
-      <nav className="bg-[#050505] border-b border-zinc-850 sticky top-0 z-40">
+      <nav className={`sticky top-0 z-40 transition-colors duration-300 border-b ${isLight ? 'bg-white border-zinc-200' : 'bg-[#050505] border-zinc-850'}`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-serif italic font-black text-xl shadow-md">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-serif italic font-black text-xl shadow-md transition-colors ${isLight ? 'bg-zinc-950 text-white' : 'bg-white text-black'}`}>
                 G.
               </div>
-              <span className="font-serif italic text-xl text-white">
+              <span className={`font-serif italic text-xl transition-colors ${isLight ? 'text-zinc-950' : 'text-white'}`}>
                 Hello, {adminName}!
               </span>
             </div>
 
             {/* Tab Swiffer */}
-            <div className="bg-zinc-900 border border-zinc-800 p-0.5 rounded-xl flex ml-4 text-xs font-semibold">
+            <div className={`p-0.5 rounded-xl flex ml-4 text-xs font-semibold transition-colors border ${isLight ? 'bg-zinc-100 border-zinc-250' : 'bg-zinc-900 border-zinc-800'}`}>
               <button
                 onClick={() => setActiveTab('guesstimates')}
                 className={`px-4 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'guesstimates'
-                    ? 'bg-white text-black font-semibold shadow-sm'
-                    : 'text-zinc-550 hover:text-white'
+                  ? (isLight ? 'bg-zinc-900 text-white font-semibold shadow-sm' : 'bg-white text-black font-semibold shadow-sm')
+                  : (isLight ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-400 hover:text-white')
                   }`}
               >
                 Guesstimates Library
@@ -203,11 +207,11 @@ export const AdminDashboard: React.FC = () => {
               <button
                 onClick={() => setActiveTab('users')}
                 className={`px-4 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'users'
-                    ? 'bg-white text-black font-semibold shadow-sm'
-                    : 'text-zinc-550 hover:text-white'
+                  ? (isLight ? 'bg-zinc-900 text-white font-semibold shadow-sm' : 'bg-white text-black font-semibold shadow-sm')
+                  : (isLight ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-400 hover:text-white')
                   }`}
               >
-                Practitioners Management
+                Users Management
               </button>
             </div>
           </div>
@@ -217,8 +221,19 @@ export const AdminDashboard: React.FC = () => {
               ADMIN CONTROL PANEL
             </span>
             <button
+              onClick={toggleTheme}
+              className={`p-2 border transition-all rounded-xl cursor-pointer ${isLight
+                ? 'border-zinc-250 text-zinc-700 bg-zinc-100 hover:bg-zinc-200'
+                : 'border-zinc-850 text-zinc-350 bg-zinc-900 hover:bg-zinc-805'
+                }`}
+              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {isLight ? <Moon size={13} /> : <Sun size={13} />}
+            </button>
+            <button
               onClick={logout}
-              className="flex items-center gap-1.5 text-xs text-red-500 font-semibold border border-red-950/40 bg-red-950/10 hover:bg-red-950/30 px-3.5 py-1.5 rounded-xl cursor-pointer transition-colors font-mono"
+              className={`flex items-center gap-1.5 text-xs text-red-500 font-semibold border bg-red-950/10 hover:bg-red-950/35 px-3.5 py-1.5 rounded-xl cursor-pointer transition-colors font-mono ${isLight ? 'border-red-200 hover:bg-red-50' : 'border-red-950/40'
+                }`}
             >
               <LogOut size={13} />
               <span className="hidden sm:inline">Sign Out</span>
@@ -233,44 +248,66 @@ export const AdminDashboard: React.FC = () => {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center p-12 text-center h-80">
-            <div className="w-10 h-10 rounded-full border-4 border-[#1A2E6C] border-t-transparent animate-spin mb-4"></div>
-            <span className="text-sm font-semibold text-gray-400 font-mono">LOADING CONTROL DESKS...</span>
+            <div className={`w-10 h-10 rounded-full border-4 border-t-transparent animate-spin mb-4 ${isLight ? 'border-zinc-900' : 'border-white'}`}></div>
+            <span className={`text-sm font-semibold font-mono ${isLight ? 'text-zinc-500' : 'text-gray-400'}`}>LOADING CONTROL DESKS...</span>
           </div>
         ) : activeTab === 'guesstimates' ? (
 
           /* ==========================================================
-             GUESSTIMATES MANAGEMENT DOMAIN
+             Guesstimates / GUESSTIMATES MANAGEMENT TAB
              ========================================================== */
           <div className="flex flex-col gap-6">
-
-            {/* Quick Metrics ribbon of Guesstimates */}
+            {/* Quick Metrics ribbon of Questions */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Challenges</span>
-                <span className="font-serif italic text-2xl text-white block mt-1">{totalQuestionsCount}</span>
-                <span className="text-[10px] text-zinc-600 block mt-1 font-mono">Global stored index</span>
-              </div>
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Categories Created</span>
-                <span className="font-serif italic text-2xl text-white block mt-1">{categoriesCount}</span>
-                <span className="text-[10px] text-zinc-600 block mt-1 font-mono">Dynamic classifications</span>
-              </div>
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Difficulty Split</span>
-                <span className="font-serif italic text-lg text-zinc-100 block mt-2.5 truncate font-mono">
-                  {easyQCount}E / {mediumQCount}M / {hardQCount}H
+
+              {/* Card 1: Total Questions - Indigo */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-zinc-50 border-zinc-200 shadow-sm'
+                : 'bg-[#121214] border-zinc-800 shadow-lg shadow-black/50 dark:shadow-indigo-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Questions</span>
+                <span className={`font-serif font-bold italic text-2xl block mt-1 ${isLight ? 'text-zinc-950' : 'text-indigo-400'}`}>
+                  {totalQuestionsCount}
                 </span>
               </div>
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Publishing Indices</span>
-                <span className="font-serif italic text-2xl text-emerald-500 block mt-1">
-                  {publishedQuestionsCount} <span className="text-zinc-500 text-xs font-mono font-normal">/ {draftQuestionsCount} Draft</span>
+
+              {/* Card 2: Categories - Purple */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-purple-50/40 border-purple-100 shadow-sm'
+                : 'bg-[#121017] border-purple-950/60 shadow-lg shadow-black/50 dark:shadow-purple-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Categories</span>
+                <span className={`font-serif font-bold italic text-2xl block mt-1 ${isLight ? 'text-purple-900' : 'text-purple-400'}`}>
+                  {categoriesCount}
                 </span>
               </div>
+
+              {/* Card 3: Difficulty Split - Amber */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-amber-50/40 border-amber-100 shadow-sm'
+                : 'bg-[#14110D] border-amber-950/60 shadow-lg shadow-black/50 dark:shadow-amber-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Difficulty Split</span>
+                <span className={`font-serif font-bold text-lg italic block mt-2.5 truncate ${isLight ? 'text-amber-900' : 'text-amber-400'}`}>
+                  {easyQCount} Easy / {mediumQCount} Medium / {hardQCount} Hard
+                </span>
+              </div>
+
+              {/* Card 4: Publishing Status - Emerald */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-emerald-50/40 border-emerald-100 shadow-sm'
+                : 'bg-[#0E1411] border-emerald-950/60 shadow-lg shadow-black/50 dark:shadow-emerald-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Publishing Status</span>
+                <span className={`font-serif font-bold italic text-2xl block mt-1 ${isLight ? 'text-emerald-900' : 'text-emerald-400'}`}>
+                  {publishedQuestionsCount} <span className="text-xs font-mono font-normal text-zinc-500">/ {draftQuestionsCount} Draft</span>
+                </span>
+              </div>
+
             </div>
 
             {/* Database header search filters and add actions */}
-            <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+            <div className={`p-4 rounded-xl border transition-all duration-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs ${isLight ? 'bg-white border-zinc-200' : 'bg-[#121212] border-zinc-850/80'}`}>
 
               <div className="flex flex-wrap items-center gap-3 flex-grow">
                 {/* Search */}
@@ -283,10 +320,13 @@ export const AdminDashboard: React.FC = () => {
                     value={qSearch}
                     onChange={(e) => { setQSearch(e.target.value); setQPage(1); }}
                     placeholder="Search questions text..."
-                    className="w-full pl-8 pr-3 py-2 border border-zinc-800 rounded-lg outline-none bg-zinc-950 text-white placeholder:text-zinc-650 focus:border-zinc-500"
+                    className={`w-full pl-8 pr-8 py-2 border rounded-lg outline-none transition-colors ${isLight
+                      ? 'bg-zinc-50 border-zinc-350 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-550'
+                      : 'bg-zinc-950 border border-zinc-800 text-white placeholder:text-zinc-650 focus:border-zinc-500'
+                      }`}
                   />
                   {qSearch && (
-                    <button onClick={() => setQSearch('')} className="absolute right-2.5 top-2.5 text-zinc-550 hover:text-white">×</button>
+                    <button onClick={() => setQSearch('')} className={`absolute right-2.5 top-2.5 transition-colors ${isLight ? 'text-zinc-400 hover:text-zinc-800' : 'text-zinc-555 hover:text-white'}`}>×</button>
                   )}
                 </div>
 
@@ -294,7 +334,10 @@ export const AdminDashboard: React.FC = () => {
                 <select
                   value={qCategoryFilter}
                   onChange={(e) => { setQCategoryFilter(e.target.value); setQPage(1); }}
-                  className="p-2 border border-zinc-800 rounded-lg bg-zinc-950 text-zinc-300 outline-none focus:border-zinc-500 max-w-[150px] cursor-pointer font-mono"
+                  className={`p-2 border rounded-lg outline-none cursor-pointer font-mono transition-colors ${isLight
+                    ? 'bg-zinc-50 border-zinc-250 text-zinc-850 focus:bg-white focus:border-zinc-550'
+                    : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-500'
+                    } max-w-[150px]`}
                 >
                   <option value="All">All Categories</option>
                   {categories.map(c => (
@@ -306,7 +349,10 @@ export const AdminDashboard: React.FC = () => {
                 <select
                   value={qDifficultyFilter}
                   onChange={(e) => { setQDifficultyFilter(e.target.value); setQPage(1); }}
-                  className="p-2 border border-zinc-800 rounded-lg bg-zinc-950 text-zinc-300 outline-none focus:border-zinc-500 cursor-pointer font-mono"
+                  className={`p-2 border rounded-lg outline-none cursor-pointer font-mono transition-colors ${isLight
+                    ? 'bg-zinc-50 border-zinc-250 text-zinc-850 focus:bg-white focus:border-zinc-550'
+                    : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-500'
+                    }`}
                 >
                   <option value="All">All Difficulties</option>
                   <option value="Easy">Easy</option>
@@ -317,7 +363,10 @@ export const AdminDashboard: React.FC = () => {
                 {/* Clear */}
                 <button
                   onClick={handleResetQFilters}
-                  className="p-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-lg cursor-pointer transition-colors"
+                  className={`p-2 border rounded-lg cursor-pointer transition-colors ${isLight
+                    ? 'bg-zinc-550/10 border-zinc-250 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
+                    : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-805'
+                    }`}
                   title="Reset filters"
                 >
                   <RotateCcw size={14} />
@@ -330,7 +379,10 @@ export const AdminDashboard: React.FC = () => {
                   setSelectedQuestion(null); // Add Mode
                   setShowQModal(true);
                 }}
-                className="py-2.5 px-4 bg-white hover:bg-zinc-200 text-black font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer shrink-0 transition-all font-mono uppercase tracking-wider text-xs"
+                className={`py-2.5 px-4 font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer shrink-0 transition-all font-mono uppercase tracking-wider text-xs ${isLight
+                  ? 'bg-zinc-900 hover:bg-zinc-800 text-white'
+                  : 'bg-white hover:bg-zinc-200 text-black'
+                  }`}
               >
                 <Plus size={14} strokeWidth={3} />
                 <span>Add Question</span>
@@ -338,12 +390,12 @@ export const AdminDashboard: React.FC = () => {
 
             </div>
             {/* Questions Inventory Table */}
-            <div className="bg-[#121212] border border-zinc-850 rounded-xl shadow-lg overflow-hidden">
+            <div className={`border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-sm' : 'bg-[#121212] border-zinc-850'}`}>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm whitespace-nowrap">
-                  <thead className="bg-[#050505] border-b border-zinc-850 text-xs font-bold text-zinc-500 uppercase font-mono">
+                  <thead className={`text-xs font-bold uppercase font-mono transition-colors ${isLight ? 'bg-zinc-100/80 border-b border-zinc-205 border-zinc-200 text-zinc-500' : 'bg-[#050505] border-b border-zinc-850 text-zinc-500'}`}>
                     <tr>
-                      <th className="px-6 py-4">Question Prompt</th>
+                      <th className="px-6 py-4">Question</th>
                       <th className="px-6 py-4">Category</th>
                       <th className="px-6 py-4">Difficulty</th>
                       <th className="px-6 py-4">Attempts</th>
@@ -351,37 +403,43 @@ export const AdminDashboard: React.FC = () => {
                       <th className="px-6 py-4 text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-850 font-sans text-zinc-300">
+                  <tbody className={`divide-y font-sans transition-colors ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-850 text-zinc-300'}`}>
                     {paginatedQuestions.map(q => {
                       // Attempts = solved + retry counts dynamically combined across progress list
                       const qProgress = allProgress.filter(p => p.question_id === q.id);
                       const qAttemptsCount = qProgress.filter(p => p.status === 'solved' || p.status === 'retry').length;
 
                       const getDiffLabelStyle = (d: string) => {
-                        if (d === 'Easy') return 'text-emerald-500 bg-emerald-500/10 border border-emerald-500/20';
-                        if (d === 'Medium') return 'text-amber-500 bg-amber-500/10 border border-amber-500/20';
-                        return 'text-red-500 bg-red-500/10 border border-red-500/20';
+                        if (d === 'Easy') return isLight ? 'text-emerald-700 bg-emerald-50 border border-emerald-200/50' : 'text-emerald-500 bg-emerald-500/10 border border-emerald-500/20';
+                        if (d === 'Medium') return isLight ? 'text-amber-705 text-amber-700 bg-amber-50 border border-amber-200/50' : 'text-amber-500 bg-amber-500/10 border border-amber-500/20';
+                        return isLight ? 'text-red-700 bg-red-50 border border-red-200/50' : 'text-red-500 bg-red-500/10 border border-red-500/20';
                       };
 
                       return (
-                        <tr key={q.id} className="hover:bg-zinc-900/40 transition-colors">
-                          <td className="px-6 py-4 max-w-[320px] truncate font-medium text-white" title={q.question}>
+                        <tr key={q.id} className={`transition-colors ${isLight ? 'hover:bg-zinc-50/70' : 'hover:bg-zinc-900/40'}`}>
+                          <td className={`px-6 py-4 max-w-xl truncate font-medium transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`} title={q.question}>
                             {q.question}
                           </td>
-                          <td className="px-6 py-4 text-xs font-semibold text-zinc-450">{q.category_name}</td>
+                          <td className={`px-6 py-4 text-xs font-semibold transition-colors ${isLight ? 'text-zinc-500' : 'text-zinc-450'}`}>{q.category_name}</td>
                           <td className="px-6 py-4">
-                            <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-md ${getDiffLabelStyle(q.difficulty)}`}>
+                            <span className={`text-[12px] font-bold px-2.5 py-1 rounded-md ${getDiffLabelStyle(q.difficulty)}`}>
                               {q.difficulty}
                             </span>
                           </td>
-                          <td className="px-6 py-4 font-mono text-xs font-bold text-zinc-350">{qAttemptsCount}</td>
+                          <td className={`px-6 py-4 text-center font-mono text-xs font-bold transition-colors ${isLight ? 'text-zinc-800' : 'text-zinc-350'}`}>{qAttemptsCount}</td>
                           <td className="px-6 py-4">
                             {q.status === 'Published' ? (
-                              <span className="text-[10px] bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-0.5 rounded-md font-bold font-mono">
+                              <span className={`text-[12px] px-2 py-1 rounded-md font-bold font-mono ${isLight
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                                }`}>
                                 Published
                               </span>
                             ) : (
-                              <span className="text-[10px] bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-0.5 rounded-md font-bold font-mono">
+                              <span className={`text-[12px] px-2 py-1 rounded-md font-bold font-mono ${isLight
+                                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                : 'bg-amber-500/10 text-amber-500 border border-[#F59E0B]/10'
+                                }`}>
                                 Draft
                               </span>
                             )}
@@ -394,7 +452,10 @@ export const AdminDashboard: React.FC = () => {
                                   setSelectedQuestion(q);
                                   setShowQModal(true);
                                 }}
-                                className="p-1 px-2.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 rounded-md font-semibold text-xs transition-colors cursor-pointer"
+                                className={`p-1 px-2.5 border rounded-md font-semibold text-xs transition-colors cursor-pointer ${isLight
+                                  ? 'bg-zinc-50 hover:bg-zinc-100 border-zinc-250 text-zinc-700 font-bold'
+                                  : 'bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-zinc-300'
+                                  }`}
                                 title="Edit Question"
                               >
                                 Edit
@@ -403,7 +464,8 @@ export const AdminDashboard: React.FC = () => {
                               {/* Stats Report */}
                               <button
                                 onClick={() => setReadOnlyQStats(q)}
-                                className="p-1 px-2 text-zinc-400 hover:text-white hover:underline text-xs font-bold cursor-pointer font-mono"
+                                className={`p-1 px-2 hover:underline text-xs font-bold cursor-pointer font-mono transition-colors ${isLight ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'
+                                  }`}
                                 title="Platform Metrics"
                               >
                                 Stats
@@ -427,17 +489,20 @@ export const AdminDashboard: React.FC = () => {
 
               {/* Table pagination control deck */}
               {filteredQuestions.length > rowsPerPage && (
-                <div className="bg-[#050505] border-t border-zinc-850 px-6 py-3 flex items-center justify-between text-xs text-zinc-500 font-semibold font-mono">
+                <div className={`border-t px-6 py-3 flex items-center justify-between text-xs font-semibold font-mono transition-colors ${isLight ? 'bg-zinc-50/80 border-zinc-200 text-zinc-550' : 'bg-[#050505] border-zinc-850 text-zinc-500'
+                  }`}>
                   <span>
                     Showing {(qPage - 1) * rowsPerPage + 1} to {Math.min(qPage * rowsPerPage, filteredQuestions.length)} of {filteredQuestions.length} entries
                   </span>
 
                   {/* Steppers paging joiner */}
-                  <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 p-0.5 rounded-lg">
+                  <div className={`flex items-center gap-1 p-0.5 rounded-lg border transition-colors ${isLight ? 'bg-zinc-100 border-zinc-250' : 'bg-zinc-900 border border-zinc-800'
+                    }`}>
                     <button
                       onClick={() => setQPage(prev => Math.max(1, prev - 1))}
                       disabled={qPage === 1}
-                      className="p-1.5 hover:bg-zinc-800 text-zinc-400 rounded-md disabled:opacity-40 cursor-pointer"
+                      className={`p-1.5 rounded-md disabled:opacity-40 cursor-pointer transition-colors ${isLight ? 'hover:bg-zinc-200 text-zinc-650' : 'hover:bg-zinc-800 text-zinc-400'
+                        }`}
                     >
                       <ChevronLeft size={14} />
                     </button>
@@ -445,9 +510,9 @@ export const AdminDashboard: React.FC = () => {
                       <button
                         key={idx}
                         onClick={() => setQPage(idx + 1)}
-                        className={`px-2.5 py-1 text-xs rounded-md ${qPage === idx + 1
-                            ? 'bg-white text-black font-semibold font-mono'
-                            : 'text-zinc-400 hover:bg-zinc-800'
+                        className={`px-2.5 py-1 text-xs rounded-md transition-colors ${qPage === idx + 1
+                          ? (isLight ? 'bg-zinc-900 text-white font-bold font-mono' : 'bg-white text-black font-semibold font-mono')
+                          : (isLight ? 'text-zinc-500 hover:bg-zinc-200' : 'text-zinc-400 hover:bg-zinc-800')
                           }`}
                       >
                         {idx + 1}
@@ -456,7 +521,8 @@ export const AdminDashboard: React.FC = () => {
                     <button
                       onClick={() => setQPage(prev => Math.min(qTotalPages, prev + 1))}
                       disabled={qPage === qTotalPages}
-                      className="p-1.5 hover:bg-zinc-800 text-zinc-400 rounded-md disabled:opacity-40 cursor-pointer"
+                      className={`p-1.5 rounded-md disabled:opacity-40 cursor-pointer transition-colors ${isLight ? 'hover:bg-zinc-200 text-zinc-650' : 'hover:bg-zinc-800 text-zinc-400'
+                        }`}
                     >
                       <ChevronRight size={14} />
                     </button>
@@ -470,52 +536,77 @@ export const AdminDashboard: React.FC = () => {
         ) : (
 
           /* ==========================================================
-             PRACTITIONERS / USERS MANAGEMENT TAB
+             Users / USERS MANAGEMENT TAB
              ========================================================== */
-          <div className="flex flex-col gap-6">
-
+          <div className="flex flex-col gap-6 animate-fadeIn">
             {/* Quick Metrics ribbon of Users */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Users</span>
-                <span className="font-serif italic text-2xl text-white block mt-1">{totalUsersCount}</span>
-                <span className="text-[10px] text-zinc-650 block mt-1 font-mono">Practitioners registered</span>
+
+              {/* Card 1: Total Users - Indigo */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-zinc-50 border-zinc-200 shadow-sm'
+                : 'bg-[#121214] border-zinc-800 shadow-lg shadow-black/50 dark:shadow-indigo-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Users</span>
+                <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-zinc-950' : 'text-indigo-400'}`}>
+                  {totalUsersCount}
+                </span>
               </div>
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Mean Success Rate</span>
-                <span className="font-serif italic text-2xl text-emerald-500 block mt-1">{successRate}%</span>
-                <span className="text-[10px] text-zinc-650 block mt-1 font-mono">Platform completion metric</span>
+
+              {/* Card 2: Overall Success Rate - Purple */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-purple-50/40 border-purple-100 shadow-sm'
+                : 'bg-[#121017] border-purple-950/60 shadow-lg shadow-black/50 dark:shadow-purple-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Overall Success Rate</span>
+                <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-purple-900' : 'text-purple-400'}`}>
+                  {successRate}%
+                </span>
               </div>
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Global Solved Flags</span>
-                <span className="font-serif italic text-2xl text-emerald-500 block mt-1">{globalSolvedCount}</span>
-                <span className="text-[10px] text-zinc-650 block mt-1 font-mono">Aggregated completes</span>
+
+              {/* Card 3: Total Solved Questions - Amber */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-amber-50/40 border-amber-100 shadow-sm'
+                : 'bg-[#14110D] border-amber-950/60 shadow-lg shadow-black/50 dark:shadow-amber-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Solved Questions</span>
+                <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-amber-700' : 'text-amber-400'}`}>
+                  {globalSolvedCount}
+                </span>
               </div>
-              <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
-                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Global Retry Backlog</span>
-                <span className="font-serif italic text-2xl text-amber-500 block mt-1">{globalRetryCount}</span>
-                <span className="text-[10px] text-zinc-650 block mt-1 font-mono">Assisted backlog queue</span>
+
+              {/* Card 4: Total Retry Questions - Emerald */}
+              <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
+                ? 'bg-emerald-50/40 border-emerald-100 shadow-sm'
+                : 'bg-[#0E1411] border-emerald-950/60 shadow-lg shadow-black/50 dark:shadow-emerald-500/[0.02]'
+                }`}>
+                <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Retry Questions</span>
+                <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-emerald-700' : 'text-emerald-400'}`}>
+                  {globalRetryCount}
+                </span>
               </div>
+
             </div>
+
             {/* Top 5 Dynamic Leaderboard grid lists */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
               {/* Component A: Top 5 Solve Questions */}
-              <div className="bg-[#121212] border border-zinc-850/80 rounded-xl p-5 shadow-lg">
+              <div className={`border rounded-xl p-5 shadow-sm transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-[#121212] border-zinc-850/80 text-zinc-300'}`}>
                 <div className="flex items-center gap-1.5 mb-4 text-zinc-400">
                   <BarChart3 size={15} />
-                  <span className="font-serif italic font-semibold text-sm tracking-wide text-white">Top Guesstimates by Completes</span>
+                  <span className={`font-serif italic font-semibold text-sm tracking-wide ${isLight ? 'text-zinc-950' : 'text-white'}`}>Top Guesstimates by Completes</span>
                 </div>
-                <div className="divide-y divide-zinc-850 font-sans text-xs text-zinc-300">
+                <div className={`divide-y font-sans text-xs ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-850 text-zinc-300'}`}>
                   {topQuestions.map((q, i) => (
                     <div key={q.id} className="py-2.5 flex items-center justify-between">
                       <div className="flex items-center gap-2 max-w-[70%]">
-                        <span className="font-mono text-zinc-600 font-bold">{i + 1}.</span>
-                        <span className="truncate font-semibold text-zinc-100 font-serif italic" title={q.question}>{q.question}</span>
+                        <span className={`font-mono font-bold ${isLight ? 'text-zinc-400' : 'text-zinc-600'}`}>{i + 1}.</span>
+                        <span className={`truncate font-sans ${isLight ? 'text-zinc-800' : 'text-zinc-100'}`} title={q.question}>{q.question}</span>
                       </div>
-                      <div className="flex items-center gap-3 font-mono text-[10px]">
-                        <span className="text-emerald-500 font-bold">{q.solvedCount} resolved</span>
-                        <span className="text-zinc-500">{q.retryCount} retry</span>
+                      <div className="flex items-center gap-3 font-mono text-[12px]">
+                        <span className={`${isLight ? 'text-emerald-700 font-bold' : 'text-emerald-500 font-bold'}`}>{q.solvedCount} Solves</span>
+                        <span className="text-zinc-500">{q.retryCount} Retries</span>
                       </div>
                     </div>
                   ))}
@@ -523,23 +614,23 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Component B: Top 5 Active Practitioners */}
-              <div className="bg-[#121212] border border-zinc-850/80 rounded-xl p-5 shadow-lg">
+              {/* Component B: Top 5 Active Users */}
+              <div className={`border rounded-xl p-5 shadow-sm transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-[#121212] border-zinc-850/80 text-zinc-300'}`}>
                 <div className="flex items-center gap-1.5 mb-4 text-zinc-400">
                   <Award size={15} />
-                  <span className="font-serif italic font-semibold text-sm tracking-wide text-white">Top Performing Users</span>
+                  <span className={`font-serif italic font-semibold text-sm tracking-wide ${isLight ? 'text-zinc-950' : 'text-white'}`}>Top Performing Users</span>
                 </div>
-                <div className="divide-y divide-zinc-850 font-sans text-xs text-zinc-300">
+                <div className={`divide-y font-sans text-xs ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-850 text-zinc-300'}`}>
                   {topUsers.map((u, i) => (
                     <div key={u.id} className="py-2.5 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-zinc-600 font-bold">{i + 1}.</span>
-                        <span className="font-semibold text-zinc-100 font-serif italic">{u.first_name} {u.last_name}</span>
-                        {u.role === 'admin' && <span className="bg-zinc-850 text-zinc-400 font-bold px-1.5 text-[9px] rounded-md font-mono scale-90">ADMIN</span>}
+                        <span className={`font-mono font-bold ${isLight ? 'text-zinc-400' : 'text-zinc-600'}`}>{i + 1}.</span>
+                        <span className={`font-sans ${isLight ? 'text-zinc-800' : 'text-zinc-100'}`}>{u.first_name} {u.last_name}</span>
+                        {u.role === 'admin' && <span className={`font-bold px-1.5 text-[9px] rounded-md font-mono scale-90 ${isLight ? 'bg-zinc-100 text-zinc-500' : 'bg-zinc-850 text-zinc-400'}`}>ADMIN</span>}
                       </div>
-                      <div className="flex items-center gap-3 font-mono text-[10px]">
-                        <span className="text-emerald-500 font-bold">{u.solvedCount} Solved</span>
-                        <span className="text-zinc-500">{u.retryCount} Retry</span>
+                      <div className="flex items-center gap-3 font-mono text-[12px]">
+                        <span className={`${isLight ? 'text-emerald-700 font-bold' : 'text-emerald-500 font-bold'}`}>{u.solvedCount} Solves</span>
+                        <span className="text-zinc-500">{u.retryCount} Retries</span>
                       </div>
                     </div>
                   ))}
@@ -550,11 +641,11 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Filters Row of Users */}
-            <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+            <div className={`p-4 rounded-xl border transition-all duration-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs ${isLight ? 'bg-white border-zinc-200' : 'bg-[#121212] border-zinc-850/80'}`}>
 
               <div className="flex flex-wrap items-center gap-3 flex-grow/1">
                 {/* Search */}
-                <div className="relative flex-grow max-w-sm">
+                <div className="relative grow max-w-sm">
                   <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-500">
                     <Search size={14} />
                   </span>
@@ -562,11 +653,14 @@ export const AdminDashboard: React.FC = () => {
                     type="text"
                     value={uSearch}
                     onChange={(e) => { setUSearch(e.target.value); setUPage(1); }}
-                    placeholder="Search by practitioner name or email..."
-                    className="w-full pl-8 pr-3 py-2 border border-zinc-800 rounded-lg outline-none bg-zinc-950 text-white placeholder:text-zinc-650 focus:border-zinc-500 font-mono text-xs"
+                    placeholder="Search by user name or email..."
+                    className={`w-full pl-8 pr-8 py-2 border rounded-lg outline-none transition-colors font-mono text-xs ${isLight
+                      ? 'bg-zinc-50 border-zinc-350 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-550'
+                      : 'bg-zinc-950 border border-zinc-800 text-white placeholder:text-zinc-650 focus:border-zinc-500'
+                      }`}
                   />
                   {uSearch && (
-                    <button onClick={() => setUSearch('')} className="absolute right-2.5 top-2.5 text-zinc-550 hover:text-white">×</button>
+                    <button onClick={() => setUSearch('')} className={`absolute right-2.5 top-2.5 transition-colors ${isLight ? 'text-zinc-400 hover:text-zinc-800' : 'text-zinc-555 hover:text-white'}`}>×</button>
                   )}
                 </div>
 
@@ -574,7 +668,10 @@ export const AdminDashboard: React.FC = () => {
                 <select
                   value={uSortBy}
                   onChange={(e) => { setUSortBy(e.target.value as any); setUPage(1); }}
-                  className="p-2 border border-zinc-800 rounded-lg bg-zinc-950 text-zinc-300 outline-none focus:border-zinc-500 cursor-pointer text-xs font-mono"
+                  className={`p-2 border rounded-lg outline-none cursor-pointer text-xs font-mono transition-colors ${isLight
+                    ? 'bg-zinc-50 border-zinc-250 text-zinc-850 focus:bg-white focus:border-zinc-550'
+                    : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-500'
+                    }`}
                 >
                   <option value="newest">Sort by Newest Account</option>
                   <option value="oldest">Sort by Oldest Account</option>
@@ -582,7 +679,10 @@ export const AdminDashboard: React.FC = () => {
 
                 <button
                   onClick={handleResetUFilters}
-                  className="p-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-lg cursor-pointer transition-colors"
+                  className={`p-2 border rounded-lg cursor-pointer transition-colors ${isLight
+                    ? 'bg-zinc-550/10 border-zinc-250 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
+                    : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-805'
+                    }`}
                   title="Reset filters"
                 >
                   <RotateCcw size={14} />
@@ -595,7 +695,10 @@ export const AdminDashboard: React.FC = () => {
                   setSelectedUserProfile(null); // Add Mode
                   setShowUModal(true);
                 }}
-                className="py-2.5 px-4 bg-white hover:bg-zinc-200 text-black font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer shrink-0 transition-all font-mono uppercase tracking-wider text-xs"
+                className={`py-2.5 px-4 font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer shrink-0 transition-all font-mono uppercase tracking-wider text-xs ${isLight
+                  ? 'bg-zinc-900 hover:bg-zinc-800 text-white'
+                  : 'bg-white hover:bg-zinc-200 text-black'
+                  }`}
               >
                 <Plus size={14} strokeWidth={3} />
                 <span>Add User</span>
@@ -604,22 +707,22 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Users Comprehensive Table representation with Completion sliders */}
-            <div className="bg-[#121212] border border-zinc-850 rounded-xl shadow-lg overflow-hidden">
+            <div className={`border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-[#121212] border-zinc-850'}`}>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm whitespace-nowrap">
-                  <thead className="bg-[#050505] border-b border-zinc-850 text-xs font-bold text-zinc-500 uppercase font-mono">
+                  <thead className={`text-xs font-bold uppercase font-mono transition-colors ${isLight ? 'bg-zinc-100 border-b border-zinc-200 text-zinc-500' : 'bg-[#050505] border-b border-zinc-850 text-zinc-500'}`}>
                     <tr>
-                      <th className="px-6 py-4">Practitioner Name</th>
-                      <th className="px-6 py-4">Email Coordinates</th>
-                      <th className="px-6 py-4">Easy Solves</th>
-                      <th className="px-6 py-4">Med Solves</th>
-                      <th className="px-6 py-4">Hard Solves</th>
-                      <th className="px-6 py-4">Solved</th>
-                      <th className="px-6 py-4">Retries</th>
+                      <th className="px-6 py-4">User Name</th>
+                      <th className="px-6 py-4">Email</th>
+                      <th className="px-6 py-4 text-center">Easy Solves</th>
+                      <th className="px-6 py-4 text-center">Med Solves</th>
+                      <th className="px-6 py-4 text-center">Hard Solves</th>
+                      <th className="px-6 py-4 text-center">Solved</th>
+                      <th className="px-6 py-4 text-center">Retries</th>
                       <th className="px-6 py-4 text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-850 font-sans text-zinc-300 text-xs">
+                  <tbody className={`divide-y font-sans text-xs transition-colors ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-850 text-zinc-300'}`}>
                     {paginatedProfiles.map(u => {
                       const uProgress = allProgress.filter(p => p.user_id === u.id);
 
@@ -642,45 +745,45 @@ export const AdminDashboard: React.FC = () => {
                       const hardPercent = hardTotal.length > 0 ? Math.round((hardSolved / hardTotal.length) * 100) : 0;
 
                       return (
-                        <tr key={u.id} className="hover:bg-zinc-900/40 transition-colors">
-                          <td className="px-6 py-4 font-semibold text-white">
+                        <tr key={u.id} className={`transition-colors ${isLight ? 'hover:bg-zinc-50/70' : 'hover:bg-zinc-900/40'}`}>
+                          <td className={`px-6 py-4 font-semibold transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
                             {u.first_name} {u.last_name}
-                            {u.role === 'admin' && <span className="ml-1.5 text-[9px] bg-zinc-850 text-zinc-400 py-0.5 px-1.5 rounded-sm font-mono font-bold">ADMIN</span>}
+                            {u.role === 'admin' && <span className={`ml-1.5 text-[9px] py-0.5 px-1.5 rounded-sm font-mono font-bold transition-colors ${isLight ? 'bg-zinc-150 text-zinc-650' : 'bg-zinc-850 text-zinc-400'}`}>ADMIN</span>}
                           </td>
-                          <td className="px-6 py-4 text-zinc-400 font-mono text-[11px] font-semibold uppercase">{u.email}</td>
+                          <td className={`px-6 py-4 font-mono text-[11px] font-semibold uppercase transition-colors ${isLight ? 'text-zinc-500' : 'text-zinc-400'}`}>{u.email}</td>
 
                           {/* Easy Progress slide */}
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-1.5 w-24">
-                              <div className="flex-grow bg-zinc-950 h-1 rounded-full overflow-hidden border border-zinc-900">
+                              <div className={`flex-grow h-1 rounded-full overflow-hidden border transition-colors ${isLight ? 'bg-zinc-100 border-zinc-200' : 'bg-zinc-950 border-zinc-900'}`}>
                                 <div className="bg-emerald-500 h-full" style={{ width: `${easyPercent}%` }}></div>
                               </div>
-                              <span className="font-mono text-[10px] text-zinc-500 font-bold">{easyPercent}%</span>
+                              <span className={`font-mono text-[12px] font-bold ${isLight ? 'text-zinc-450' : 'text-zinc-500'}`}>{easyPercent}%</span>
                             </div>
                           </td>
 
                           {/* Med Progress slide */}
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-1.5 w-24">
-                              <div className="flex-grow bg-zinc-950 h-1 rounded-full overflow-hidden border border-zinc-900">
+                              <div className={`flex-grow h-1 rounded-full overflow-hidden border transition-colors ${isLight ? 'bg-zinc-100 border-zinc-200' : 'bg-zinc-950 border-zinc-900'}`}>
                                 <div className="bg-[#D97706] h-full" style={{ width: `${medPercent}%` }}></div>
                               </div>
-                              <span className="font-mono text-[10px] text-zinc-500 font-bold">{medPercent}%</span>
+                              <span className={`font-mono text-[12px] font-bold ${isLight ? 'text-zinc-450' : 'text-zinc-500'}`}>{medPercent}%</span>
                             </div>
                           </td>
 
                           {/* Hard Progress slide */}
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-1.5 w-24">
-                              <div className="flex-grow bg-zinc-950 h-1 rounded-full overflow-hidden border border-zinc-900">
+                              <div className={`flex-grow h-1 rounded-full overflow-hidden border transition-colors ${isLight ? 'bg-zinc-100 border-zinc-200' : 'bg-zinc-950 border-zinc-900'}`}>
                                 <div className="bg-red-500 h-full" style={{ width: `${hardPercent}%` }}></div>
                               </div>
-                              <span className="font-mono text-[10px] text-zinc-500 font-bold">{hardPercent}%</span>
+                              <span className={`font-mono text-[12px] font-bold ${isLight ? 'text-zinc-450' : 'text-zinc-500'}`}>{hardPercent}%</span>
                             </div>
                           </td>
 
-                          <td className="px-6 py-4 font-mono font-bold text-emerald-500">{uSolved.length}</td>
-                          <td className="px-6 py-4 font-mono font-semibold text-amber-500">{uRetryCount}</td>
+                          <td className={`px-6 py-4 text-center font-mono font-bold ${isLight ? 'text-emerald-700' : 'text-emerald-500'}`}>{uSolved.length}</td>
+                          <td className={`px-6 py-4 text-center font-mono font-semibold ${isLight ? 'text-amber-700' : 'text-amber-500'}`}>{uRetryCount}</td>
                           <td className="px-6 py-4 text-center">
                             <div className="flex items-center justify-center gap-2">
                               {/* Edit credentials / reset */}
@@ -689,8 +792,11 @@ export const AdminDashboard: React.FC = () => {
                                   setSelectedUserProfile(u);
                                   setShowUModal(true);
                                 }}
-                                className="p-1 px-2.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-350 rounded-md font-bold text-[10px] transition-colors cursor-pointer font-mono"
-                                title="Edit Practitioner"
+                                className={`p-1 px-2.5 border rounded-md font-semibold text-[12px] transition-colors cursor-pointer font-mono ${isLight
+                                  ? 'bg-zinc-50 hover:bg-zinc-100 border-zinc-250 text-zinc-700 font-bold'
+                                  : 'bg-zinc-900 hover:bg-zinc-800 border-zinc-805 border-zinc-805 text-zinc-350'
+                                  }`}
+                                title="Edit User"
                               >
                                 Edit
                               </button>
@@ -698,7 +804,8 @@ export const AdminDashboard: React.FC = () => {
                               {/* Stats Report summary */}
                               <button
                                 onClick={() => setReadOnlyUStats(u)}
-                                className="p-1 px-2 text-zinc-400 hover:text-white hover:underline text-[10px] font-bold cursor-pointer font-mono"
+                                className={`p-1 px-2 hover:underline text-[12px] font-bold cursor-pointer font-mono transition-colors ${isLight ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'
+                                  }`}
                               >
                                 Stats
                               </button>
@@ -721,17 +828,20 @@ export const AdminDashboard: React.FC = () => {
 
               {/* Users footer pagination sliders */}
               {filteredProfiles.length > rowsPerPage && (
-                <div className="bg-[#050505] border-t border-zinc-850 px-6 py-3 flex items-center justify-between text-xs text-zinc-500 font-semibold font-mono">
+                <div className={`border-t px-6 py-3 flex items-center justify-between text-xs font-semibold font-mono transition-colors ${isLight ? 'bg-zinc-50/80 border-zinc-200 text-zinc-555' : 'bg-[#050505] border-t border-zinc-850 text-zinc-500'
+                  }`}>
                   <span>
                     Showing {(uPage - 1) * rowsPerPage + 1} to {Math.min(uPage * rowsPerPage, filteredProfiles.length)} of {filteredProfiles.length} entries
                   </span>
 
                   {/* Steppers */}
-                  <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 p-0.5 rounded-lg">
+                  <div className={`flex items-center gap-1 p-0.5 rounded-lg border transition-colors ${isLight ? 'bg-zinc-100 border-zinc-250' : 'bg-zinc-900 border border-zinc-800'
+                    }`}>
                     <button
                       onClick={() => setUPage(prev => Math.max(1, prev - 1))}
                       disabled={uPage === 1}
-                      className="p-1.5 hover:bg-zinc-805 text-zinc-400 rounded-md disabled:opacity-40 cursor-pointer"
+                      className={`p-1.5 rounded-md disabled:opacity-40 cursor-pointer transition-colors ${isLight ? 'hover:bg-zinc-200 text-zinc-650' : 'hover:bg-zinc-805 text-zinc-400'
+                        }`}
                     >
                       <ChevronLeft size={14} />
                     </button>
@@ -739,9 +849,9 @@ export const AdminDashboard: React.FC = () => {
                       <button
                         key={idx}
                         onClick={() => setUPage(idx + 1)}
-                        className={`px-2.5 py-1 text-xs rounded-md ${uPage === idx + 1
-                            ? 'bg-white text-black font-semibold font-mono'
-                            : 'text-zinc-400 hover:bg-zinc-800'
+                        className={`px-2.5 py-1 text-xs rounded-md transition-colors ${uPage === idx + 1
+                          ? (isLight ? 'bg-zinc-900 text-white font-bold font-mono' : 'bg-white text-black font-semibold font-mono')
+                          : (isLight ? 'text-zinc-500 hover:bg-zinc-200' : 'text-zinc-400 hover:bg-zinc-800')
                           }`}
                       >
                         {idx + 1}
@@ -750,7 +860,8 @@ export const AdminDashboard: React.FC = () => {
                     <button
                       onClick={() => setUPage(prev => Math.min(uTotalPages, prev + 1))}
                       disabled={uPage === uTotalPages}
-                      className="p-1.5 hover:bg-zinc-805 text-zinc-400 rounded-md disabled:opacity-40 cursor-pointer"
+                      className={`p-1.5 rounded-md disabled:opacity-40 cursor-pointer transition-colors ${isLight ? 'hover:bg-zinc-200 text-zinc-650' : 'hover:bg-zinc-805 text-zinc-400'
+                        }`}
                     >
                       <ChevronRight size={14} />
                     </button>
@@ -763,10 +874,8 @@ export const AdminDashboard: React.FC = () => {
 
         )}
 
-      </main>
-
-      {/* FOOTER ADVERTISEMENT */}
-      <footer className="bg-[#0c0c0c] border-t border-zinc-850 py-6 text-center text-[10px] text-zinc-550 font-mono mt-12">
+      </main>      {/* FOOTER ADVERTISEMENT */}
+      <footer className={`border-t py-6 text-center text-[12px] font-mono mt-12 transition-all duration-300 ${isLight ? 'bg-zinc-50 border-zinc-200 text-zinc-400' : 'bg-[#0c0c0c] border-zinc-850 text-zinc-550'}`}>
         CONTROL DECK INTERFACE SYSTEM &copy; 2026 GUESSTIMATE DB METRICS
       </footer>
 
@@ -792,18 +901,21 @@ export const AdminDashboard: React.FC = () => {
 
       {/* READ-ONLY OVERLAY MODAL: Question Statistics breakdown */}
       {readOnlyQStats && (
-        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col relative text-zinc-350">
-            <button onClick={() => setReadOnlyQStats(null)} className="absolute top-4 right-4 text-zinc-500 hover:text-white cursor-pointer transition-colors">
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
+          <div className={`border rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col relative transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-[#121212] border-zinc-800 text-zinc-350'
+            }`}>
+            <button onClick={() => setReadOnlyQStats(null)} className={`absolute top-4 right-4 cursor-pointer transition-colors ${isLight ? 'text-zinc-450 hover:text-zinc-900' : 'text-zinc-500 hover:text-white'
+              }`}>
               <X size={18} />
             </button>
 
-            <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-semibold mb-2 uppercase font-mono tracking-wider">
+            <div className="flex items-center gap-1.5 text-xs text-zinc-455 text-zinc-500 font-semibold mb-2 uppercase font-mono tracking-wider">
               <BarChart2 size={14} />
               <span>Guesstimate Statistics</span>
             </div>
 
-            <p className="font-display font-medium text-white text-base leading-relaxed border-b border-zinc-850 pb-4 mb-4">
+            <p className={`font-display font-medium text-base leading-relaxed border-b pb-4 mb-4 transition-colors ${isLight ? 'text-zinc-900 border-zinc-150' : 'text-white border-zinc-850'
+              }`}>
               "{readOnlyQStats.question}"
             </p>
 
@@ -816,17 +928,20 @@ export const AdminDashboard: React.FC = () => {
               return (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3 text-center text-xs">
-                    <div className="bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20">
-                      <span className="text-[10px] uppercase font-bold text-emerald-500 font-mono tracking-wider block">Total Solved</span>
-                      <span className="text-xl font-serif italic text-emerald-400 block mt-1">{solves}</span>
+                    <div className={`p-3 rounded-lg border transition-colors ${isLight ? 'bg-emerald-50 text-emerald-800 border-emerald-200/50' : 'bg-emerald-500/10 border-emerald-500/20'
+                      }`}>
+                      <span className={`text-[12px] uppercase font-bold font-mono tracking-wider block ${isLight ? 'text-emerald-700' : 'text-emerald-500'}`}>Total Solved</span>
+                      <span className={`text-xl font-serif italic block mt-1 ${isLight ? 'text-emerald-900' : 'text-emerald-400'}`}>{solves}</span>
                     </div>
-                    <div className="bg-amber-500/10 p-3 rounded-lg border border-amber-500/20">
-                      <span className="text-[10px] uppercase font-bold text-amber-500 font-mono tracking-wider block">Total Retries</span>
-                      <span className="text-xl font-serif italic text-amber-400 block mt-1">{retries}</span>
+                    <div className={`p-3 rounded-lg border transition-colors ${isLight ? 'bg-amber-50 text-amber-800 border-amber-200/50' : 'bg-amber-500/10 border-amber-500/20'
+                      }`}>
+                      <span className={`text-[12px] uppercase font-bold font-mono tracking-wider block ${isLight ? 'text-amber-700' : 'text-amber-500'}`}>Total Retries</span>
+                      <span className={`text-xl font-serif italic block mt-1 ${isLight ? 'text-amber-900' : 'text-amber-400'}`}>{retries}</span>
                     </div>
-                    <div className="bg-zinc-950 p-3 rounded-lg border border-zinc-850 col-span-2">
-                      <span className="text-[10px] uppercase font-bold text-zinc-500 font-mono tracking-wider block">Upvotes / Downvotes Balance</span>
-                      <span className="text-sm font-mono text-zinc-300 block mt-1">
+                    <div className={`p-3 rounded-lg border col-span-2 transition-colors ${isLight ? 'bg-zinc-50 border-zinc-200' : 'bg-zinc-950 border-zinc-850'
+                      }`}>
+                      <span className="text-[12px] uppercase font-bold text-zinc-500 font-mono tracking-wider block">Upvotes / Downvotes Balance</span>
+                      <span className={`text-sm font-mono block mt-1 ${isLight ? 'text-zinc-800' : 'text-zinc-300'}`}>
                         👍 {readOnlyQStats.upvotes} / 👎 {readOnlyQStats.downvotes}
                       </span>
                     </div>
@@ -834,7 +949,8 @@ export const AdminDashboard: React.FC = () => {
 
                   <button
                     onClick={() => setReadOnlyQStats(null)}
-                    className="w-full py-2.5 bg-white hover:bg-zinc-200 text-black text-xs font-bold uppercase tracking-wider rounded-lg mt-4 cursor-pointer transition-colors font-mono"
+                    className={`w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg mt-4 cursor-pointer transition-colors font-mono ${isLight ? 'bg-zinc-950 hover:bg-zinc-850 text-white shadow-md' : 'bg-white hover:bg-zinc-200 text-black shadow-md'
+                      }`}
                   >
                     Close Statistics
                   </button>
@@ -845,26 +961,29 @@ export const AdminDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* READ-ONLY OVERLAY MODAL: Specific Practitioner Stats breakdown */}
+      {/* READ-ONLY OVERLAY MODAL: Specific User Stats breakdown */}
       {readOnlyUStats && (
-        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col relative max-h-[90vh] text-zinc-350">
-            <button onClick={() => setReadOnlyUStats(null)} className="absolute top-4 right-4 text-zinc-500 hover:text-white cursor-pointer transition-colors">
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
+          <div className={`border rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col relative max-h-[90vh] transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-[#121212] border-zinc-800 text-zinc-350 font-sans'
+            }`}>
+            <button onClick={() => setReadOnlyUStats(null)} className={`absolute top-4 right-4 cursor-pointer transition-colors ${isLight ? 'text-zinc-450 hover:text-zinc-900' : 'text-zinc-500 hover:text-white'
+              }`}>
               <X size={18} />
             </button>
 
-            <div className="text-center pb-4 border-b border-zinc-850 mb-4">
-              <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 text-white flex items-center justify-center rounded-full text-sm font-bold mx-auto mb-2 font-mono">
+            <div className={`text-center pb-4 border-b mb-4 transition-colors ${isLight ? 'border-zinc-150' : 'border-zinc-850'}`}>
+              <div className={`w-12 h-12 flex items-center justify-center rounded-full text-sm font-bold mx-auto mb-2 font-mono border transition-colors ${isLight ? 'bg-zinc-100 border-zinc-250 text-zinc-800' : 'bg-zinc-900 border-zinc-800 text-white'
+                }`}>
                 {readOnlyUStats.first_name[0].toUpperCase()}{readOnlyUStats.last_name[0].toUpperCase()}
               </div>
-              <h4 className="font-serif italic font-medium text-white text-lg">
+              <h4 className={`font-serif italic font-medium text-lg transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
                 {readOnlyUStats.first_name} {readOnlyUStats.last_name}
               </h4>
-              <span className="text-[10px] text-zinc-455 font-mono uppercase tracking-widest block mt-1">{readOnlyUStats.email}</span>
+              <span className={`text-[12px] font-mono uppercase tracking-widest block mt-1 ${isLight ? 'text-zinc-450' : 'text-zinc-400'}`}>{readOnlyUStats.email}</span>
             </div>
 
             <div className="overflow-y-auto space-y-4 pr-1">
-              <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-mono font-bold block">Individual Performance Card</span>
+              <span className="text-[12px] uppercase tracking-widest text-zinc-500 font-mono font-bold block">Individual Performance Card</span>
 
               {(() => {
                 const uProg = allProgress.filter(p => p.user_id === readOnlyUStats.id);
@@ -874,18 +993,21 @@ export const AdminDashboard: React.FC = () => {
                 return (
                   <div className="space-y-4 text-xs font-sans text-zinc-300">
                     <div className="grid grid-cols-2 gap-3 text-center">
-                      <div className="bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20">
-                        <span className="text-[10px] text-emerald-500 uppercase font-mono font-bold block">SOLVED CARD</span>
-                        <span className="text-xl font-serif italic text-emerald-450 block mt-1">{solves}</span>
+                      <div className={`p-3 rounded-lg border transition-colors ${isLight ? 'bg-emerald-50 border-emerald-200/50 text-emerald-800' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'
+                        }`}>
+                        <span className={`text-[12px] uppercase font-mono font-bold block ${isLight ? 'text-emerald-700' : 'text-emerald-500'}`}>SOLVED CARD</span>
+                        <span className={`text-xl font-serif italic block mt-1 ${isLight ? 'text-emerald-900' : 'text-emerald-450'}`}>{solves}</span>
                       </div>
-                      <div className="bg-amber-500/10 p-3 rounded-lg border border-amber-500/20">
-                        <span className="text-[10px] text-amber-500 uppercase font-mono font-bold block">RETRY CAP</span>
-                        <span className="text-xl font-serif italic text-amber-450 block mt-1">{retries}</span>
+                      <div className={`p-3 rounded-lg border transition-colors ${isLight ? 'bg-amber-50 border-amber-200/50 text-amber-800' : 'bg-amber-500/10 border-amber-500/20 text-amber-500'
+                        }`}>
+                        <span className={`text-[12px] uppercase font-mono font-bold block ${isLight ? 'text-amber-700' : 'text-amber-500'}`}>RETRY CAP</span>
+                        <span className={`text-xl font-serif italic block mt-1 ${isLight ? 'text-amber-900' : 'text-amber-450'}`}>{retries}</span>
                       </div>
                     </div>
 
-                    <div className="border border-zinc-850 bg-zinc-950 p-3.5 rounded-lg space-y-3">
-                      <span className="font-bold text-zinc-500 font-mono uppercase block text-[10px] tracking-wider">Category Performance Matrix</span>
+                    <div className={`p-3.5 rounded-lg space-y-3 border transition-colors ${isLight ? 'bg-zinc-50 border-zinc-200' : 'border-[#222] border-zinc-850 bg-zinc-950'
+                      }`}>
+                      <span className="font-bold text-zinc-500 font-mono uppercase block text-[12px] tracking-wider">Category Performance Matrix</span>
                       {categories.map(cat => {
                         const catQuestions = questions.filter(q => q.category_id === cat.id);
                         const catSolved = uProg.filter(p => p.status === 'solved' && catQuestions.some(q => q.id === p.question_id)).length;
@@ -893,8 +1015,8 @@ export const AdminDashboard: React.FC = () => {
 
                         return (
                           <div key={cat.id} className="flex items-center justify-between text-[11px] font-mono">
-                            <span className="font-semibold text-zinc-300 font-serif italic">{cat.name}</span>
-                            <span className="text-zinc-500 font-bold">{catSolved}/{catQuestions.length} ({ratio}%)</span>
+                            <span className={`font-semibold font-serif italic ${isLight ? 'text-zinc-800' : 'text-zinc-300'}`}>{cat.name}</span>
+                            <span className={`font-bold ${isLight ? 'text-zinc-505 text-zinc-500 font-semibold' : 'text-zinc-500'}`}>{catSolved}/{catQuestions.length} ({ratio}%)</span>
                           </div>
                         );
                       })}
@@ -906,7 +1028,8 @@ export const AdminDashboard: React.FC = () => {
 
             <button
               onClick={() => setReadOnlyUStats(null)}
-              className="w-full py-2.5 bg-white hover:bg-zinc-200 text-black text-xs font-bold uppercase tracking-wider rounded-lg mt-6 cursor-pointer font-mono"
+              className={`w-full py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg mt-6 cursor-pointer font-mono ${isLight ? 'bg-zinc-950 hover:bg-zinc-850 text-white shadow-md' : 'bg-white hover:bg-zinc-200 text-black shadow-md'
+                }`}
             >
               Close Performance Report
             </button>

@@ -151,7 +151,7 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-      <div className={`relative w-full max-w-4xl rounded-2xl shadow-xl flex flex-col max-h-[90vh] transition-colors border ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-[#171717] text-zinc-300 border-zinc-800'}`}>
+      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-xl flex flex-col max-h-[90vh] transition-colors border ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-[#171717] text-zinc-300 border-zinc-800'}`}>
 
         {/* Header bar */}
         <div className={`flex items-center justify-between px-6 py-4 border-b ${isLight ? 'border-[#E5E7EB]' : 'border-zinc-800/80 bg-bg-card'}`}>
