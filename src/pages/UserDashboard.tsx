@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Question, Category, UserProgress, Difficulty, ProgressStatus } from '../types';
+//import { Question, Category, UserProgress, Difficulty, ProgressStatus } from '../types';
+import { Question, Category, UserProgress, Difficulty, ProgressStatus, UserVote, VoteType } from '../types';
 import { db } from '../lib/db';
 import { DotGridCard } from '../components/DotGridCard';
 import { WorkspaceModal } from '../components/WorkspaceModal';
@@ -17,6 +18,7 @@ export const UserDashboard: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
+  const [userVotes, setUserVotes] = useState<UserVote[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   // Filter & Search States
@@ -46,11 +48,132 @@ export const UserDashboard: React.FC = () => {
       if (userId) {
         const prog = await db.getUserProgress(userId);
         setUserProgress(prog);
+        const votes = await db.getUserVotes(userId);
+        setUserVotes(votes);
+
       }
     } catch (err) {
       toast.error('Failed to sync library parameters.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handling Question Toggles
+  const handleToggleQuestionStatus = async (questionId: string, currentStatus: ProgressStatus, targetStatus: ProgressStatus) => {
+    if (!userId) {
+      toast.error('You must be logged in to update progress.');
+      return;
+    }
+    try {
+      const nextStatus = currentStatus === targetStatus ? 'none' : targetStatus;
+      await db.toggleProgressStatus(userId, questionId, nextStatus);
+
+      setUserProgress(prev => {
+        const existingIdx = prev.findIndex(p => p.question_id === questionId);
+        if (existingIdx !== -1) {
+          const updated = [...prev];
+          updated[existingIdx] = {
+            ...updated[existingIdx],
+            status: nextStatus,
+            updated_at: new Date().toISOString()
+          };
+          return updated;
+        } else {
+          return [
+            ...prev,
+            {
+              id: 'new-prog-' + Date.now(),
+              user_id: userId,
+              question_id: questionId,
+              status: nextStatus,
+              notes: '',
+              updated_at: new Date().toISOString()
+            }
+          ];
+        }
+      });
+
+      if (nextStatus === 'solved') {
+        toast.success('Challenge marked as Solved!');
+      } else if (nextStatus === 'retry') {
+        toast.success('Added to retry queue.');
+      } else {
+        toast.success('Removed state capsule.');
+      }
+
+      // Sync back counters silently
+      await loadDashboardData();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update progress status.');
+    }
+  };
+
+  const handleToggleQuestionVote = async (questionId: string, currentUserVote: VoteType | null, targetVote: VoteType) => {
+    if (!userId) {
+      toast.error('You must be logged in to register reaction.');
+      return;
+    }
+    try {
+      const nextVote = currentUserVote === targetVote ? null : targetVote;
+      await db.toggleVote(userId, questionId, nextVote);
+
+      setUserVotes(prev => {
+        const filtered = prev.filter(v => v.question_id !== questionId);
+        if (nextVote) {
+          return [
+            ...filtered,
+            {
+              id: 'new-vote-' + Date.now(),
+              user_id: userId,
+              question_id: questionId,
+              vote: nextVote,
+              created_at: new Date().toISOString()
+            }
+          ];
+        }
+        return filtered;
+      });
+
+      setQuestions(prevQuestions => {
+        return prevQuestions.map(q => {
+          if (q.id === questionId) {
+            let upvotesDiff = 0;
+            let downvotesDiff = 0;
+
+            if (currentUserVote === 'up') {
+              upvotesDiff -= 1;
+            } else if (currentUserVote === 'down') {
+              downvotesDiff -= 1;
+            }
+
+            if (nextVote === 'up') {
+              upvotesDiff += 1;
+            } else if (nextVote === 'down') {
+              downvotesDiff += 1;
+            }
+
+            return {
+              ...q,
+              upvotes: Math.max(0, (q.upvotes || 0) + upvotesDiff),
+              downvotes: Math.max(0, (q.downvotes || 0) + downvotesDiff)
+            };
+          }
+          return q;
+        });
+      });
+
+      if (nextVote === 'up') {
+        toast.success('Upvoted!');
+      } else if (nextVote === 'down') {
+        toast.success('Downvoted!');
+      } else {
+        toast.success('Removed vote.');
+      }
+
+      await loadDashboardData();
+    } catch (err: any) {
+      toast.error('Failed to register reaction.');
     }
   };
 
@@ -361,6 +484,10 @@ export const UserDashboard: React.FC = () => {
                 // Determine if new (e.g., created recently, or mock newly marked)
                 const isNew = new Date(q.created_at).getTime() > new Date('2026-03-01').getTime();
 
+                // Find user vote row
+                const voteRow = userVotes.find(v => v.question_id === q.id);
+                const currentUserVote = voteRow ? voteRow.vote : null;
+
                 return (
                   <DotGridCard
                     key={q.id}
@@ -368,6 +495,10 @@ export const UserDashboard: React.FC = () => {
                     progressStatus={progressStatus}
                     isNew={isNew}
                     onPlay={handlePlayQuestion}
+                    currentUserVote={currentUserVote}
+                    onToggleStatus={handleToggleQuestionStatus}
+                    onToggleVote={handleToggleQuestionVote}
+
                   />
                 );
               })}
@@ -405,7 +536,7 @@ export const UserDashboard: React.FC = () => {
 
       {/* FOOTER METRIC NOTE */}
       <footer className="bg-[#050505] border-t border-zinc-850/80 py-4 px-6 text-center text-[9px] text-zinc-650 font-mono tracking-widest mt-12 shrink-0">
-        POWERED BY GUESSTIMATE DB ENGINE . PERSISTING METRICS SAFELY
+        Guesstimate Tracker. 100% Vibe Coded. Soham Banerjee.
       </footer>
 
       {/* OVERLAY MODAL: Question Sandbox Workspace */}
