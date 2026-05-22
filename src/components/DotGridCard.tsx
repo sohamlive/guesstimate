@@ -3,6 +3,7 @@ import React from 'react';
 //import { Play, ThumbsUp, Check, RefreshCw, Sparkles } from 'lucide-react';
 import { Question, ProgressStatus, VoteType } from '../types';
 import { Play, ThumbsUp, ThumbsDown, Check, RefreshCw, Sparkles } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 interface DotGridCardProps {
   question: Question;
@@ -24,6 +25,9 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
   onToggleStatus,
   onToggleVote,
 }) => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+
   // Determine card style class based on solved state and category
   // const getCardBgClass = () => {
   //   if (progressStatus === 'solved') {
@@ -45,7 +49,7 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
   // };
   const getCardBgClass = () => {
     if (progressStatus === 'solved') {
-      return 'card-solved border border-zinc-800/80 hover:border-zinc-600 shadow-sm';
+      return 'card-solved border border-zinc-300 dark:border-zinc-800/80 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-sm';
     }
 
     switch (question.category_name) {
@@ -63,7 +67,7 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
 
       default:
         // Assuming border-zinc-800 for fallback, lighting up to a clean zinc-600
-        return 'card-default border border-zinc-800 hover:border-zinc-600 shadow-lg shadow-black/30 hover:shadow-white/5';
+        return 'card-default border border-zinc-300 dark:border-zinc-800 hover:border-zinc-450 dark:hover:border-zinc-600 shadow-lg shadow-black/30 hover:shadow-white/5';
     }
   };
 
@@ -87,24 +91,36 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
     >
       {/* Top row with badges */}
       <div className="flex items-center justify-between gap-2 mb-3">
-        <span className="text-[10px] uppercase tracking-wider font-semibold text-zinc-300 bg-zinc-900 border border-zinc-800/80 px-2.5 py-1 rounded-md">
+        <span className={`text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-md border ${isLight
+          ? 'text-zinc-800 bg-zinc-100/50 border-zinc-300'
+          : 'text-zinc-300 bg-zinc-900/50 border-zinc-700'
+          }`}>
           {question.category_name}
         </span>
 
         {/* Status badges */}
         <div className="flex items-center gap-1.5 font-mono">
           {progressStatus === 'solved' && (
-            <span className="flex items-center gap-1 text-[10px] font-bold text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/25 px-2 py-0.5 rounded-md">
+            <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md border ${isLight
+              ? 'text-[#047857] bg-[#E6F4EA] border-[#047857]/30'
+              : 'text-[#10B981] bg-[#10B981]/10 border-[#10B981]/25'
+              }`}>
               <Check size={10} strokeWidth={3} /> SOLVED
             </span>
           )}
           {progressStatus === 'retry' && (
-            <span className="flex items-center gap-1 text-[10px] font-bold text-[#F59E0B] bg-[#F59E0B]/10 border border-[#F59E0B]/25 px-2 py-0.5 rounded-md animate-pulse">
+            <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md border animate-pulse ${isLight
+              ? 'text-[#B45309] bg-[#FEF3C7] border-[#B45309]/30'
+              : 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/25'
+              }`}>
               <RefreshCw size={10} className="animate-spin" style={{ animationDuration: '4s' }} /> RETRY
             </span>
           )}
           {isNew && progressStatus === 'none' && (
-            <span className="flex items-center gap-1 text-[10px] font-bold text-white bg-white/10 border border-white/20 px-2 py-0.5 rounded-md">
+            <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md border ${isLight
+              ? 'text-zinc-850 bg-zinc-200 border-zinc-350 shadow-sm'
+              : 'text-white bg-white/10 border-white/20'
+              }`}>
               <Sparkles size={10} /> NEW
             </span>
           )}
@@ -113,7 +129,8 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
 
       {/* Question prompt */}
       <div className="flex-grow flex items-center mb-5">
-        <h3 className="font-serif italic text-white text-base sm:text-lg leading-relaxed line-clamp-3">
+        <h3 className={`font-serif text-base sm:text-lg leading-relaxed line-clamp-3 ${isLight ? 'text-zinc-900' : 'text-white'
+          }`}>
           "{question.question}"
         </h3>
       </div>
@@ -141,19 +158,27 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
           </button>
         </div>
       </div> */}
+
+
       {/* Bottom info row with Interactive Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-y-3 gap-x-1.5 mt-auto pt-3 border-t border-zinc-600/60 select-none">
+      <div className={`flex flex-wrap items-center justify-between gap-y-3 gap-x-1.5 mt-auto pt-3 border-t select-none ${isLight ? 'border-zinc-400' : 'border-zinc-700'
+        }`}>
 
         {/* Left Side: Upvote / Downvote Capsule */}
-        <div className="flex items-center gap-1 bg-zinc-950 border border-zinc-600 rounded-lg p-0.5 font-mono text-xs">
+        <div className={`flex items-center gap-1 rounded-lg p-0.5 font-mono text-xs ${isLight
+          ? 'bg-zinc-100 border border-zinc-400'
+          : 'bg-zinc-950 border border-zinc-700'
+          }`}>
           <button
             onClick={(e) => {
               e.stopPropagation();
               onToggleVote?.(question.id, currentUserVote, 'up');
             }}
-            className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer ${currentUserVote === 'up'
-              ? 'bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/20 font-bold'
-              : 'text-zinc-500 hover:text-zinc-200 hover:bg-zinc-900 border border-transparent'
+            className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer border border-transparent ${currentUserVote === 'up'
+              ? 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30 font-bold'
+              : (isLight
+                ? 'text-zinc-605 hover:text-zinc-900 hover:bg-zinc-200/50'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900')
               }`}
             title={currentUserVote === 'up' ? 'Remove Upvote' : 'Upvote Challenge'}
           >
@@ -166,9 +191,11 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
               e.stopPropagation();
               onToggleVote?.(question.id, currentUserVote, 'down');
             }}
-            className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer ${currentUserVote === 'down'
-              ? 'bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/20 font-bold'
-              : 'text-zinc-500 hover:text-zinc-350 hover:bg-zinc-900 border border-transparent'
+            className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer border border-transparent ${currentUserVote === 'down'
+              ? 'bg-[#EF4444]/15 text-[#EF4444] border-[#EF4444]/30 font-bold'
+              : (isLight
+                ? 'text-zinc-605 hover:text-zinc-900 hover:bg-zinc-200/50'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900')
               }`}
             title={currentUserVote === 'down' ? 'Remove Downvote' : 'Downvote Challenge'}
           >
@@ -183,15 +210,20 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
         <div className="flex items-center justify-between gap-2.5">
 
           {/* Solved / Retry Action Box */}
-          <div className="flex items-center gap-1 bg-zinc-950 border border-zinc-600 rounded-lg p-0.5 font-mono text-xs">
+          <div className={`flex items-center gap-1 rounded-lg p-0.5 font-mono text-xs ${isLight
+            ? 'bg-zinc-100 border border-zinc-400'
+            : 'bg-zinc-950 border border-zinc-700'
+            }`}>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleStatus?.(question.id, progressStatus, 'solved');
               }}
-              className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer text-[9px] font-bold uppercase ${progressStatus === 'solved'
-                ? 'bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/25'
-                : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent'
+              className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer text-[9px] font-bold uppercase border border-transparent ${progressStatus === 'solved'
+                ? 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/25 font-bold'
+                : (isLight
+                  ? 'text-zinc-605 hover:text-zinc-900 hover:bg-zinc-200/50'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900')
                 }`}
               title={progressStatus === 'solved' ? 'Unmark Solved' : 'Mark as Solved'}
             >
@@ -204,9 +236,11 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
                 e.stopPropagation();
                 onToggleStatus?.(question.id, progressStatus, 'retry');
               }}
-              className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer text-[9px] font-bold uppercase ${progressStatus === 'retry'
-                ? 'bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/25'
-                : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 border border-transparent'
+              className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer text-[9px] font-bold uppercase border border-transparent ${progressStatus === 'retry'
+                ? 'bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/25 font-bold'
+                : (isLight
+                  ? 'text-zinc-605 hover:text-zinc-900 hover:bg-zinc-200/50'
+                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900')
                 }`}
               title={progressStatus === 'retry' ? 'Unmark Retry' : 'Flag for Retry'}
             >
@@ -215,7 +249,7 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
             </button>
           </div>
 
-          <span className={`text-[10px] font-mono uppercase tracking-wider font-bold ${getDifficultyColor(question.difficulty)}`}>
+          <span className={`text-[12px] font-mono uppercase tracking-wider font-bold ${getDifficultyColor(question.difficulty)}`}>
             {question.difficulty}
           </span>
 
@@ -224,10 +258,16 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
               e.stopPropagation();
               onPlay(question);
             }}
-            className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-all cursor-pointer ${progressStatus === 'solved'
-              ? 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-white'
-              : 'bg-white text-black hover:bg-zinc-200 mt-0.5 shadow-md hover:scale-105'
-              }`}
+            className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-all cursor-pointer border ${isLight
+              ? (progressStatus === 'solved'
+                ? 'bg-zinc-150 border-zinc-250 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900 font-bold'
+                : 'bg-zinc-900 border-zinc-900 text-white hover:bg-zinc-800'
+              )
+              : (progressStatus === 'solved'
+                ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                : 'bg-white border-white text-black hover:bg-zinc-200 shadow-md'
+              )
+              } mt-0.5 hover:scale-105`}
             title="Open Challenge Workspace"
           >
             <Play size={10} fill="currentColor" className="ml-0.5" />

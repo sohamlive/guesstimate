@@ -6,11 +6,14 @@ import { db } from '../lib/db';
 import { DotGridCard } from '../components/DotGridCard';
 import { WorkspaceModal } from '../components/WorkspaceModal';
 import { StatsModal } from '../components/StatsModal';
-import { Search, LogOut, Award, SlidersHorizontal, RotateCcw, AlertCircle, X, ChevronDown } from 'lucide-react';
+import { Search, LogOut, Award, SlidersHorizontal, RotateCcw, AlertCircle, X, ChevronDown, Sun, Moon } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useTheme } from '../context/ThemeContext';
 
 export const UserDashboard: React.FC = () => {
   const { session, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const isLight = theme === 'light';
   const userId = session?.user?.id || '';
   const profile = session?.profile;
 
@@ -97,9 +100,9 @@ export const UserDashboard: React.FC = () => {
       if (nextStatus === 'solved') {
         toast.success('Challenge marked as Solved!');
       } else if (nextStatus === 'retry') {
-        toast.success('Added to retry queue.');
+        toast.success('Added to your Retry queue.');
       } else {
-        toast.success('Removed state capsule.');
+        toast.success('Removed from your Retry queue.');
       }
 
       // Sync back counters silently
@@ -250,25 +253,25 @@ export const UserDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-zinc-300 flex flex-col select-none">
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight ? 'bg-[#FAFAFB] text-zinc-700' : 'bg-[#0A0A0A] text-zinc-300'}`}>
 
-      {/* Dynamic Header Navbar in Sophisticated Dark */}
-      <nav className="bg-[#050505] border-b border-zinc-850/80">
+      {/* Dynamic Header Navbar */}
+      <nav className={`border-b transition-colors duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-[#050505] border-zinc-850/80'}`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
 
           {/* Logo */}
           <div className="flex items-center gap-3 shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-serif italic font-black text-xl shadow-md">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-serif italic font-black text-xl shadow-md ${isLight ? 'bg-zinc-950 text-white' : 'bg-white text-black'}`}>
               G.
             </div>
-            <span className="font-serif italic text-2xl text-white tracking-tight hidden sm:inline">
+            <span className={`font-serif italic text-2xl tracking-tight hidden sm:inline transition-colors ${isLight ? 'text-zinc-950' : 'text-white'}`}>
               Guesstimate Tracker.
             </span>
           </div>
 
           {/* Search bar centered */}
           <div className="flex-grow max-w-lg relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-550">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500">
               <Search size={14} />
             </div>
             <input
@@ -279,35 +282,54 @@ export const UserDashboard: React.FC = () => {
                 setItemsLimit(12);
               }}
               placeholder="Search challenges by keyword or tags..."
-              className="w-full pl-9 pr-4 py-2 text-sm border border-zinc-800 rounded-xl outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-850 bg-zinc-900/40 text-white placeholder:text-zinc-650"
+              className={`w-full pl-9 pr-4 py-2 text-sm border rounded-xl outline-none transition-colors ${isLight ? 'border-zinc-350 bg-zinc-100 text-black placeholder:text-zinc-400 focus:border-zinc-500' : 'border-zinc-800 bg-zinc-600/40 text-white placeholder:text-zinc-650 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-850'}`}
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute inset-y-0 right-3 flex items-center text-zinc-400 hover:text-white cursor-pointer"
+                className={`absolute inset-y-0 right-3 flex items-center cursor-pointer transition-colors ${isLight ? 'text-zinc-400 hover:text-zinc-800' : 'text-zinc-400 hover:text-white'}`}
               >
                 <X size={13} />
               </button>
             )}
           </div>
 
-          {/* User Profile Avatar & Logout */}
+          {/* User Profile Avatar, Theme & Logout */}
           <div className="flex items-center gap-3 shrink-0">
 
-            {/* View Stats Button */}
+            {/* Theme toggle Button */}
+            {/* <button
+              onClick={toggleTheme}
+              className={`p-2 border transition-all rounded-xl cursor-pointer ${isLight ? 'border-zinc-300 text-zinc-700 bg-zinc-100 hover:bg-zinc-200' : 'border-zinc-850 text-zinc-300 bg-zinc-900 hover:bg-zinc-800/80'}`}
+              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {isLight ? <Moon size={14} /> : <Sun size={14} />}
+            </button> */}
             <button
+              onClick={toggleTheme}
+              className={`p-2 border transition-all duration-200 rounded-xl cursor-pointer ${isLight
+                ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
+                : 'border-zinc-800 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
+                }`}
+              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {isLight ? <Moon size={14} /> : <Sun size={14} />}
+            </button>
+
+            {/* View Stats Button */}
+            {/* <button
               onClick={() => setShowStatsModal(true)}
-              className="flex items-center gap-1 text-xs bg-zinc-900 border border-zinc-850 hover:bg-zinc-800 text-zinc-300 hover:text-white font-semibold tracking-wider font-mono px-3 py-2 rounded-xl cursor-pointer transition-colors"
+              className={`flex items-center gap-1 text-xs border font-semibold tracking-wider font-mono px-3 py-2 rounded-xl cursor-pointer transition-colors ${isLight ? 'bg-zinc-100 border-zinc-300 hover:bg-zinc-200 text-zinc-800 hover:text-zinc-950' : 'bg-zinc-900 border-zinc-850 hover:bg-zinc-800 text-zinc-300 hover:text-white'}`}
               title="Your Statistics"
             >
               <Award size={13} />
               <span className="hidden md:inline">Analytics</span>
-            </button>
+            </button> */}
 
-            {/* Profile Circle Icon representing dropdown click */}
+            {/* Profile Circle Icon */}
             <button
               onClick={() => setShowStatsModal(true)}
-              className="w-9 h-9 bg-white text-black flex items-center justify-center rounded-full text-xs font-bold font-serif shadow-md cursor-pointer hover:bg-zinc-200 transition-colors"
+              className={`w-9 h-9 flex items-center justify-center rounded-full text-xs font-bold font-serif shadow-md cursor-pointer transition-colors ${isLight ? 'bg-zinc-950 text-white hover:bg-zinc-800' : 'bg-white text-black hover:bg-zinc-200'}`}
               title="Review Profile"
             >
               {profile?.first_name?.[0]?.toUpperCase() || 'P'}
@@ -316,7 +338,10 @@ export const UserDashboard: React.FC = () => {
             {/* Log Out */}
             <button
               onClick={logout}
-              className="p-2 border border-red-950/40 text-red-500 bg-red-950/10 hover:bg-red-950/30 rounded-xl transition-all cursor-pointer"
+              className={`p-2 border rounded-xl transition-all duration-200 cursor-pointer ${isLight
+                ? 'bg-zinc-100 border-zinc-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-zinc-600'
+                : 'bg-zinc-900/50 border-zinc-800 hover:bg-red-950/30 hover:border-red-900/50 hover:text-red-400 text-zinc-400'
+                }`}
               title="Sign Out"
             >
               <LogOut size={14} />
@@ -327,18 +352,18 @@ export const UserDashboard: React.FC = () => {
       </nav>
 
       {/* Primary Filtering Ribbon Panel */}
-      <section className="bg-[#0D0D0D] border-b border-zinc-850/80 py-3.5 px-6">
+      <section className={`border-b py-3.5 px-6 transition-colors duration-300 ${isLight ? 'bg-zinc-100/50 border-zinc-250' : 'bg-[#0D0D0D] border-zinc-850/80'}`}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
 
           {/* Leftside category capsules */}
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-            <span className="text-[10px] uppercase font-mono tracking-widest font-bold text-zinc-550 mr-1 shrink-0">Genre:</span>
+            <span className="text-[12px] uppercase font-mono tracking-widest font-bold text-zinc-500 mr-1 shrink-0">Genre:</span>
 
             <button
               onClick={handleClearCategories}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all shrink-0 font-sans ${selectedCategories.length === 0
-                ? 'bg-white text-black border border-transparent shadow-xs'
-                : 'bg-zinc-900 text-zinc-400 border border-zinc-850 hover:text-white hover:bg-zinc-800'
+                ? (isLight ? 'bg-zinc-900 text-white border border-transparent shadow-xs' : 'bg-white text-black border border-transparent shadow-xs')
+                : (isLight ? 'bg-white text-zinc-650 border border-zinc-250 hover:bg-zinc-200 hover:text-zinc-900' : 'bg-zinc-900 text-zinc-400 border border-zinc-850 hover:text-white hover:bg-zinc-800')
                 }`}
             >
               All
@@ -351,8 +376,8 @@ export const UserDashboard: React.FC = () => {
                   key={c.id}
                   onClick={() => handleCategoryToggle(c.id)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all shrink-0 font-sans ${isActive
-                    ? 'bg-white text-black border border-transparent shadow-xs'
-                    : 'bg-zinc-900 text-zinc-400 border border-zinc-850 hover:text-white hover:bg-zinc-800'
+                    ? (isLight ? 'bg-zinc-900 text-white border border-transparent shadow-xs' : 'bg-white text-black border border-transparent shadow-xs')
+                    : (isLight ? 'bg-white text-zinc-650 border border-zinc-250 hover:bg-zinc-200 hover:text-zinc-900' : 'bg-zinc-900 text-zinc-400 border border-zinc-850 hover:text-white hover:bg-zinc-800')
                     }`}
                 >
                   {c.name}
@@ -362,11 +387,11 @@ export const UserDashboard: React.FC = () => {
           </div>
 
           {/* Rightside additional parameters */}
-          <div className="flex flex-wrap items-center gap-5 text-xs font-semibold text-zinc-400 font-mono">
+          <div className={`flex flex-wrap items-center gap-5 text-xs font-semibold font-mono ${isLight ? 'text-zinc-550' : 'text-zinc-400'}`}>
 
             {/* Difficulty Dropdown */}
             <div className="flex items-center gap-2">
-              <span className="text-zinc-500 text-[10px] uppercase tracking-widest">Difficulty:</span>
+              <span className="text-zinc-555 dark:text-zinc-500 text-[12px] uppercase tracking-widest">Difficulty:</span>
               <div className="relative">
                 <select
                   value={selectedDifficulty}
@@ -374,14 +399,14 @@ export const UserDashboard: React.FC = () => {
                     setSelectedDifficulty(e.target.value);
                     setItemsLimit(12);
                   }}
-                  className="p-1.5 pr-6 bg-zinc-900 border border-zinc-800 text-zinc-300 rounded-lg text-xs outline-none focus:border-zinc-500 appearance-none cursor-pointer hover:bg-zinc-850 transition-colors font-mono"
+                  className={`p-1.5 pr-6 rounded-lg text-xs outline-none appearance-none cursor-pointer transition-colors font-mono ${isLight ? 'bg-white border border-zinc-300 text-zinc-800 hover:bg-zinc-50 focus:border-zinc-550' : 'bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-850 focus:border-zinc-500'}`}
                 >
                   <option value="All">All Levels</option>
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
                   <option value="Hard">Hard</option>
                 </select>
-                <ChevronDown size={11} className="absolute right-2 top-2.5 text-zinc-550 pointer-events-none" />
+                <ChevronDown size={11} className="absolute right-2 top-2.5 text-zinc-500 pointer-events-none" />
               </div>
             </div>
 
@@ -397,9 +422,9 @@ export const UserDashboard: React.FC = () => {
                     setShowSolved(e.target.checked);
                     setItemsLimit(12);
                   }}
-                  className="w-3.5 h-3.5 bg-zinc-950 border-zinc-800 rounded-xs accent-white checked:bg-zinc-750 checked:border-transparent text-white focus:ring-0 cursor-pointer"
+                  className={`w-3.5 h-3.5 focus:ring-0 cursor-pointer ${isLight ? 'accent-zinc-900 bg-white border border-zinc-300' : 'accent-white bg-zinc-950 border border-zinc-800'}`}
                 />
-                <span className="text-zinc-500 hover:text-zinc-300 font-mono text-[10px] uppercase tracking-widest">Show Solved</span>
+                <span className={`font-mono text-[12px] uppercase tracking-widest ${isLight ? 'text-zinc-500 hover:text-zinc-850' : 'text-zinc-500 hover:text-zinc-300'}`}>Show Solved</span>
               </label>
 
               {/* Show Retries Toggle */}
@@ -411,9 +436,9 @@ export const UserDashboard: React.FC = () => {
                     setShowRetriesOnly(e.target.checked);
                     setItemsLimit(12);
                   }}
-                  className="w-3.5 h-3.5 bg-zinc-950 border-zinc-800 rounded-xs accent-white checked:bg-zinc-750 checked:border-transparent text-white focus:ring-0 cursor-pointer"
+                  className={`w-3.5 h-3.5 focus:ring-0 cursor-pointer ${isLight ? 'accent-zinc-900 bg-white border border-zinc-300' : 'accent-white bg-zinc-950 border border-zinc-800'}`}
                 />
-                <span className="text-zinc-500 hover:text-zinc-300 flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest">
+                <span className={`flex items-center gap-1 font-mono text-[12px] uppercase tracking-widest ${isLight ? 'text-zinc-500 hover:text-zinc-850' : 'text-zinc-500 hover:text-zinc-300'}`}>
                   <span>Retries Only</span>
                   {showRetriesOnly && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>}
                 </span>
@@ -424,7 +449,7 @@ export const UserDashboard: React.FC = () => {
             {/* Reset Stats Icon Button */}
             <button
               onClick={handleResetFilters}
-              className="p-1.5 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-lg cursor-pointer transition-colors"
+              className={`p-1.5 border hover:text-white rounded-lg cursor-pointer transition-colors ${isLight ? 'bg-white border-zinc-300 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800'}`}
               title="Reset All Filters"
             >
               <RotateCcw size={12} />
@@ -442,30 +467,30 @@ export const UserDashboard: React.FC = () => {
           /* Skeletons loader */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="bg-[#121212] rounded-xl p-5 min-h-[190px] animate-pulse flex flex-col justify-between border border-zinc-800/80">
-                <div className="h-4 bg-zinc-800 rounded-md w-1/3 mb-4"></div>
+              <div key={i} className={`rounded-xl p-5 min-h-[190px] animate-pulse flex flex-col justify-between border ${isLight ? 'bg-white border-zinc-250' : 'bg-[#121212] border-zinc-805/85 border-zinc-800/80'}`}>
+                <div className={`h-4 rounded-md w-1/3 mb-4 ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
                 <div className="space-y-2 flex-grow">
-                  <div className="h-4 bg-zinc-800 rounded-md w-full"></div>
-                  <div className="h-4 bg-zinc-800 rounded-md w-4/5"></div>
+                  <div className={`h-4 rounded-md w-full ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
+                  <div className={`h-4 rounded-md w-4/5 ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
                 </div>
-                <div className="h-6 bg-zinc-800 rounded-md w-1/4 mt-4"></div>
+                <div className={`h-6 rounded-md w-1/4 mt-4 ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
               </div>
             ))}
           </div>
         ) : filteredQuestions.length === 0 ? (
 
           /* Empty state */
-          <div className="bg-[#121212] py-14 px-10 border border-zinc-800/80 rounded-xl flex flex-col items-center justify-center text-center max-w-md mx-auto my-12 shadow-2xl">
-            <AlertCircle className="text-zinc-650 mb-4" size={44} />
-            <h4 className="font-serif italic text-lg text-white">
+          <div className={`py-14 px-10 border rounded-xl flex flex-col items-center justify-center text-center max-w-md mx-auto my-12 shadow-2xl transition-colors ${isLight ? 'bg-white border-zinc-300' : 'bg-[#121212] border-zinc-800/80'}`}>
+            <AlertCircle className="text-zinc-400 mb-4" size={44} />
+            <h4 className={`font-serif italic text-lg ${isLight ? 'text-zinc-950' : 'text-white'}`}>
               No challenges match your filters
             </h4>
-            <p className="text-xs text-zinc-500 mt-2 font-sans leading-relaxed">
+            <p className={`text-xs mt-2 font-sans leading-relaxed ${isLight ? 'text-zinc-550' : 'text-zinc-500'}`}>
               Try adjusting your genre categories, expanding difficulty parameters, or clearing the search query string directly to retry.
             </p>
             <button
               onClick={handleResetFilters}
-              className="mt-6 px-5 py-2.5 bg-white text-black font-semibold rounded-lg text-xs transition-colors cursor-pointer font-mono uppercase tracking-wider hover:bg-zinc-200"
+              className={`mt-6 px-5 py-2.5 font-semibold rounded-lg text-xs transition-colors cursor-pointer font-mono uppercase tracking-wider ${isLight ? 'bg-zinc-950 text-white hover:bg-zinc-800' : 'bg-white text-black hover:bg-zinc-200'}`}
             >
               Reset Filters
             </button>
@@ -504,24 +529,24 @@ export const UserDashboard: React.FC = () => {
               })}
             </div>
 
-            {/* Load more controls matching PRD caption tags */}
+            {/* Load more controls */}
             {filteredQuestions.length > itemsLimit && (
               <div className="mt-12 flex flex-col items-center">
                 {loadingMore ? (
                   <div className="flex flex-col items-center gap-1.5">
                     <div className="flex items-center gap-1 justify-center">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${isLight ? 'bg-zinc-950' : 'bg-white'}`} style={{ animationDelay: '0ms' }}></span>
+                      <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${isLight ? 'bg-zinc-950' : 'bg-white'}`} style={{ animationDelay: '150ms' }}></span>
+                      <span className={`w-1.5 h-1.5 rounded-full animate-bounce ${isLight ? 'bg-zinc-950' : 'bg-white'}`} style={{ animationDelay: '300ms' }}></span>
                     </div>
-                    <span className="text-[9px] uppercase tracking-widest font-mono text-zinc-550">
+                    <span className="text-[9px] uppercase tracking-widest font-mono text-zinc-500">
                       Syncing parameters...
                     </span>
                   </div>
                 ) : (
                   <button
                     onClick={handleLoadMore}
-                    className="px-6 py-2.5 bg-[#121212] hover:bg-zinc-800 border border-zinc-800 text-zinc-105 hover:text-white font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider"
+                    className={`px-6 py-2.5 border font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider ${isLight ? 'bg-white border-zinc-300 text-zinc-900 hover:bg-zinc-100' : 'bg-[#121212] border-zinc-800 text-zinc-105 hover:text-white hover:bg-zinc-800'}`}
                   >
                     Load More Calculations
                   </button>
@@ -535,8 +560,12 @@ export const UserDashboard: React.FC = () => {
       </main>
 
       {/* FOOTER METRIC NOTE */}
-      <footer className="bg-[#050505] border-t border-zinc-850/80 py-4 px-6 text-center text-[9px] text-zinc-650 font-mono tracking-widest mt-12 shrink-0">
-        Guesstimate Tracker. 100% Vibe Coded. Soham Banerjee.
+      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-250 text-zinc-550' : 'bg-[#050505] border-zinc-850/80 text-zinc-650'}`}>
+        <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
+          <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
+          <p>PLAY.SIDELOWER.IN</p>
+        </div>
+
       </footer>
 
       {/* OVERLAY MODAL: Question Sandbox Workspace */}

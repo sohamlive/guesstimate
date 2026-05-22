@@ -6,7 +6,7 @@
   --font-display: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
-
+  
   /* Core Palette for Sophisticated Dark */
   --color-bg-base: #0A0A0A;
   --color-bg-canvas: #0D0D0D;
@@ -15,89 +15,120 @@
   --color-bg-card: #121212;
   --color-bg-surface: #141414;
   --color-bg-muted: #1A1A1A;
-
+  
   --color-brand-primary: #FFFFFF;
   --color-brand-primary-hover: #E4E4E7;
   --color-brand-primary-light: #18181B;
-
+  
   --color-brand-accent: #FFFFFF;
   --color-brand-accent-hover: #E4E4E7;
 }
 
-/* Custom Base styles to match Sophisticated Dark */
+/* Custom Base styles to match Sophisticated Dark & Light */
 body {
   background-color: #0A0A0A;
-  color: #D4D4D8;
-  /* zinc-300 */
+  color: #D4D4D8; /* zinc-300 */
   font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Custom scrollbars for Dark Theme */
+body.light {
+  background-color: #F9F9FB;
+  color: #3F3F46; /* zinc-700 */
+}
+
+/* Custom scrollbars for Dark & Light Themes */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
-::-webkit-scrollbar-track {
+body:not(.light) ::-webkit-scrollbar-track {
   background: #050505;
 }
-
-::-webkit-scrollbar-thumb {
+body:not(.light) ::-webkit-scrollbar-thumb {
   background: #27272A;
   border-radius: 3px;
 }
-
-::-webkit-scrollbar-thumb:hover {
+body:not(.light) ::-webkit-scrollbar-thumb:hover {
   background: #3F3F46;
 }
 
-/* Premium dark theme cards - Backgrounds locked, Dots darkened for text readability */
+body.light ::-webkit-scrollbar-track {
+  background: #F1F1F4;
+}
+body.light ::-webkit-scrollbar-thumb {
+  background: #D4D4D8;
+  border-radius: 3px;
+}
+body.light ::-webkit-scrollbar-thumb:hover {
+  background: #A1A1AA;
+}
 
+/* Custom card category dot grids - modified to look premium dark in Sophisticated Dark */
 .card-population {
-  /* Rich, warm copper/amber undertone */
   background-color: #241B18; 
   background-image: radial-gradient(circle, #3D2D28 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  /* border: 1px solid rgba(168, 112, 97, 0.2); */
 }
 
 .card-market-sizing {
-  /* Elegant deep amethyst/purple undertone */
-  background-color: #1B1826; 
+   background-color: #1B1826; 
   background-image: radial-gradient(circle, #332A47 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  /* border: 1px solid rgba(144, 110, 216, 0.2); */
 }
 
 .card-fermi-estimate {
-  /* Crisp jade/emerald green undertone */
   background-color: #171E1B; 
   background-image: radial-gradient(circle, #25332F 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  /* border: 1px solid rgba(97, 154, 134, 0.2); */
 }
 
 .card-scientific {
-  /* Clean slate/nordic blue undertone */
   background-color: #181D24; 
   background-image: radial-gradient(circle, #263142 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  /* border: 1px solid rgba(116, 151, 204, 0.2); */
 }
 
 .card-default {
-  /* Balanced, neutral zinc gray */
-  background-color: #202022; 
-  background-image: radial-gradient(circle, #34343A 1.5px, transparent 1.5px);
+  background-color: #0E0E0E;
+  background-image: radial-gradient(circle, #27272A 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Solved states force clean, desaturated, receding visual cues */
 .card-solved {
-  background-color: #1A1A1E;
+  background-color: #191920;
   background-image: radial-gradient(circle, #2A2A30 1.5px, transparent 1.5px);
   background-size: 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0.9;
+}
+
+/* Light theme card overrides */
+body.light .card-population {
+  background-color: #FFF9F6;
+  background-image: radial-gradient(circle, #FBE0D3 1.5px, transparent 1.5px);
+}
+body.light .card-market-sizing {
+  background-color: #F8F6FF;
+  background-image: radial-gradient(circle, #E1DBFA 1.5px, transparent 1.5px);
+}
+body.light .card-fermi-estimate {
+  background-color: #F3FCF9;
+  background-image: radial-gradient(circle, #CFEFE7 1.5px, transparent 1.5px);
+}
+body.light .card-scientific {
+  background-color: #F4FAFF;
+  background-image: radial-gradient(circle, #D2E7FC 1.5px, transparent 1.5px);
+}
+body.light .card-default {
+  background-color: #FAFAFA;
+  background-image: radial-gradient(circle, #E4E4E7 1.5px, transparent 1.5px);
+}
+body.light .card-solved {
+  background-color: #F2F2F2;
+  background-image: radial-gradient(circle, #DBDBDB 1.5px, transparent 1.5px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   opacity: 0.9;
 }
 
@@ -117,4 +148,11 @@ body {
   background-image: radial-gradient(circle, #2f2f4c 1.5px, transparent 5px);
   background-size: 24px 24px;
   animation: bgDrift 20s linear infinite;
+  transition: background-color 0.3s ease;
 }
+
+body.light .hero-dot-drift {
+  background-color: #FAFAFB;
+  background-image: radial-gradient(circle, #D4D4E8 2px, transparent 5px);
+}
+

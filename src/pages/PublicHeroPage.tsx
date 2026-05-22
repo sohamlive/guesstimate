@@ -1,38 +1,42 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Sparkles, Filter, RefreshCw, BarChart2, Shield, Compass, ChevronRight } from 'lucide-react';
+import { Play, Sparkles, Filter, RefreshCw, BarChart2, Shield, Compass, ChevronRight, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 export const PublicHeroPage: React.FC = () => {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
+  const isLight = theme === 'light';
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-[#0A0A0A] text-zinc-300 font-sans selection:bg-white selection:text-black">
+    <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300 font-sans ${isLight ? 'bg-[#FAFAFB] text-zinc-700 selection:bg-zinc-200 selection:text-black' : 'bg-[#0A0A0A] text-zinc-300 selection:bg-white selection:text-black'}`}>
 
-      {/* Sophisticated Dark Navigation Bar */}
-      <header className="sticky top-0 z-50 bg-[#050505]/95 backdrop-blur-md border-b border-zinc-800/80">
+      {/* Sophisticated Navigation Bar */}
+      <header className={`sticky top-0 z-50 transition-colors duration-300 backdrop-blur-md border-b ${isLight ? 'bg-white/95 border-zinc-200' : 'bg-[#050505]/95 border-zinc-800/80'}`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-serif italic font-black text-xl shadow-md">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-serif italic font-black text-xl shadow-md ${isLight ? 'bg-zinc-950 text-white' : 'bg-white text-black'}`}>
               G.
             </div>
-            <span className="font-serif italic text-2xl text-white tracking-tight">
+            <span className={`font-serif italic text-2xl tracking-tight transition-colors ${isLight ? 'text-zinc-950' : 'text-white'}`}>
               Guesstimate Tracker.
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className={`p-2 border transition-all rounded-lg cursor-pointer ${isLight ? 'border-zinc-300 text-zinc-700 hover:bg-zinc-150 hover:text-zinc-950' : 'border-zinc-700 text-zinc-300 hover:bg-zinc-900/80 hover:text-white'}`}
+              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {isLight ? <Moon size={16} /> : <Sun size={16} />}
+            </button>
             <button
               onClick={() => navigate('/login')}
-              className="px-4 py-2 border border-zinc-700 text-zinc-300 hover:bg-zinc-900/80 hover:text-white transition-all rounded-lg text-sm font-semibold cursor-pointer font-mono"
+              className={`px-4 py-2 border transition-all rounded-lg text-sm font-semibold cursor-pointer font-mono ${isLight ? 'border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950' : 'border-zinc-700 text-zinc-300 hover:bg-zinc-900/80 hover:text-white'}`}
             >
               Sign In
             </button>
-            {/* <button
-              onClick={() => navigate('/login')}
-              className="px-4 py-2 bg-white hover:bg-zinc-200 text-black shadow-sm transition-all rounded-lg text-sm font-semibold cursor-pointer hidden sm:block font-mono"
-            >
-              Start Practising
-            </button> */}
           </div>
         </div>
       </header>
@@ -43,40 +47,23 @@ export const PublicHeroPage: React.FC = () => {
 
           {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col gap-6 text-left">
-            {/* <div className="inline-flex items-center gap-2 bg-[#121212] border border-zinc-800 px-3 py-1.5 rounded-full w-fit">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-[10px] font-mono text-zinc-400 tracking-wider">MANAGEMENT CONSULTING & TECH ROLES</span>
-            </div> */}
 
-            <h1 className="font-serif italic text-white leading-tight tracking-tight text-4xl sm:text-5xl lg:text-6xl">
+            <h1 className={`font-serif italic leading-tight tracking-tight text-4xl sm:text-5xl lg:text-6xl ${isLight ? 'text-zinc-950' : 'text-white'}`}>
               Sharpen Your <br className="hidden sm:inline" />
-              <span className="text-zinc-400 not-italic font-sans font-light">Guesstimate</span> Thinking.
+              <span className={`not-italic font-sans font-light ${isLight ? 'text-zinc-550' : 'text-zinc-400'}`}>Guesstimate</span> Thinking.
             </h1>
 
-            {/* <p className="font-sans text-zinc-450 text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed">
-              Work through Fermi calculations, market-sizing estimates, and scientific parameters. Log private mathematical notebooks, filter by topic complexity, and trace your progress.
-            </p> */}
-
-            <p className="font-sans text-zinc-450 text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed">
+            <p className={`font-sans text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed ${isLight ? 'text-zinc-650' : 'text-zinc-450'}`}>
               From Enrico Fermi estimating an atomic blast's yield with scraps of paper in 1945, to modern market-sizing and scientific bounds. This is the home for your back-of-the-envelope calculations. Structure complex problems, filter by complexity, and map your progress.
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-4">
               <button
                 onClick={() => navigate('/login')}
-                className="px-8 py-4 bg-white hover:bg-zinc-200 text-black rounded-lg shadow-lg font-semibold text-base transition-all cursor-pointer text-center font-mono"
+                className={`px-8 py-4 rounded-lg shadow-lg font-semibold text-base transition-all cursor-pointer text-center font-mono ${isLight ? 'bg-zinc-950 hover:bg-zinc-800 text-white' : 'bg-white hover:bg-zinc-200 text-black'}`}
               >
                 Start Practising Now
               </button>
-              {/* <button
-                onClick={() => {
-                  const target = document.getElementById('details-section');
-                  if (target) target.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="px-6 py-4 bg-[#121212] hover:bg-zinc-800 text-zinc-300 border border-zinc-800 rounded-lg font-semibold text-base transition-all cursor-pointer text-center font-mono"
-              >
-                See How It Works
-              </button> */}
             </div>
           </div>
 
@@ -85,13 +72,13 @@ export const PublicHeroPage: React.FC = () => {
             <div className="relative w-full max-w-[380px] hover:scale-[1.02] transition-transform duration-500">
 
               {/* Back ambient circles */}
-              <div className="absolute -top-12 -left-12 w-48 h-48 rounded-full bg-white/5 blur-2xl"></div>
-              <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full bg-emerald-500/5 blur-2xl"></div>
+              <div className="absolute -top-12 -left-12 w-48 h-48 rounded-full bg-blue-500/5 dark:bg-white/5 blur-2xl"></div>
+              <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full bg-[#10B981]/5 blur-2xl"></div>
 
               {/* Floating Active Question Card Mock */}
-              <div className="relative bg-[#121212] rounded-xl border border-zinc-700 p-6 shadow-2xl z-10">
+              <div className={`relative rounded-xl border p-6 shadow-2xl z-10 transition-colors duration-300 ${isLight ? 'bg-white border-zinc-300' : 'bg-[#121212] border-zinc-700'}`}>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-550 dark:text-zinc-500">
                     MARKET SIZING
                   </span>
                   <span className="text-[10px] bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2.5 py-0.5 rounded-md font-mono">
@@ -100,22 +87,22 @@ export const PublicHeroPage: React.FC = () => {
                 </div>
 
                 <div className="mb-6 min-h-[100px] flex items-center">
-                  <h4 className="font-serif italic text-lg text-white leading-relaxed">
+                  <h4 className={`font-serif italic text-lg leading-relaxed ${isLight ? 'text-zinc-950' : 'text-white'}`}>
                     "How many tennis balls are consumed annually in the Wimbledon tournament?"
                   </h4>
                 </div>
 
-                <div className="border-t border-zinc-800 pt-3 flex items-center justify-between text-xs">
+                <div className={`border-t pt-3 flex items-center justify-between text-xs ${isLight ? 'border-zinc-200' : 'border-zinc-805/80'}`}>
                   <span className="text-zinc-500 font-mono">★ Medium Difficulty</span>
-                  <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${isLight ? 'bg-zinc-950 text-white hover:bg-zinc-800' : 'bg-white text-black hover:bg-zinc-200'}`}>
                     <Play size={10} fill="currentColor" className="ml-0.5" />
                   </div>
                 </div>
               </div>
 
               {/* Stack effect behind active card */}
-              <div className="absolute top-4 left-4 right-4 h-full bg-[#121212]/75 border border-zinc-700/60 rounded-xl -z-10 shadow-lg transform rotate-2"></div>
-              <div className="absolute top-8 left-8 right-8 h-full bg-[#121212]/40 border border-zinc-700/30 rounded-xl -z-20 shadow-md transform -rotate-3"></div>
+              <div className={`absolute top-4 left-4 right-4 h-full border rounded-xl -z-10 shadow-lg transform rotate-2 transition-colors ${isLight ? 'bg-white border-zinc-200/80' : 'bg-[#121212]/75 border-zinc-700/60'}`}></div>
+              <div className={`absolute top-8 left-8 right-8 h-full border rounded-xl -z-20 shadow-md transform -rotate-3 transition-colors ${isLight ? 'bg-white/65 border-zinc-200/40' : 'bg-[#121212]/40 border-zinc-700/30'}`}></div>
 
             </div>
           </div>
@@ -124,23 +111,23 @@ export const PublicHeroPage: React.FC = () => {
       </section>
 
       {/* Stats Counter Panel Strip */}
-      <section className="bg-[#050505] text-white py-8 px-6 border-y border-zinc-800/80">
+      <section className={`border-y transition-colors duration-300 py-8 px-6 ${isLight ? 'bg-zinc-100/50 border-zinc-250 text-zinc-850' : 'bg-[#050505] border-zinc-800/80 text-white'}`}>
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center font-mono">
           <div>
             <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">50+</span>
-            <span className="text-[10px] text-zinc-500 block uppercase tracking-widest mt-1">Analytical Challenges</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Analytical Challenges</span>
           </div>
           <div>
             <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">4</span>
-            <span className="text-[10px] text-zinc-500 block uppercase tracking-widest mt-1">Core Classifications</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Core Classifications</span>
           </div>
           <div>
             <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">3</span>
-            <span className="text-[10px] text-zinc-500 block uppercase tracking-widest mt-1">Difficulty Levels</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Difficulty Levels</span>
           </div>
           <div>
             <span className="font-serif italic font-extrabold text-3xl sm:text-4xl block">100%</span>
-            <span className="text-[10px] text-zinc-500 block uppercase tracking-widest mt-1">Personal Progress Tracker</span>
+            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-1">Personal Progress Tracker</span>
           </div>
         </div>
       </section>
@@ -269,7 +256,7 @@ export const PublicHeroPage: React.FC = () => {
 
       {/* Footer banner block */}
       <footer className="bg-[#050505] text-zinc-400 py-5 px-6 mt-auto text-center border-t border-zinc-850">
-        <div className="max-w-2xl mx-auto flex flex-col items-center gap-6">
+        <div className="max-w-6xl mx-auto flex flex-col items-center gap-6">
           {/* <h2 className="font-serif italic text-white text-2xl sm:text-3xl leading-tight">
             Ready to think in parameters?
           </h2>
@@ -288,7 +275,7 @@ export const PublicHeroPage: React.FC = () => {
             <div>&copy; 2026 Soham Banerjee. Version 1.0</div>
             <div>PLAY.SIDELOWER.IN</div>
           </div> */}
-          <div className="mt-0 pt-3 w-full text-[10px] text-zinc-650 font-mono flex items-center justify-between">
+          <div className="mt-0 pt-3 w-full text-[12px] text-zinc-650 font-mono flex items-center justify-between">
             <div>&copy; 2026 Soham Banerjee. Version 1.0</div>
             <div>PLAY.SIDELOWER.IN</div>
           </div>

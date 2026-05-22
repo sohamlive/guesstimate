@@ -4,8 +4,8 @@ import { Question, Category, Profile, UserProgress, Difficulty, QuestionStatus }
 import { db } from '../lib/db';
 import { ContentStudioModal } from '../components/ContentStudioModal';
 import { UserStudioModal } from '../components/UserStudioModal';
-import { 
-  Users, BarChart2, ShieldAlert, Edit, Trash2, Award, Plus, 
+import {
+  Users, BarChart2, ShieldAlert, Edit, Trash2, Award, Plus,
   Search, SlidersHorizontal, RotateCcw, AlertCircle, LogOut, CheckCircle, RefreshCw, BarChart3, ChevronLeft, ChevronRight, HelpCircle, X
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -41,13 +41,13 @@ export const AdminDashboard: React.FC = () => {
   // Modal State machines
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [showQModal, setShowQModal] = useState<boolean>(false);
-  
+
   const [selectedUserProfile, setSelectedUserProfile] = useState<Profile | null>(null);
   const [showUModal, setShowUModal] = useState<boolean>(false);
 
   // Questionnaire read-only stats modal trigger
   const [readOnlyQStats, setReadOnlyQStats] = useState<Question | null>(null);
-  
+
   // Specific user statistics summary
   const [readOnlyUStats, setReadOnlyUStats] = useState<Profile | null>(null);
 
@@ -135,8 +135,8 @@ export const AdminDashboard: React.FC = () => {
   // successRate Formula from PRD:
   // (Total Solved across all users) / (Total Published Questions * Total Users) * 100
   const denominator = publishedQuestionsCount * totalUsersCount;
-  const successRate = denominator > 0 
-    ? Math.round((globalSolvedCount / denominator) * 100) 
+  const successRate = denominator > 0
+    ? Math.round((globalSolvedCount / denominator) * 100)
     : 0;
 
   // ==========================================
@@ -174,11 +174,11 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-zinc-300 flex flex-col select-none">
-      
+
       {/* Header bar */}
       <nav className="bg-[#050505] border-b border-zinc-850 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          
+
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-serif italic font-black text-xl shadow-md">
@@ -193,21 +193,19 @@ export const AdminDashboard: React.FC = () => {
             <div className="bg-zinc-900 border border-zinc-800 p-0.5 rounded-xl flex ml-4 text-xs font-semibold">
               <button
                 onClick={() => setActiveTab('guesstimates')}
-                className={`px-4 py-1.5 rounded-lg transition-all cursor-pointer ${
-                  activeTab === 'guesstimates'
+                className={`px-4 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'guesstimates'
                     ? 'bg-white text-black font-semibold shadow-sm'
                     : 'text-zinc-550 hover:text-white'
-                }`}
+                  }`}
               >
                 Guesstimates Library
               </button>
               <button
                 onClick={() => setActiveTab('users')}
-                className={`px-4 py-1.5 rounded-lg transition-all cursor-pointer ${
-                  activeTab === 'users'
+                className={`px-4 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'users'
                     ? 'bg-white text-black font-semibold shadow-sm'
                     : 'text-zinc-550 hover:text-white'
-                }`}
+                  }`}
               >
                 Practitioners Management
               </button>
@@ -232,19 +230,19 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Main dashboard view container */}
       <main className="flex-grow max-w-7xl mx-auto px-6 py-8 w-full">
-        
+
         {loading ? (
           <div className="flex flex-col items-center justify-center p-12 text-center h-80">
             <div className="w-10 h-10 rounded-full border-4 border-[#1A2E6C] border-t-transparent animate-spin mb-4"></div>
             <span className="text-sm font-semibold text-gray-400 font-mono">LOADING CONTROL DESKS...</span>
           </div>
         ) : activeTab === 'guesstimates' ? (
-          
+
           /* ==========================================================
              GUESSTIMATES MANAGEMENT DOMAIN
              ========================================================== */
           <div className="flex flex-col gap-6">
-            
+
             {/* Quick Metrics ribbon of Guesstimates */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
@@ -273,7 +271,7 @@ export const AdminDashboard: React.FC = () => {
 
             {/* Database header search filters and add actions */}
             <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
-              
+
               <div className="flex flex-wrap items-center gap-3 flex-grow">
                 {/* Search */}
                 <div className="relative flex-grow max-w-sm">
@@ -433,7 +431,7 @@ export const AdminDashboard: React.FC = () => {
                   <span>
                     Showing {(qPage - 1) * rowsPerPage + 1} to {Math.min(qPage * rowsPerPage, filteredQuestions.length)} of {filteredQuestions.length} entries
                   </span>
-                  
+
                   {/* Steppers paging joiner */}
                   <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 p-0.5 rounded-lg">
                     <button
@@ -447,11 +445,10 @@ export const AdminDashboard: React.FC = () => {
                       <button
                         key={idx}
                         onClick={() => setQPage(idx + 1)}
-                        className={`px-2.5 py-1 text-xs rounded-md ${
-                          qPage === idx + 1
+                        className={`px-2.5 py-1 text-xs rounded-md ${qPage === idx + 1
                             ? 'bg-white text-black font-semibold font-mono'
                             : 'text-zinc-400 hover:bg-zinc-800'
-                        }`}
+                          }`}
                       >
                         {idx + 1}
                       </button>
@@ -471,12 +468,12 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
         ) : (
-          
+
           /* ==========================================================
              PRACTITIONERS / USERS MANAGEMENT TAB
              ========================================================== */
           <div className="flex flex-col gap-6">
-            
+
             {/* Quick Metrics ribbon of Users */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-lg">
@@ -502,7 +499,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
             {/* Top 5 Dynamic Leaderboard grid lists */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              
+
               {/* Component A: Top 5 Solve Questions */}
               <div className="bg-[#121212] border border-zinc-850/80 rounded-xl p-5 shadow-lg">
                 <div className="flex items-center gap-1.5 mb-4 text-zinc-400">
@@ -554,7 +551,7 @@ export const AdminDashboard: React.FC = () => {
 
             {/* Filters Row of Users */}
             <div className="bg-[#121212] p-4 rounded-xl border border-zinc-850/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
-              
+
               <div className="flex flex-wrap items-center gap-3 flex-grow/1">
                 {/* Search */}
                 <div className="relative flex-grow max-w-sm">
@@ -625,7 +622,7 @@ export const AdminDashboard: React.FC = () => {
                   <tbody className="divide-y divide-zinc-850 font-sans text-zinc-300 text-xs">
                     {paginatedProfiles.map(u => {
                       const uProgress = allProgress.filter(p => p.user_id === u.id);
-                      
+
                       const uSolved = uProgress.filter(p => p.status === 'solved');
                       const uRetryCount = uProgress.filter(p => p.status === 'retry').length;
 
@@ -651,7 +648,7 @@ export const AdminDashboard: React.FC = () => {
                             {u.role === 'admin' && <span className="ml-1.5 text-[9px] bg-zinc-850 text-zinc-400 py-0.5 px-1.5 rounded-sm font-mono font-bold">ADMIN</span>}
                           </td>
                           <td className="px-6 py-4 text-zinc-400 font-mono text-[11px] font-semibold uppercase">{u.email}</td>
-                          
+
                           {/* Easy Progress slide */}
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-1.5 w-24">
@@ -728,7 +725,7 @@ export const AdminDashboard: React.FC = () => {
                   <span>
                     Showing {(uPage - 1) * rowsPerPage + 1} to {Math.min(uPage * rowsPerPage, filteredProfiles.length)} of {filteredProfiles.length} entries
                   </span>
-                  
+
                   {/* Steppers */}
                   <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 p-0.5 rounded-lg">
                     <button
@@ -742,11 +739,10 @@ export const AdminDashboard: React.FC = () => {
                       <button
                         key={idx}
                         onClick={() => setUPage(idx + 1)}
-                        className={`px-2.5 py-1 text-xs rounded-md ${
-                          uPage === idx + 1
+                        className={`px-2.5 py-1 text-xs rounded-md ${uPage === idx + 1
                             ? 'bg-white text-black font-semibold font-mono'
                             : 'text-zinc-400 hover:bg-zinc-800'
-                        }`}
+                          }`}
                       >
                         {idx + 1}
                       </button>
@@ -801,7 +797,7 @@ export const AdminDashboard: React.FC = () => {
             <button onClick={() => setReadOnlyQStats(null)} className="absolute top-4 right-4 text-zinc-500 hover:text-white cursor-pointer transition-colors">
               <X size={18} />
             </button>
-            
+
             <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-semibold mb-2 uppercase font-mono tracking-wider">
               <BarChart2 size={14} />
               <span>Guesstimate Statistics</span>
@@ -835,7 +831,7 @@ export const AdminDashboard: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  
+
                   <button
                     onClick={() => setReadOnlyQStats(null)}
                     className="w-full py-2.5 bg-white hover:bg-zinc-200 text-black text-xs font-bold uppercase tracking-wider rounded-lg mt-4 cursor-pointer transition-colors font-mono"
@@ -856,7 +852,7 @@ export const AdminDashboard: React.FC = () => {
             <button onClick={() => setReadOnlyUStats(null)} className="absolute top-4 right-4 text-zinc-500 hover:text-white cursor-pointer transition-colors">
               <X size={18} />
             </button>
-            
+
             <div className="text-center pb-4 border-b border-zinc-850 mb-4">
               <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 text-white flex items-center justify-center rounded-full text-sm font-bold mx-auto mb-2 font-mono">
                 {readOnlyUStats.first_name[0].toUpperCase()}{readOnlyUStats.last_name[0].toUpperCase()}
@@ -869,7 +865,7 @@ export const AdminDashboard: React.FC = () => {
 
             <div className="overflow-y-auto space-y-4 pr-1">
               <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-mono font-bold block">Individual Performance Card</span>
-              
+
               {(() => {
                 const uProg = allProgress.filter(p => p.user_id === readOnlyUStats.id);
                 const solves = uProg.filter(p => p.status === 'solved').length;
