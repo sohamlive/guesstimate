@@ -51,80 +51,54 @@ body {
   background: #3F3F46;
 }
 
-/* Custom card category dot grids - modified to look premium dark in Sophisticated Dark */
-/* .card-population {
-  background-color: #0F0C0B;
-  background-image: radial-gradient(circle, #291E1A 1.5px, transparent 1.5px);
-  background-size: 16px 16px;
-}
-
-.card-market-sizing {
-  background-color: #0C0B10;
-  background-image: radial-gradient(circle, #201A2B 1.5px, transparent 1.5px);
-  background-size: 16px 16px;
-}
-
-.card-fermi-estimate {
-  background-color: #0B0E0D;
-  background-image: radial-gradient(circle, #182622 1.5px, transparent 1.5px);
-  background-size: 16px 16px;
-}
-
-.card-scientific {
-  background-color: #0B0C0E;
-  background-image: radial-gradient(circle, #1B232E 1.5px, transparent 1.5px);
-  background-size: 16px 16px;
-}
-
-.card-default {
-  background-color: #0E0E0E;
-  background-image: radial-gradient(circle, #27272A 1.5px, transparent 1.5px);
-  background-size: 16px 16px;
-} */
-
-/* Custom card category dot grids - Backgrounds locked, Dots darkened */
+/* Premium dark theme cards - Backgrounds locked, Dots darkened for text readability */
 
 .card-population {
-  background-color: #120E0D;
-  background-image: radial-gradient(circle, #2D211C 1.5px, transparent 1.5px);
+  /* Rich, warm copper/amber undertone */
+  background-color: #241B18; 
+  background-image: radial-gradient(circle, #3D2D28 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  border: 1px solid rgba(138, 92, 80, 0.25);
+  /* border: 1px solid rgba(168, 112, 97, 0.2); */
 }
 
 .card-market-sizing {
-  background-color: #0E0D14;
-  background-image: radial-gradient(circle, #241D30 1.5px, transparent 1.5px);
+  /* Elegant deep amethyst/purple undertone */
+  background-color: #1B1826; 
+  background-image: radial-gradient(circle, #332A47 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  border: 1px solid rgba(124, 90, 196, 0.25);
+  /* border: 1px solid rgba(144, 110, 216, 0.2); */
 }
 
 .card-fermi-estimate {
-  background-color: #0D100F;
-  background-image: radial-gradient(circle, #1B2622 1.5px, transparent 1.5px);
+  /* Crisp jade/emerald green undertone */
+  background-color: #171E1B; 
+  background-image: radial-gradient(circle, #25332F 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  border: 1px solid rgba(77, 124, 107, 0.25);
+  /* border: 1px solid rgba(97, 154, 134, 0.2); */
 }
 
 .card-scientific {
-  background-color: #0D0F12;
-  background-image: radial-gradient(circle, #1B232E 1.5px, transparent 1.5px);
+  /* Clean slate/nordic blue undertone */
+  background-color: #181D24; 
+  background-image: radial-gradient(circle, #263142 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  border: 1px solid rgba(96, 131, 184, 0.25);
+  /* border: 1px solid rgba(116, 151, 204, 0.2); */
 }
 
 .card-default {
-  background-color: #111111;
-  background-image: radial-gradient(circle, #242427 1.5px, transparent 1.5px);
+  /* Balanced, neutral zinc gray */
+  background-color: #202022; 
+  background-image: radial-gradient(circle, #34343A 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Solved states force clean, desaturated, receding visual cues */
 .card-solved {
-  background-color: #070707;
-  background-image: radial-gradient(circle, #1A1A1A 1.5px, transparent 1.5px);
+  background-color: #1A1A1E;
+  background-image: radial-gradient(circle, #2A2A30 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-  opacity: 0.7;
+  opacity: 0.9;
 }
 
 /* Subtly animated drifting background for the Hero section in dark mode */

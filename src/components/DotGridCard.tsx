@@ -16,22 +16,45 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
   onPlay,
 }) => {
   // Determine card style class based on solved state and category
+  // const getCardBgClass = () => {
+  //   if (progressStatus === 'solved') {
+  //     return 'card-solved border border-zinc-800/80 shadow-sm';
+  //   }
+
+  //   switch (question.category_name) {
+  //     case 'Population':
+  //       return 'card-population border border-[#ED946D]/30 shadow-lg shadow-black/30';
+  //     case 'Market Sizing':
+  //       return 'card-market-sizing border border-[#A594DC]/30 shadow-lg shadow-black/30';
+  //     case 'Fermi Estimate':
+  //       return 'card-fermi-estimate border border-[#76BCB2]/30 shadow-lg shadow-black/30';
+  //     case 'Scientific':
+  //       return 'card-scientific border border-[#74A9DF]/30 shadow-lg shadow-black/30';
+  //     default:
+  //       return 'card-default border border-zinc-850 shadow-lg shadow-black/30';
+  //   }
+  // };
   const getCardBgClass = () => {
     if (progressStatus === 'solved') {
-      return 'card-solved border border-zinc-800/80 shadow-sm';
+      return 'card-solved border border-zinc-800/80 hover:border-zinc-600 shadow-sm';
     }
 
     switch (question.category_name) {
       case 'Population':
-        return 'card-population border border-[#ED946D]/30 shadow-lg shadow-black/30';
+        return 'card-population border border-[#ED946D]/30 hover:border-[#ED946D]/80 shadow-lg shadow-black/30 hover:shadow-[#ED946D]/10';
+
       case 'Market Sizing':
-        return 'card-market-sizing border border-[#A594DC]/30 shadow-lg shadow-black/30';
+        return 'card-market-sizing border border-[#A594DC]/30 hover:border-[#A594DC]/80 shadow-lg shadow-black/30 hover:shadow-[#A594DC]/10';
+
       case 'Fermi Estimate':
-        return 'card-fermi-estimate border border-[#76BCB2]/30 shadow-lg shadow-black/30';
+        return 'card-fermi-estimate border border-[#76BCB2]/30 hover:border-[#76BCB2]/80 shadow-lg shadow-black/30 hover:shadow-[#76BCB2]/10';
+
       case 'Scientific':
-        return 'card-scientific border border-[#74A9DF]/30 shadow-lg shadow-black/30';
+        return 'card-scientific border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 hover:shadow-[#74A9DF]/10';
+
       default:
-        return 'card-default border border-zinc-850 shadow-lg shadow-black/30';
+        // Assuming border-zinc-800 for fallback, lighting up to a clean zinc-600
+        return 'card-default border border-zinc-800 hover:border-zinc-600 shadow-lg shadow-black/30 hover:shadow-white/5';
     }
   };
 
@@ -50,7 +73,8 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
 
   return (
     <div
-      className={`relative rounded-xl p-5 min-h-[190px] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-zinc-700/50 ${getCardBgClass()}`}
+      // className={`relative rounded-xl p-5 min-h-[190px] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-zinc-700/50 ${getCardBgClass()}`}
+      className={`relative rounded-xl p-5 min-h-[190px] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${getCardBgClass()}`}
     >
       {/* Top row with badges */}
       <div className="flex items-center justify-between gap-2 mb-3">
@@ -86,7 +110,7 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
       </div>
 
       {/* Bottom info row */}
-      <div className="flex items-center justify-between mt-auto pt-3 border-t border-zinc-800/60">
+      <div className="flex items-center justify-between mt-auto pt-3 border-t border-zinc-600/60">
         <div className="flex items-center gap-1.5 text-xs text-zinc-400">
           <ThumbsUp size={13} className="text-zinc-500" />
           <span className="font-mono">{question.upvotes || 0}</span>
