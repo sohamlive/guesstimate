@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Core Palette for Sophisticated Dark */
+  --color-bg-base: #0A0A0A;
+  --color-bg-canvas: #0D0D0D;
+  --color-bg-nav: #050505;
+  --color-bg-aside: #080808;
+  --color-bg-card: #121212;
+  --color-bg-surface: #141414;
+  --color-bg-muted: #1A1A1A;
+
+  --color-brand-primary: #FFFFFF;
+  --color-brand-primary-hover: #E4E4E7;
+  --color-brand-primary-light: #18181B;
+
+  --color-brand-accent: #FFFFFF;
+  --color-brand-accent-hover: #E4E4E7;
+}
+
+/* Custom Base styles to match Sophisticated Dark */
+body {
+  background-color: #0A0A0A;
+  color: #D4D4D8;
+  /* zinc-300 */
+  font-family: var(--font-sans);
+}
+
+/* Custom scrollbars for Dark Theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
+}
+
+/* Custom card category dot grids - modified to look premium dark in Sophisticated Dark */
+/* .card-population {
+  background-color: #0F0C0B;
+  background-image: radial-gradient(circle, #291E1A 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-market-sizing {
+  background-color: #0C0B10;
+  background-image: radial-gradient(circle, #201A2B 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-fermi-estimate {
+  background-color: #0B0E0D;
+  background-image: radial-gradient(circle, #182622 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-scientific {
+  background-color: #0B0C0E;
+  background-image: radial-gradient(circle, #1B232E 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-default {
+  background-color: #0E0E0E;
+  background-image: radial-gradient(circle, #27272A 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+} */
+
+/* Custom card category dot grids - Backgrounds locked, Dots darkened */
+
+.card-population {
+  background-color: #120E0D;
+  background-image: radial-gradient(circle, #2D211C 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border: 1px solid rgba(138, 92, 80, 0.25);
+}
+
+.card-market-sizing {
+  background-color: #0E0D14;
+  background-image: radial-gradient(circle, #241D30 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border: 1px solid rgba(124, 90, 196, 0.25);
+}
+
+.card-fermi-estimate {
+  background-color: #0D100F;
+  background-image: radial-gradient(circle, #1B2622 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border: 1px solid rgba(77, 124, 107, 0.25);
+}
+
+.card-scientific {
+  background-color: #0D0F12;
+  background-image: radial-gradient(circle, #1B232E 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border: 1px solid rgba(96, 131, 184, 0.25);
+}
+
+.card-default {
+  background-color: #111111;
+  background-image: radial-gradient(circle, #242427 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Solved states force clean, desaturated, receding visual cues */
+.card-solved {
+  background-color: #070707;
+  background-image: radial-gradient(circle, #1A1A1A 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  opacity: 0.7;
+}
+
+/* Subtly animated drifting background for the Hero section in dark mode */
+@keyframes bgDrift {
+  0% {
+    background-position: 0px 0px;
+  }
+
+  100% {
+    background-position: 36px 36px;
+  }
+}
+
+.hero-dot-drift {
+  background-color: #0A0A0A;
+  background-image: radial-gradient(circle, #1F1F22 1px, transparent 1px);
+  background-size: 24px 24px;
+  animation: bgDrift 20s linear infinite;
+}

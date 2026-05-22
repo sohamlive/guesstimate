@@ -1,0 +1,6 @@
+{
+  "name": "Guesstimate",
+  "description": "A web application for practising estimation and Fermi-calculation challenges.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
