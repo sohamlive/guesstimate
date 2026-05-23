@@ -1,6 +1,4 @@
 import React from 'react';
-//import { Question, ProgressStatus } from '../types';
-//import { Play, ThumbsUp, Check, RefreshCw, Sparkles } from 'lucide-react';
 import { Question, ProgressStatus, VoteType } from '../types';
 import { Play, ThumbsUp, ThumbsDown, Check, RefreshCw, Sparkles } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
@@ -27,53 +25,6 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
 }) => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
-
-  // Determine card style class based on solved state and category
-  // const getCardBgClass = () => {
-  //   if (progressStatus === 'solved') {
-  //     return 'card-solved border border-zinc-800/80 shadow-sm';
-  //   }
-
-  //   switch (question.category_name) {
-  //     case 'Population':
-  //       return 'card-population border border-[#ED946D]/30 shadow-lg shadow-black/30';
-  //     case 'Market Sizing':
-  //       return 'card-market-sizing border border-[#A594DC]/30 shadow-lg shadow-black/30';
-  //     case 'Fermi Estimate':
-  //       return 'card-fermi-estimate border border-[#76BCB2]/30 shadow-lg shadow-black/30';
-  //     case 'Scientific':
-  //       return 'card-scientific border border-[#74A9DF]/30 shadow-lg shadow-black/30';
-  //     default:
-  //       return 'card-default border border-zinc-850 shadow-lg shadow-black/30';
-  //   }
-  // };
-
-  // ------------------------------
-  // GOOD CARD BACKGROUND
-  // ------------------------------
-  // const getCardBgClass = () => {
-  //   if (progressStatus === 'solved') {
-  //     return 'card-solved border border-zinc-300 dark:border-zinc-800/80 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-sm';
-  //   }
-
-  //   switch (question.category_name) {
-  //     case 'Population':
-  //       return 'card-population border border-[#ED946D]/30 hover:border-[#ED946D]/80 shadow-lg shadow-black/30 hover:shadow-[#ED946D]/10';
-
-  //     case 'Market Sizing':
-  //       return 'card-market-sizing border border-[#A594DC]/30 hover:border-[#A594DC]/80 shadow-lg shadow-black/30 hover:shadow-[#A594DC]/10';
-
-  //     case 'Fermi Estimate':
-  //       return 'card-fermi-estimate border border-[#76BCB2]/30 hover:border-[#76BCB2]/80 shadow-lg shadow-black/30 hover:shadow-[#76BCB2]/10';
-
-  //     case 'Scientific':
-  //       return 'card-scientific border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 hover:shadow-[#74A9DF]/10';
-
-  //     default:
-  //       // Assuming border-zinc-800 for fallback, lighting up to a clean zinc-600
-  //       return 'card-default border border-zinc-300 dark:border-zinc-800 hover:border-zinc-450 dark:hover:border-zinc-600 shadow-lg shadow-black/30 hover:shadow-white/5';
-  //   }
-  // };
 
   const getCardBgClass = () => {
     if (progressStatus === 'solved') {
@@ -116,7 +67,6 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
 
   return (
     <div
-      // className={`relative rounded-xl p-5 min-h-[190px] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-zinc-700/50 ${getCardBgClass()}`}
       className={`relative rounded-xl p-5 min-h-[190px] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${getCardBgClass()}`}
     >
       {/* Top row with badges */}
@@ -164,31 +114,6 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
           "{question.question}"
         </h3>
       </div>
-
-      {/* Bottom info row */}
-      {/* <div className="flex items-center justify-between mt-auto pt-3 border-t border-zinc-600/60">
-        <div className="flex items-center gap-1.5 text-xs text-zinc-400">
-          <ThumbsUp size={13} className="text-zinc-500" />
-          <span className="font-mono">{question.upvotes || 0}</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <span className={`text-[11px] font-mono uppercase tracking-wider font-semibold ${getDifficultyColor(question.difficulty)}`}>
-            {question.difficulty}
-          </span>
-          <button
-            onClick={() => onPlay(question)}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${progressStatus === 'solved'
-              ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white'
-              : 'bg-white text-black hover:bg-zinc-200 shadow-md'
-              }`}
-            title="Open Challenge Workspace"
-          >
-            <Play size={10} fill="currentColor" className="ml-0.5" />
-          </button>
-        </div>
-      </div> */}
-
 
       {/* Bottom info row with Interactive Controls */}
       <div className={`flex flex-wrap items-center justify-between gap-y-3 gap-x-1.5 mt-auto pt-3 border-t select-none ${isLight ? 'border-zinc-400' : 'border-zinc-700'

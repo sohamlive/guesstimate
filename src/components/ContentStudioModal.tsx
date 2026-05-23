@@ -248,8 +248,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                 onChange={(e) => setQuestionText(e.target.value)}
                 placeholder="How many liters of tea are consumed in Shanghai daily? (Be descriptive)"
                 className={`w-full h-32 p-3 rounded-xl outline-none focus:ring-1 text-sm leading-relaxed font-serif italic transition-all ${isLight
-                    ? 'bg-zinc-50 border border-zinc-250 text-zinc-850 focus:bg-white focus:border-zinc-500 focus:ring-zinc-400'
-                    : 'bg-zinc-950 border border-zinc-800 text-zinc-250 focus:border-zinc-550 focus:ring-1 focus:ring-zinc-650'
+                  ? 'bg-zinc-50 border border-zinc-250 text-zinc-850 focus:bg-white focus:border-zinc-500 focus:ring-zinc-400'
+                  : 'bg-zinc-950 border border-zinc-800 text-zinc-250 focus:border-zinc-550 focus:ring-1 focus:ring-zinc-650'
                   }`}
               />
             </div>
@@ -274,8 +274,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 className={`w-full p-2.5 border rounded-xl outline-none font-mono transition-colors ${isLight
-                    ? 'bg-zinc-50 border-zinc-250 text-zinc-805 focus:bg-white focus:border-zinc-500'
-                    : 'bg-zinc-950 border-zinc-800 text-zinc-300 focus:border-zinc-550'
+                  ? 'bg-zinc-50 border-zinc-250 text-zinc-805 focus:bg-white focus:border-zinc-500'
+                  : 'bg-zinc-950 border-zinc-800 text-zinc-300 focus:border-zinc-550'
                   }`}
               >
                 {categories.map(c => (
@@ -297,12 +297,12 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                     type="button"
                     onClick={() => setDifficulty(d)}
                     className={`py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer font-mono ${difficulty === d
-                        ? isLight
-                          ? 'bg-zinc-900 text-white font-bold shadow-xs'
-                          : 'bg-zinc-800 text-white border border-zinc-700 font-bold shadow-xs'
-                        : isLight
-                          ? 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-200/50'
-                          : 'text-zinc-500 hover:text-white'
+                      ? isLight
+                        ? 'bg-zinc-900 text-white font-bold shadow-xs'
+                        : 'bg-zinc-800 text-white border border-zinc-700 font-bold shadow-xs'
+                      : isLight
+                        ? 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-200/50'
+                        : 'text-zinc-500 hover:text-white'
                       }`}
                   >
                     {d}
@@ -323,8 +323,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                   onChange={(e) => setUrl1(e.target.value)}
                   placeholder="https://en.wikipedia.org/wiki/..."
                   className={`w-full p-2.5 border rounded-xl outline-none text-xs font-mono transition-colors ${isLight
-                      ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500'
-                      : 'bg-zinc-950 border-zinc-805 text-zinc-300 focus:border-zinc-550'
+                    ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500'
+                    : 'bg-zinc-950 border-zinc-805 text-zinc-300 focus:border-zinc-550'
                     }`}
                 />
               </div>
@@ -338,8 +338,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                   onChange={(e) => setUrl2(e.target.value)}
                   placeholder="https://statista.com/..."
                   className={`w-full p-2.5 border rounded-xl outline-none text-xs font-mono transition-colors ${isLight
-                      ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500'
-                      : 'bg-zinc-950 border-zinc-805 text-zinc-300 focus:border-zinc-550'
+                    ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500'
+                    : 'bg-zinc-950 border-zinc-805 text-zinc-300 focus:border-zinc-550'
                     }`}
                 />
               </div>
@@ -368,16 +368,16 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                   }}
                   placeholder="Type tag (e.g. food) and press Enter"
                   className={`flex-grow p-2.5 border rounded-xl outline-none text-xs font-mono transition-colors ${isLight
-                      ? 'bg-zinc-50 border-zinc-250 text-zinc-805 focus:bg-white focus:border-zinc-500'
-                      : 'bg-zinc-950 border-zinc-800 text-zinc-350 focus:border-zinc-550'
+                    ? 'bg-zinc-50 border-zinc-250 text-zinc-805 focus:bg-white focus:border-zinc-500'
+                    : 'bg-zinc-950 border-zinc-800 text-zinc-350 focus:border-zinc-550'
                     }`}
                 />
                 <button
                   type="button"
                   onClick={handleAddTag}
                   className={`py-2.5 px-4 border rounded-xl text-xs font-bold transition-all cursor-pointer font-mono ${isLight
-                      ? 'bg-zinc-100 border-zinc-250 hover:bg-zinc-200 text-zinc-750'
-                      : 'bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-305 font-bold'
+                    ? 'bg-zinc-100 border-zinc-250 hover:bg-zinc-200 text-zinc-750'
+                    : 'bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-305 font-bold'
                     }`}
                 >
                   Add
@@ -389,8 +389,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                   <span
                     key={i}
                     className={`flex items-center gap-1 text-[11px] font-mono px-2.5 py-0.5 rounded-md border transition-colors ${isLight
-                        ? 'bg-zinc-100 text-zinc-700 border-zinc-200'
-                        : 'bg-zinc-900 text-zinc-300 border-zinc-800'
+                      ? 'bg-zinc-100 text-zinc-700 border-zinc-200'
+                      : 'bg-zinc-900 text-zinc-300 border-zinc-800'
                       }`}
                   >
                     #{tag}
@@ -422,10 +422,10 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                     type="button"
                     onClick={() => setStatus(st)}
                     className={`py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer font-mono ${status === st
-                        ? st === 'Published' ? 'bg-emerald-600 text-white font-bold shadow-xs' : 'bg-amber-600 text-white font-bold shadow-xs'
-                        : isLight
-                          ? 'text-zinc-500 hover:text-zinc-955'
-                          : 'text-zinc-500 hover:text-white'
+                      ? st === 'Published' ? 'bg-emerald-600 text-white font-bold shadow-xs' : 'bg-amber-600 text-white font-bold shadow-xs'
+                      : isLight
+                        ? 'text-zinc-500 hover:text-zinc-955'
+                        : 'text-zinc-500 hover:text-white'
                       }`}
                   >
                     {st}
@@ -549,8 +549,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
               type="button"
               onClick={onClose}
               className={`border font-bold py-2 px-5 rounded-lg text-sm transition-all cursor-pointer ${isLight
-                  ? 'bg-white border-zinc-250 text-zinc-700 hover:bg-zinc-100'
-                  : 'bg-zinc-900 border border-zinc-805 hover:bg-zinc-800 text-zinc-30s text-zinc-300'
+                ? 'bg-white border-zinc-250 text-zinc-700 hover:bg-zinc-100'
+                : 'bg-zinc-900 border border-zinc-805 hover:bg-zinc-800 text-zinc-30s text-zinc-300'
                 }`}
             >
               Cancel
@@ -560,8 +560,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
               onClick={handleSave}
               disabled={saving}
               className={`font-bold py-2 px-6 rounded-lg text-sm flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 ${isLight
-                  ? 'bg-zinc-900 hover:bg-zinc-850 text-white'
-                  : 'bg-white hover:bg-zinc-200 text-black'
+                ? 'bg-zinc-900 hover:bg-zinc-850 text-white'
+                : 'bg-white hover:bg-zinc-200 text-black'
                 }`}
             >
               <Save size={14} />
@@ -600,8 +600,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                 onChange={(e) => setNewCategoryName(e.target.value)}
                 placeholder="e.g. Real Estate Sizing"
                 className={`w-full p-2.5 border rounded-xl outline-none text-xs font-mono transition-colors ${isLight
-                    ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500'
-                    : 'bg-zinc-950 border border-zinc-805 text-zinc-200 focus:border-zinc-550'
+                  ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500'
+                  : 'bg-zinc-950 border border-zinc-805 text-zinc-200 focus:border-zinc-550'
                   }`}
               />
             </div>
@@ -611,8 +611,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                 type="button"
                 onClick={() => setShowAddCategory(false)}
                 className={`border py-1.5 px-3 rounded-lg transition-colors ${isLight
-                    ? 'bg-white border-zinc-200 text-zinc-705 hover:bg-zinc-100'
-                    : 'bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800'
+                  ? 'bg-white border-zinc-200 text-zinc-705 hover:bg-zinc-100'
+                  : 'bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800'
                   }`}
               >
                 Cancel
@@ -621,8 +621,8 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                 type="submit"
                 disabled={addingCategory}
                 className={`py-1.5 px-4 rounded-lg flex items-center gap-1 font-bold ${isLight
-                    ? 'bg-zinc-900 hover:bg-zinc-850 text-white shadow-xs'
-                    : 'bg-white hover:bg-zinc-200 text-black shadow-xs'
+                  ? 'bg-zinc-900 hover:bg-zinc-850 text-white shadow-xs'
+                  : 'bg-white hover:bg-zinc-200 text-black shadow-xs'
                   }`}
               >
                 <span>Save</span>

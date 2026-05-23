@@ -197,7 +197,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
             </div>
 
             <div className="font-mono">
-              <label className="text-xs font-bold text-zinc-500 uppercase block mb-1.5 tracking-wider font-mono">Email Coordinates *</label>
+              <label className="text-xs font-bold text-zinc-500 uppercase block mb-1.5 tracking-wider font-mono">Email *</label>
               <input
                 type="email"
                 required
@@ -247,7 +247,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
                         : 'text-zinc-500 hover:text-white'
                       }`}
                   >
-                    {r === 'admin' ? 'Platform Admin' : 'Practitioner'}
+                    {r === 'admin' ? 'Platform Admin' : 'User'}
                   </button>
                 ))}
               </div>
@@ -264,32 +264,32 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
               <div>
                 <div className="flex items-center gap-1.5 mb-3 text-xs font-bold text-zinc-550 uppercase font-mono tracking-wider">
                   <Award size={15} />
-                  <span>Interactive Practice Records</span>
+                  <span>Practice Records</span>
                 </div>
 
                 {isEditMode ? (
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-3 text-center font-mono">
-                      <div className={`p-3 rounded-xl border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] border border-zinc-805'
+                      <div className={`p-3 rounded-xl border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] p-3 rounded-xl border border-zinc-805'
                         }`}>
-                        <span className="text-[10px] text-zinc-550 font-bold uppercase block tracking-wider">Challenges Solved</span>
-                        <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-emerald-700 font-bold' : 'text-emerald-400'}`}>{solvedCount}</span>
+                        <span className="text-[12px] text-zinc-550 font-bold uppercase block tracking-wider">Solved</span>
+                        <span className={`font-serif italic text-3xl block mt-1 ${isLight ? 'text-emerald-700 font-bold' : 'text-emerald-400'}`}>{solvedCount}</span>
                       </div>
                       <div className={`p-3 rounded-xl border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] p-3 rounded-xl border border-zinc-805'
                         }`}>
-                        <span className="text-[10px] text-zinc-550 font-bold uppercase block tracking-wider">Retry Queued</span>
-                        <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-amber-700 font-bold' : 'text-amber-400'}`}>{retryCount}</span>
+                        <span className="text-[12px] text-zinc-550 font-bold uppercase block tracking-wider">Retries</span>
+                        <span className={`font-serif italic text-3xl block mt-1 ${isLight ? 'text-amber-700 font-bold' : 'text-amber-400'}`}>{retryCount}</span>
                       </div>
                     </div>
 
                     <div className={`text-center p-3 rounded-xl border font-mono transition-colors ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] border border-zinc-805'
                       }`}>
-                      <span className="text-[10px] text-zinc-550 font-bold uppercase block tracking-wider">Completion Factor</span>
+                      <span className="text-[12px] text-zinc-550 font-bold uppercase block tracking-wider">Completion</span>
                       <span className={`font-serif italic text-lg block mt-1 ${isLight ? 'text-zinc-800 font-bold' : 'text-zinc-200'}`}>
                         {totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0}%
                       </span>
-                      <span className="text-[10px] text-zinc-500 block mt-1">
-                        Cleared {solvedCount} of {totalQuestions} published.
+                      <span className="text-[12px] text-zinc-500 block mt-1">
+                        Solved {solvedCount} of {totalQuestions} published.
                       </span>
                     </div>
                   </div>

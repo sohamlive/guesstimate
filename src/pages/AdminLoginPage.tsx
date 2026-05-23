@@ -72,7 +72,7 @@ export const AdminLoginPage: React.FC = () => {
           <div className="w-10 h-10 rounded-xl bg-zinc-950 dark:bg-white flex items-center justify-center text-white dark:text-black font-serif italic font-black text-2xl shadow-md">
             G.
           </div>
-          <span className={`font-serif italic font-black text-2xl tracking-tight transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>Guesstimate.</span>
+          <span className={`font-serif italic font-black text-2xl tracking-tight transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>Guesstimate Tracker.</span>
         </div>
 
         {/* Login Card */}
@@ -111,8 +111,8 @@ export const AdminLoginPage: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@guesstimate.com"
                   className={`w-full pl-10 pr-4 py-3 rounded-xl outline-none text-sm transition-all duration-300 font-medium ${isLight
-                      ? 'bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-400 focus:ring-1 focus:ring-zinc-350'
-                      : 'bg-zinc-950 border border-zinc-850 text-white placeholder:text-zinc-600 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-805'
+                    ? 'bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-400 focus:ring-1 focus:ring-zinc-350'
+                    : 'bg-zinc-950 border border-zinc-850 text-white placeholder:text-zinc-600 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-805'
                     }`}
                 />
               </div>
@@ -134,8 +134,8 @@ export const AdminLoginPage: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className={`w-full pl-10 pr-10 py-3 rounded-xl outline-none text-sm transition-all duration-300 font-medium font-mono ${isLight
-                      ? 'bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-400 focus:ring-1 focus:ring-zinc-350'
-                      : 'bg-zinc-950 border border-zinc-850 text-white placeholder:text-zinc-600 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-805'
+                    ? 'bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-400 focus:ring-1 focus:ring-zinc-350'
+                    : 'bg-zinc-950 border border-zinc-850 text-white placeholder:text-zinc-600 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-805'
                     }`}
                 />
                 <button
@@ -153,8 +153,8 @@ export const AdminLoginPage: React.FC = () => {
               type="submit"
               disabled={loading}
               className={`w-full py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer disabled:opacity-50 mt-6 font-mono uppercase tracking-wider ${isLight
-                  ? 'bg-zinc-900 hover:bg-zinc-800 text-white shadow-zinc-200/50'
-                  : 'bg-white hover:bg-zinc-200 text-black'
+                ? 'bg-zinc-900 hover:bg-zinc-800 text-white shadow-zinc-200/50'
+                : 'bg-white hover:bg-zinc-200 text-black'
                 }`}
             >
               <LogIn size={14} />
@@ -174,8 +174,8 @@ export const AdminLoginPage: React.FC = () => {
           <button
             onClick={handleApplyAdminPreset}
             className={`w-full text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-colors font-mono border ${isLight
-                ? 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
-                : 'bg-zinc-900 border-zinc-850 text-zinc-300 hover:bg-zinc-800'
+              ? 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
+              : 'bg-zinc-900 border-zinc-850 text-zinc-300 hover:bg-zinc-800'
               }`}
           >
             <span>🛡 Apply Admin Credentials ( admin@ / admin )</span>
