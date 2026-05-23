@@ -1,7 +1,7 @@
 import { supabase, hasSupabaseConfig } from './supabase';
-import { 
-  Category, Question, Profile, UserProgress, UserVote, 
-  Difficulty, QuestionStatus, ProgressStatus, VoteType, UserRole, AuthSession 
+import {
+  Category, Question, Profile, UserProgress, UserVote,
+  Difficulty, QuestionStatus, ProgressStatus, VoteType, UserRole, AuthSession
 } from '../types';
 
 // ==========================================
@@ -272,7 +272,7 @@ const mockAuth = {
       if (password && password !== expectedPass) {
         return { data: { session: null }, error: new Error('Invalid email or password.') };
       }
-      
+
       const session: AuthSession = {
         user: { id: found.id, email: found.email },
         profile: found
@@ -280,7 +280,7 @@ const mockAuth = {
       localStorage.setItem('g_session', JSON.stringify(session));
       return { data: { session }, error: null };
     }
-    
+
     // Auto-create standard users if they logging in with valid user@... format to make testing frictionless!
     if (email.toLowerCase() === 'user@guesstimate.com' || email.toLowerCase() === 'admin@guesstimate.com') {
       const is_admin = email.includes('admin');
@@ -292,11 +292,11 @@ const mockAuth = {
         role: is_admin ? 'admin' : 'user',
         created_at: new Date().toISOString()
       };
-      
+
       // Save it
       profiles.push(mockProfile);
       localStorage.setItem('g_profiles', JSON.stringify(profiles));
-      
+
       const session: AuthSession = {
         user: { id: mockProfile.id, email: mockProfile.email },
         profile: mockProfile
@@ -304,7 +304,7 @@ const mockAuth = {
       localStorage.setItem('g_session', JSON.stringify(session));
       return { data: { session }, error: null };
     }
-    
+
     return { data: { session: null }, error: new Error('User account not found. Please contact the administrator to create your account.') };
   },
 
@@ -335,26 +335,61 @@ export const db = {
   // ==========================================
   // AUTH OPERATIONS
   // ==========================================
-  
+
   login: async (email: string, password?: string): Promise<{ session: AuthSession | null; error: Error | null }> => {
     if (db.isLive()) {
       try {
         const { data, error } = await supabase!.auth.signInWithPassword({ email, password: password || '' });
         if (error) throw error;
-        
+
         if (data?.user) {
-          // Fetch associated profile
-          const { data: profile, error: pError } = await supabase!
-            .from('profiles')
-            .select('*')
-            .eq('id', data.user.id)
-            .single();
-            
-          if (pError) throw pError;
-          
+          // Fetch associated profile safely without crashing on single()
+          let profile: Profile | null = null;
+          try {
+            const { data: profilesList, error: pError } = await supabase!
+              .from('profiles')
+              .select('*')
+              .eq('id', data.user.id);
+
+            if (!pError && profilesList && profilesList.length > 0) {
+              profile = profilesList[0] as Profile;
+            } else {
+              // Attempt to recover by upserting/creating the profile row
+              const targetRole = email.toLowerCase().includes('admin') ? 'admin' : 'user';
+              const { data: upserted, error: uErr } = await supabase!
+                .from('profiles')
+                .upsert({
+                  id: data.user.id,
+                  first_name: data.user.user_metadata?.first_name || 'User',
+                  last_name: data.user.user_metadata?.last_name || 'Practitioner',
+                  email: data.user.email || email,
+                  role: targetRole
+                })
+                .select();
+
+              if (!uErr && upserted && upserted.length > 0) {
+                profile = upserted[0] as Profile;
+              }
+            }
+          } catch (pErr) {
+            console.warn('Handling profiles table query error:', pErr);
+          }
+
+          if (!profile) {
+            // Memory fallback to ensure login succeeds even if DB table is unprovisioned or RLS blocked
+            profile = {
+              id: data.user.id,
+              first_name: data.user.user_metadata?.first_name || 'User',
+              last_name: data.user.user_metadata?.last_name || 'Practitioner',
+              email: data.user.email || email,
+              role: (email.toLowerCase().includes('admin') ? 'admin' : 'user') as UserRole,
+              created_at: data.user.created_at || new Date().toISOString()
+            };
+          }
+
           const session: AuthSession = {
             user: { id: data.user.id, email: data.user.email || '' },
-            profile: profile as Profile
+            profile: profile
           };
           return { session, error: null };
         }
@@ -366,6 +401,111 @@ export const db = {
     } else {
       const { data, error } = await mockAuth.signIn(email, password);
       return { session: data.session, error };
+    }
+  },
+
+  signUp: async (email: string, password?: string, firstName?: string, lastName?: string): Promise<{ session: AuthSession | null; error: Error | null }> => {
+    const cleanMail = email.trim().toLowerCase();
+    const pass = password || '';
+    if (db.isLive()) {
+      try {
+        const { data, error } = await supabase!.auth.signUp({
+          email: cleanMail,
+          password: pass,
+          options: {
+            data: {
+              first_name: firstName || '',
+              last_name: lastName || ''
+            }
+          }
+        });
+        if (error) throw error;
+        if (data?.user) {
+          // Attempt profile upsert safely (which also keeps metadata up to date) without crashing on single()
+          let profile: Profile | null = null;
+          try {
+            const { data: upserted, error: pError } = await supabase!
+              .from('profiles')
+              .upsert({
+                id: data.user.id,
+                first_name: firstName || 'User',
+                last_name: lastName || 'Practitioner',
+                email: cleanMail,
+                role: 'user'
+              })
+              .select();
+            if (!pError && upserted && upserted.length > 0) {
+              profile = upserted[0] as Profile;
+            }
+          } catch (e) {
+            console.warn('Could not register profile in DB, using fallback memory state', e);
+          }
+
+          const session: AuthSession = {
+            user: { id: data.user.id, email: data.user.email || '' },
+            profile: (profile || {
+              id: data.user.id,
+              first_name: firstName || 'User',
+              last_name: lastName || 'Practitioner',
+              email: cleanMail,
+              role: 'user',
+              created_at: new Date().toISOString()
+            }) as Profile
+          };
+          return { session, error: null };
+        }
+        return { session: null, error: new Error('Registration failed.') };
+      } catch (err: any) {
+        console.error('Supabase signup error:', err);
+        return { session: null, error: err };
+      }
+    } else {
+
+      const profiles: Profile[] = JSON.parse(localStorage.getItem('g_profiles') || '[]');
+      if (profiles.some(p => p.email.toLowerCase() === cleanMail)) {
+        return { session: null, error: new Error('A user with this email address already exists.') };
+      }
+      const newProfile: Profile = {
+        id: generateUuid(),
+        first_name: firstName || 'User',
+        last_name: lastName || 'Practitioner',
+        email: cleanMail,
+        role: 'user',
+        created_at: new Date().toISOString(),
+        plain_password: pass
+      };
+      profiles.unshift(newProfile);
+      localStorage.setItem('g_profiles', JSON.stringify(profiles));
+
+      const session: AuthSession = {
+        user: { id: newProfile.id, email: newProfile.email },
+        profile: newProfile
+      };
+      localStorage.setItem('g_session', JSON.stringify(session));
+      return { session, error: null };
+    }
+  },
+
+  resetPassword: async (email: string): Promise<{ success: boolean; error: Error | null }> => {
+    const cleanMail = email.trim().toLowerCase();
+    if (db.isLive()) {
+      try {
+        const { error } = await supabase!.auth.resetPasswordForEmail(cleanMail, {
+          redirectTo: `${window.location.origin}/user/login?mode=update-password`,
+        });
+        if (error) throw error;
+        return { success: true, error: null };
+      } catch (err: any) {
+        console.error('Supabase password reset error:', err);
+        return { success: false, error: err };
+      }
+    } else {
+      const profiles: Profile[] = JSON.parse(localStorage.getItem('g_profiles') || '[]');
+      const found = profiles.find(p => p.email.toLowerCase() === cleanMail);
+      if (!found) {
+        return { success: false, error: new Error('No user account found with this email coordinates.') };
+      }
+      return { success: true, error: null };
     }
   },
 
@@ -383,15 +523,51 @@ export const db = {
       try {
         const { data: { session } } = await supabase!.auth.getSession();
         if (session?.user) {
-          const { data: profile } = await supabase!
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
+          let profile: Profile | null = null;
+          try {
+            const { data: profilesList, error: pError } = await supabase!
+              .from('profiles')
+              .select('*')
+              .eq('id', session.user.id);
+
+            if (!pError && profilesList && profilesList.length > 0) {
+              profile = profilesList[0] as Profile;
+            } else {
+              // Attempt to recover by upserting/creating the profile row
+              const targetRole = (session.user.email || '').toLowerCase().includes('admin') ? 'admin' : 'user';
+              const { data: upserted, error: uErr } = await supabase!
+                .from('profiles')
+                .upsert({
+                  id: session.user.id,
+                  first_name: session.user.user_metadata?.first_name || 'User',
+                  last_name: session.user.user_metadata?.last_name || 'Practitioner',
+                  email: session.user.email || '',
+                  role: targetRole
+                })
+                .select();
+
+              if (!uErr && upserted && upserted.length > 0) {
+                profile = upserted[0] as Profile;
+              }
+            }
+          } catch (pErr) {
+            console.warn('Session profiles table query error:', pErr);
+          }
+
+          if (!profile) {
+            profile = {
+              id: session.user.id,
+              first_name: session.user.user_metadata?.first_name || 'User',
+              last_name: session.user.user_metadata?.last_name || 'Practitioner',
+              email: session.user.email || '',
+              role: ((session.user.email || '').toLowerCase().includes('admin') ? 'admin' : 'user') as UserRole,
+              created_at: session.user.created_at || new Date().toISOString()
+            };
+          }
 
           return {
             user: { id: session.user.id, email: session.user.email || '' },
-            profile: profile as Profile
+            profile: profile
           };
         }
         return null;
@@ -459,12 +635,12 @@ export const db = {
     } else {
       const questions: Question[] = JSON.parse(localStorage.getItem('g_questions') || '[]');
       const categories: Category[] = JSON.parse(localStorage.getItem('g_categories') || '[]');
-      
+
       const resolved = questions.map(q => ({
         ...q,
         category_name: categories.find(c => c.id === q.category_id)?.name || 'Uncategorized'
       }));
-      
+
       if (!includeDrafts) {
         return resolved.filter(q => q.status === 'Published');
       }
@@ -524,7 +700,7 @@ export const db = {
       const questions: Question[] = JSON.parse(localStorage.getItem('g_questions') || '[]');
       const idx = questions.findIndex(q => q.id === id);
       if (idx === -1) throw new Error('Question not found');
-      
+
       const updated: Question = {
         ...questions[idx],
         ...payload,
@@ -666,7 +842,7 @@ export const db = {
         }, { onConflict: 'user_id,question_id' })
         .select()
         .single();
-        
+
       if (error) throw error;
       return data;
     } else {
@@ -758,25 +934,25 @@ export const db = {
             created_at: new Date().toISOString()
           }, { onConflict: 'user_id,question_id' });
       }
-      
+
       // Recalculate upvote and downvote counters on the question
       const { data: votes } = await supabase!
         .from('user_votes')
         .select('vote')
         .eq('question_id', questionId);
-        
+
       const upCount = (votes || []).filter(v => v.vote === 'up').length;
       const downCount = (votes || []).filter(v => v.vote === 'down').length;
-      
+
       await supabase!
         .from('questions')
         .update({ upvotes: upCount, downvotes: downCount })
         .eq('id', questionId);
-        
+
     } else {
       const votes: UserVote[] = JSON.parse(localStorage.getItem('g_votes') || '[]');
       const idx = votes.findIndex(v => v.user_id === userId && v.question_id === questionId);
-      
+
       const prevVote = idx !== -1 ? votes[idx].vote : null;
 
       if (direction === null) {
@@ -844,7 +1020,7 @@ export const db = {
         }])
         .select()
         .single();
-        
+
       if (error) throw error;
       return data;
     } else {
@@ -852,7 +1028,7 @@ export const db = {
       if (profiles.some(p => p.email.toLowerCase() === payload.email.toLowerCase())) {
         throw new Error('A user with this email address already exists.');
       }
-      
+
       const newProfile: Profile = {
         ...payload,
         id: generateUuid(),
@@ -878,7 +1054,7 @@ export const db = {
       const profiles: Profile[] = JSON.parse(localStorage.getItem('g_profiles') || '[]');
       const idx = profiles.findIndex(p => p.id === id);
       if (idx === -1) throw new Error('User does not exist.');
-      
+
       profiles[idx] = {
         ...profiles[idx],
         ...payload

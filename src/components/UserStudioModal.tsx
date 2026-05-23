@@ -112,30 +112,55 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
       return;
     }
 
+    // Promise racer to enforce 10-second authentication timeout constraint
+    const withTimeout = async (promise: Promise<any>, timeoutMs: number, errorMessage: string): Promise<any> => {
+      let timeoutId: any;
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => {
+          reject(new Error(errorMessage));
+        }, timeoutMs);
+      });
+      try {
+        return await Promise.race([promise, timeoutPromise]);
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    };
+
     setSaving(true);
     try {
       if (isEditMode && userProfile) {
-        await db.updateProfile(userProfile.id, {
+        const updatePromise = db.updateProfile(userProfile.id, {
           first_name: fName,
           last_name: lName,
           email: mail,
           role,
         });
+        await withTimeout(
+          updatePromise,
+          10000,
+          'There is some login/creating issue. Please try again later.'
+        );
         toast.success('User updated successfully!');
       } else {
-        await db.addProfile({
+        const addPromise = db.addProfile({
           first_name: fName,
           last_name: lName,
           email: mail,
           role,
           plain_password: password, // For easy offline mock login testing
         });
+        await withTimeout(
+          addPromise,
+          10000,
+          'There is some login/creating issue. Please try again later.'
+        );
         toast.success(`User Account for ${fName} created!`);
       }
       onSaveSuccess();
       onClose();
     } catch (err: any) {
-      toast.error(err.message || 'Failed to submit user coordinates.');
+      toast.error(err.message || 'There is some login/creating issue. Please try again later.');
     } finally {
       setSaving(false);
     }

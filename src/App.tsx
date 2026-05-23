@@ -24,7 +24,7 @@ export default function App() {
             <Route
               path="/app/dashboard"
               element={
-                <ProtectedRoute allowedRoles={['user', 'admin']} fallbackRedirect="/login">
+                <ProtectedRoute allowedRoles={['user', 'admin']} fallbackRedirect="/">
                   <UserDashboard />
                 </ProtectedRoute>
               }
@@ -34,7 +34,7 @@ export default function App() {
             <Route
               path="/admin/dashboard"
               element={
-                <ProtectedRoute allowedRoles={['admin']} fallbackRedirect="/admin">
+                <ProtectedRoute allowedRoles={['admin']} fallbackRedirect="/">
                   <AdminDashboard />
                 </ProtectedRoute>
               }
