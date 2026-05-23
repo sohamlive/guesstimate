@@ -5,8 +5,9 @@ import { Question, Category, Profile, UserProgress, Difficulty, QuestionStatus }
 import { db } from '../lib/db';
 import { ContentStudioModal } from '../components/ContentStudioModal';
 import { UserStudioModal } from '../components/UserStudioModal';
+import { BulkUploadModal } from '../components/BulkUploadModal';
 import {
-  Users, BarChart2, ShieldAlert, Edit, Trash2, Award, Plus,
+  Users, BarChart2, ShieldAlert, Edit, Trash2, Award, Plus, Upload,
   Search, SlidersHorizontal, RotateCcw, AlertCircle, LogOut, CheckCircle, RefreshCw, BarChart3, ChevronLeft, ChevronRight, HelpCircle, X,
   Sun, Moon
 } from 'lucide-react';
@@ -45,6 +46,7 @@ export const AdminDashboard: React.FC = () => {
   // Modal State machines
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [showQModal, setShowQModal] = useState<boolean>(false);
+  const [showBulkUploadModal, setShowBulkUploadModal] = useState<boolean>(false);
 
   const [selectedUserProfile, setSelectedUserProfile] = useState<Profile | null>(null);
   const [showUModal, setShowUModal] = useState<boolean>(false);
@@ -375,20 +377,36 @@ export const AdminDashboard: React.FC = () => {
                 </button>
               </div>
 
-              {/* Add New CTA */}
-              <button
-                onClick={() => {
-                  setSelectedQuestion(null); // Add Mode
-                  setShowQModal(true);
-                }}
-                className={`py-2.5 px-4 font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer shrink-0 transition-all font-mono uppercase tracking-wider text-xs ${isLight
-                  ? 'bg-zinc-900 hover:bg-zinc-800 text-white'
-                  : 'bg-white hover:bg-zinc-200 text-black'
-                  }`}
-              >
-                <Plus size={14} strokeWidth={3} />
-                <span>Add Question</span>
-              </button>
+              {/* Action buttons */}
+              <div className="flex items-center gap-2 shrink-0">
+                {/* Bulk Upload CTA */}
+                <button
+                  onClick={() => setShowBulkUploadModal(true)}
+                  className={`py-2.5 px-4 font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-all font-mono uppercase tracking-wider text-xs border ${isLight
+                    ? 'bg-white hover:bg-zinc-50 border-zinc-250 text-zinc-700'
+                    : 'bg-zinc-900 hover:bg-zinc-805 border-zinc-800 text-zinc-350 hover:text-white'
+                    }`}
+                  title="Bulk Upload Questions"
+                >
+                  <Upload size={14} strokeWidth={2.5} />
+                  <span>Bulk Upload</span>
+                </button>
+
+                {/* Add New CTA */}
+                <button
+                  onClick={() => {
+                    setSelectedQuestion(null); // Add Mode
+                    setShowQModal(true);
+                  }}
+                  className={`py-2.5 px-4 font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-all font-mono uppercase tracking-wider text-xs ${isLight
+                    ? 'bg-zinc-900 hover:bg-zinc-800 text-white'
+                    : 'bg-white hover:bg-zinc-200 text-black'
+                    }`}
+                >
+                  <Plus size={14} strokeWidth={3} />
+                  <span>Add Question</span>
+                </button>
+              </div>
 
             </div>
             {/* Questions Inventory Table */}
@@ -602,7 +620,7 @@ export const AdminDashboard: React.FC = () => {
                 <div className={`divide-y font-sans text-xs ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-850 text-zinc-300'}`}>
                   {topQuestions.map((q, i) => (
                     <div key={q.id} className="py-2.5 flex items-center justify-between">
-                      <div className="flex items-center gap-2 max-w-[70%]">
+                      <div className="flex items-center gap-2 max-w-[60%]">
                         <span className={`font-mono font-bold ${isLight ? 'text-zinc-400' : 'text-zinc-600'}`}>{i + 1}.</span>
                         <span className={`truncate font-sans ${isLight ? 'text-zinc-800' : 'text-zinc-100'}`} title={q.question}>{q.question}</span>
                       </div>
@@ -1042,6 +1060,16 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Bulk Upload Modal component */}
+      <BulkUploadModal
+        isOpen={showBulkUploadModal}
+        onClose={() => setShowBulkUploadModal(false)}
+        onSuccess={() => {
+          loadAdminMetrics();
+        }}
+        categories={categories}
+      />
 
     </div>
   );

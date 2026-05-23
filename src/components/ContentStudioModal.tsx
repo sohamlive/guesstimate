@@ -216,11 +216,11 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fadeIn">
-      <div className={`relative w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-850' : 'bg-[#0c0c0c] border-zinc-800 text-zinc-350'
+      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-850' : 'bg-[#0c0c0c] border-zinc-800 text-zinc-350'
         }`}>
 
         {/* Header bar */}
-        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-850'}`}>
+        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-card'}`}>
           <span className={`font-serif italic text-lg transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
             {isEditMode ? 'Edit Guesstimate Challenge' : 'Create Guesstimate Challenge'}
           </span>
@@ -506,7 +506,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
 
         </div>
         {/* Footer actions */}
-        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center justify-between transition-all duration-300 ${isLight ? 'bg-zinc-100 border-zinc-200' : 'bg-[#050505] border-zinc-850'
+        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center justify-between transition-all duration-300 ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-[#0F0F0F] border-zinc-800'
           }`}>
           <div>
             {isEditMode && (
