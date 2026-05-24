@@ -233,7 +233,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
         </div>
 
         {/* Two-column layout */}
-        <div className="flex-grow overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grow overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* LEFT COLUMN: Main Question settings */}
           <div className="flex flex-col gap-4">
@@ -367,7 +367,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                     }
                   }}
                   placeholder="Type tag (e.g. food) and press Enter"
-                  className={`flex-grow p-2.5 border rounded-xl outline-none text-xs font-mono transition-colors ${isLight
+                  className={`grow p-2.5 border rounded-xl outline-none text-xs font-mono transition-colors ${isLight
                     ? 'bg-zinc-50 border-zinc-250 text-zinc-805 focus:bg-white focus:border-zinc-500'
                     : 'bg-zinc-950 border-zinc-800 text-zinc-350 focus:border-zinc-550'
                     }`}
@@ -383,7 +383,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
                   Add
                 </button>
               </div>
-              <div className={`flex flex-wrap gap-1.5 min-h-[40px] p-2 border rounded-xl transition-all ${isLight ? 'bg-zinc-50/50 border-zinc-200' : 'bg-zinc-950 border-zinc-850'
+              <div className={`flex flex-wrap gap-1.5 min-h-10 p-2 border rounded-xl transition-all ${isLight ? 'bg-zinc-50/50 border-zinc-200' : 'bg-zinc-950 border-zinc-850'
                 }`}>
                 {tags.map((tag, i) => (
                   <span
@@ -440,22 +440,22 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
               <span className="text-xs font-bold text-zinc-500 uppercase block mb-2 font-mono tracking-wider">Metrics Status Registry</span>
 
               <div className="grid grid-cols-2 gap-2 text-center text-xs mb-3 font-mono">
-                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] border-zinc-805'
+                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card border-zinc-805'
                   }`}>
                   <span className="text-[10px] uppercase font-bold text-zinc-500 block">Total Solved</span>
                   <span className={`font-serif italic text-base block mt-0.5 ${isLight ? 'text-emerald-700 font-semibold' : 'text-emerald-400'}`}>{totalSolved}</span>
                 </div>
-                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] border-zinc-805'
+                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card border-zinc-805'
                   }`}>
                   <span className="text-[10px] uppercase font-bold text-zinc-500 block">Total Retry</span>
                   <span className={`font-serif italic text-base block mt-0.5 ${isLight ? 'text-amber-700 font-semibold' : 'text-amber-400'}`}>{totalRetry}</span>
                 </div>
-                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] border-zinc-805'
+                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card border-zinc-805'
                   }`}>
                   <span className="text-[10px] uppercase font-bold text-zinc-500 block">Upvotes</span>
                   <span className={`font-serif italic text-base block mt-0.5 ${isLight ? 'text-zinc-800 font-semibold' : 'text-zinc-350'}`}>{upvotes}</span>
                 </div>
-                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] border-zinc-805'
+                <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card border-zinc-805'
                   }`}>
                   <span className="text-[10px] uppercase font-bold text-zinc-500 block">Downvotes</span>
                   <span className={`font-serif italic text-base block mt-0.5 ${isLight ? 'text-zinc-500 font-semibold' : 'text-zinc-450'}`}>{downvotes}</span>
@@ -577,7 +577,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
         <div className="fixed inset-0 z-60 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
           <form
             onSubmit={handleSaveCategory}
-            className={`w-full max-w-sm rounded-xl p-5 shadow-2xl border transition-all ${isLight ? 'bg-white border-zinc-300 text-zinc-800' : 'bg-[#121212] border-zinc-800 text-zinc-300'
+            className={`w-full max-w-sm rounded-xl p-5 shadow-2xl border transition-all ${isLight ? 'bg-white border-zinc-300 text-zinc-800' : 'bg-bg-card border-zinc-800 text-zinc-300'
               }`}
           >
             <div className="flex items-center justify-between mb-4">

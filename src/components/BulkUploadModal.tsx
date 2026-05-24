@@ -373,12 +373,12 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         </div>
 
         {/* Content body */}
-        <div className="flex-grow overflow-y-auto p-6 flex flex-col gap-5">
+        <div className="grow overflow-y-auto p-6 flex flex-col gap-5">
 
           {/* Instructions and templates */}
           <div className={`p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-4 ${isLight ? 'bg-zinc-50 border-zinc-200' : 'bg-zinc-900/30 border-zinc-850'
             }`}>
-            <div className="text-xs space-y-1.5 flex-grow">
+            <div className="text-xs space-y-1.5 grow">
               <p className={`font-bold uppercase tracking-wider font-mono ${isLight ? 'text-zinc-500' : 'text-zinc-400'}`}>
                 Standard CSV / Excel File Rules
               </p>
@@ -427,7 +427,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
               onClick={() => fileInputRef.current?.click()}
               className={`border-2 border-dashed rounded-2xl p-10 text-center flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-200 ${dragActive
                 ? (isLight ? 'border-zinc-905 bg-zinc-100/60' : 'border-white bg-zinc-900/60')
-                : (isLight ? 'border-zinc-300 bg-zinc-50/50 hover:bg-zinc-50 hover:border-zinc-400' : 'border-zinc-800 bg-[#121212]/30 hover:border-zinc-700 hover:bg-[#121212]/70')
+                : (isLight ? 'border-zinc-300 bg-zinc-50/50 hover:bg-zinc-50 hover:border-zinc-400' : 'border-zinc-800 bg-bg-card/30 hover:border-zinc-700 hover:bg-bg-card/70')
                 }`}
             >
               <input
@@ -450,7 +450,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
               </div>
             </div>
           ) : (
-            <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4 ${isLight ? 'bg-zinc-50 border-zinc-205' : 'bg-[#121212] border-zinc-850'
+            <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4 ${isLight ? 'bg-zinc-50 border-zinc-205' : 'bg-bg-card border-zinc-850'
               }`}>
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <div className={`p-2.5 rounded-lg ${isLight ? 'bg-white text-zinc-800 border border-zinc-200' : 'bg-zinc-900 text-zinc-100 border border-zinc-850'}`}>
@@ -505,7 +505,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
               <div className={`border rounded-xl overflow-hidden max-h-56 overflow-y-auto ${isLight ? 'border-zinc-200' : 'border-zinc-850'
                 }`}>
                 <table className="w-full text-left text-xs whitespace-nowrap">
-                  <thead className={`sticky top-0 z-10 font-bold uppercase font-mono ${isLight ? 'bg-zinc-100 text-zinc-500 border-b border-zinc-200' : 'bg-[#050505] text-zinc-500 border-b border-zinc-850'
+                  <thead className={`sticky top-0 z-10 font-bold uppercase font-mono ${isLight ? 'bg-zinc-100 text-zinc-500 border-b border-zinc-200' : 'bg-bg-card text-zinc-500 border-b border-zinc-850'
                     }`}>
                     <tr>
                       <th className="px-4 py-2.5 text-center">Row</th>
@@ -525,10 +525,10 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                         className={`${!row.isValid ? (isLight ? 'bg-red-50/45' : 'bg-red-950/10') : ''} ${isLight ? 'hover:bg-zinc-50/70' : 'hover:bg-zinc-900/40'}`}
                       >
                         <td className="px-4 py-2 text-center font-mono font-semibold text-zinc-500">{row.rawRowNumber}</td>
-                        <td className="px-4 py-2 max-w-[200px] truncate font-sans" title={row.question}>
+                        <td className="px-4 py-2 max-w-50 truncate font-sans" title={row.question}>
                           {row.question || <span className="text-red-500 font-mono italic">Prompt Field Empty</span>}
                         </td>
-                        <td className="px-4 py-2 truncate font-sans max-w-[120px]" title={row.categoryName}>
+                        <td className="px-4 py-2 truncate font-sans max-w-30" title={row.categoryName}>
                           {row.categoryName || <span className="text-red-500 font-mono italic">Missing Category</span>}
                         </td>
                         <td className="px-4 py-2 text-center">
@@ -541,7 +541,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                             {row.difficulty}
                           </span>
                         </td>
-                        <td className="px-4 py-2 max-w-[120px] truncate font-mono text-zinc-500 text-[10px]" title={row.tags.join(', ')}>
+                        <td className="px-4 py-2 max-w-30 truncate font-mono text-zinc-500 text-[10px]" title={row.tags.join(', ')}>
                           {row.tags.length > 0 ? row.tags.join(',') : '-'}
                         </td>
                         <td className="px-4 py-2 text-left">

@@ -162,7 +162,7 @@ export const UserLoginPage: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center p-6 relative select-none transition-colors duration-300 ${isLight ? 'bg-[#FAFAFA] text-zinc-800' : 'bg-[#0A0A0A] text-zinc-300'}`}>
+    <div className={`min-h-screen flex flex-col items-center justify-center p-6 relative select-none transition-colors duration-300 ${isLight ? 'bg-[#FAFAFA] text-zinc-800' : 'bg-bg-base text-zinc-300'}`}>
 
       {/* Back to landing link */}
       <Link
@@ -183,7 +183,7 @@ export const UserLoginPage: React.FC = () => {
         </div>
 
         {/* Dynamic State Card */}
-        <div className={`rounded-xl border p-8 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-xl shadow-zinc-200/50' : 'bg-[#121212] border-zinc-800/80 shadow-2xl'}`}>
+        <div className={`rounded-xl border p-8 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-xl shadow-zinc-200/50' : 'bg-bg-card border-zinc-800/80 shadow-2xl'}`}>
 
           {/* MODE: LOGIN */}
           {mode === 'login' && (
@@ -553,7 +553,7 @@ export const UserLoginPage: React.FC = () => {
         </div>
 
         {/* Diagnostic controls */}
-        <div className={`mt-6 rounded-xl border p-4 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-lg shadow-zinc-100/50' : 'bg-[#121212] border-zinc-800/80'}`}>
+        <div className={`mt-6 rounded-xl border p-4 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-lg shadow-zinc-100/50' : 'bg-bg-card border-zinc-800/80'}`}>
           <span className="text-[10px] font-bold text-zinc-500 block uppercase tracking-widest mb-2 font-mono flex items-center gap-1">
             <Key size={11} className={isLight ? 'text-zinc-700' : 'text-zinc-300'} />
             TESTING CREDENTIALS ( friction-free )

@@ -185,7 +185,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
         </div>
 
         {/* Two column profile setup */}
-        <div className="flex-grow overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grow overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* LEFT COLUMN: Input credentials */}
           <div className="flex flex-col gap-4">
@@ -249,7 +249,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
                 placeholder="e.g. custom123"
                 className={`w-full p-2.5 border rounded-xl outline-none text-sm font-mono transition-colors ${isLight
                   ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:border-zinc-200'
-                  : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-550 disabled:bg-[#121212] disabled:text-zinc-550 disabled:border-zinc-850'
+                  : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-550 disabled:bg-bg-card disabled:text-zinc-550 disabled:border-zinc-850'
                   }`}
               />
             </div>
@@ -284,7 +284,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
           <div className={`flex flex-col gap-4 border-t md:border-t-0 md:border-l pt-4 md:pt-0 md:pl-6 justify-between transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-850'}`}>
 
             {/* Live stats preview */}
-            <div className={`rounded-xl p-5 border flex-grow flex flex-col justify-between transition-colors ${isLight ? 'bg-zinc-50 border-zinc-200 text-zinc-805' : 'bg-zinc-950 border border-zinc-850 text-zinc-300'
+            <div className={`rounded-xl p-5 border grow flex flex-col justify-between transition-colors ${isLight ? 'bg-zinc-50 border-zinc-200 text-zinc-805' : 'bg-zinc-950 border border-zinc-850 text-zinc-300'
               }`}>
               <div>
                 <div className="flex items-center gap-1.5 mb-3 text-xs font-bold text-zinc-550 uppercase font-mono tracking-wider">
@@ -295,19 +295,19 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
                 {isEditMode ? (
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-3 text-center font-mono">
-                      <div className={`p-3 rounded-xl border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] p-3 rounded-xl border border-zinc-805'
+                      <div className={`p-3 rounded-xl border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card p-3 rounded-xl border border-zinc-805'
                         }`}>
                         <span className="text-[12px] text-zinc-550 font-bold uppercase block tracking-wider">Solved</span>
                         <span className={`font-serif italic text-3xl block mt-1 ${isLight ? 'text-emerald-700 font-bold' : 'text-emerald-400'}`}>{solvedCount}</span>
                       </div>
-                      <div className={`p-3 rounded-xl border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] p-3 rounded-xl border border-zinc-805'
+                      <div className={`p-3 rounded-xl border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card p-3 rounded-xl border border-zinc-805'
                         }`}>
                         <span className="text-[12px] text-zinc-550 font-bold uppercase block tracking-wider">Retries</span>
                         <span className={`font-serif italic text-3xl block mt-1 ${isLight ? 'text-amber-700 font-bold' : 'text-amber-400'}`}>{retryCount}</span>
                       </div>
                     </div>
 
-                    <div className={`text-center p-3 rounded-xl border font-mono transition-colors ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-[#121212] border border-zinc-805'
+                    <div className={`text-center p-3 rounded-xl border font-mono transition-colors ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card border border-zinc-805'
                       }`}>
                       <span className="text-[12px] text-zinc-550 font-bold uppercase block tracking-wider">Completion</span>
                       <span className={`font-serif italic text-lg block mt-1 ${isLight ? 'text-zinc-800 font-bold' : 'text-zinc-200'}`}>

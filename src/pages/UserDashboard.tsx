@@ -253,10 +253,10 @@ export const UserDashboard: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight ? 'bg-[#FAFAFB] text-zinc-700' : 'bg-[#0A0A0A] text-zinc-300'}`}>
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight ? 'bg-[#FAFAFB] text-zinc-700' : 'bg-bg-base text-zinc-300'}`}>
 
       {/* Dynamic Header Navbar */}
-      <nav className={`border-b transition-colors duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-[#050505] border-zinc-850/80'}`}>
+      <nav className={`border-b transition-colors duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-nav border-zinc-850/80'}`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
 
           {/* Logo */}
@@ -270,7 +270,7 @@ export const UserDashboard: React.FC = () => {
           </div>
 
           {/* Search bar centered */}
-          <div className="flex-grow max-w-lg relative">
+          <div className="grow max-w-lg relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500">
               <Search size={14} />
             </div>
@@ -345,7 +345,7 @@ export const UserDashboard: React.FC = () => {
       </nav>
 
       {/* Primary Filtering Ribbon Panel */}
-      <section className={`border-b py-3.5 px-6 transition-colors duration-300 ${isLight ? 'bg-zinc-100/50 border-zinc-250' : 'bg-[#0D0D0D] border-zinc-850/80'}`}>
+      <section className={`border-b py-3.5 px-6 transition-colors duration-300 ${isLight ? 'bg-zinc-100/50 border-zinc-250' : 'bg-bg-canvas border-zinc-850/80'}`}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
 
           {/* Leftside category capsules */}
@@ -460,7 +460,7 @@ export const UserDashboard: React.FC = () => {
           /* Skeletons loader */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className={`rounded-xl p-5 min-h-[190px] animate-pulse flex flex-col justify-between border ${isLight ? 'bg-white border-zinc-250' : 'bg-bg-card border-zinc-805/85 border-zinc-800/80'}`}>
+              <div key={i} className={`rounded-xl p-5 min-h-47.5 animate-pulse flex flex-col justify-between border ${isLight ? 'bg-white border-zinc-250' : 'bg-bg-card border-zinc-805/85 border-zinc-800/80'}`}>
                 <div className={`h-4 rounded-md w-1/3 mb-4 ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
                 <div className="space-y-2 grow">
                   <div className={`h-4 rounded-md w-full ${isLight ? 'bg-zinc-200' : 'bg-zinc-800'}`}></div>
@@ -473,7 +473,7 @@ export const UserDashboard: React.FC = () => {
         ) : filteredQuestions.length === 0 ? (
 
           /* Empty state */
-          <div className={`py-14 px-10 border rounded-xl flex flex-col items-center justify-center text-center max-w-md mx-auto my-12 shadow-2xl transition-colors ${isLight ? 'bg-white border-zinc-300' : 'bg-[#121212] border-zinc-800/80'}`}>
+          <div className={`py-14 px-10 border rounded-xl flex flex-col items-center justify-center text-center max-w-md mx-auto my-12 shadow-2xl transition-colors ${isLight ? 'bg-white border-zinc-300' : 'bg-bg-card border-zinc-800/80'}`}>
             <AlertCircle className="text-zinc-400 mb-4" size={44} />
             <h4 className={`font-serif italic text-lg ${isLight ? 'text-zinc-950' : 'text-white'}`}>
               No challenges match your filters
@@ -539,7 +539,7 @@ export const UserDashboard: React.FC = () => {
                 ) : (
                   <button
                     onClick={handleLoadMore}
-                    className={`px-6 py-2.5 border font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider ${isLight ? 'bg-white border-zinc-300 text-zinc-900 hover:bg-zinc-100' : 'bg-[#121212] border-zinc-800 text-zinc-105 hover:text-white hover:bg-zinc-800'}`}
+                    className={`px-6 py-2.5 border font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider ${isLight ? 'bg-white border-zinc-300 text-zinc-900 hover:bg-zinc-100' : 'bg-bg-card border-zinc-800 text-zinc-105 hover:text-white hover:bg-zinc-800'}`}
                   >
                     Load More Calculations
                   </button>
@@ -553,7 +553,7 @@ export const UserDashboard: React.FC = () => {
       </main>
 
       {/* FOOTER METRIC NOTE */}
-      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-250 text-zinc-550' : 'bg-[#050505] border-zinc-850/80 text-zinc-650'}`}>
+      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-250 text-zinc-550' : 'bg-bg-nav border-zinc-850/80 text-zinc-650'}`}>
         <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
           <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
           <p>PLAY.SIDELOWER.IN</p>
