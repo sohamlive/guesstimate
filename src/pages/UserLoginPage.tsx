@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Mail, Lock, Eye, EyeOff, LogIn, Key, User, ArrowLeft, Check, Sparkles, AlertCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+
+// Official hCaptcha development/sandbox verification sitekey fallback
+const hcaptchaSiteKey = ((import.meta as any).env?.VITE_HCAPTCHA_SITEKEY as string) || '10000000-ffff-ffff-ffff-ffffffffffff';
 
 export const UserLoginPage: React.FC = () => {
   const { login, signUp, resetPassword } = useAuth();
@@ -23,6 +27,10 @@ export const UserLoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // Anti-bot security verification states
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha | null>(null);
 
   // Promise racer to enforce 10-second authentication timeout constraint
   const withTimeout = async (promise: Promise<any>, timeoutMs: number, errorMessage: string): Promise<any> => {
@@ -94,6 +102,10 @@ export const UserLoginPage: React.FC = () => {
       toast.error('Passwords do not match.');
       return;
     }
+    if (!captchaToken) {
+      toast.error('Please solve the hCaptcha security verification to continue.');
+      return;
+    }
 
     setLoading(true);
     try {
@@ -109,9 +121,13 @@ export const UserLoginPage: React.FC = () => {
         navigate('/app/dashboard');
       } else {
         toast.error(error?.message || 'Failed to complete registration.');
+        captchaRef.current?.resetCaptcha();
+        setCaptchaToken(null);
       }
     } catch (err: any) {
       toast.error(err.message || 'There is some login/creating issue. Please try again later.');
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
     } finally {
       setLoading(false);
     }
@@ -161,6 +177,16 @@ export const UserLoginPage: React.FC = () => {
     toast.success('Loaded credential coordinates.');
   };
 
+  const validatePassword = (password) => {
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasMinLength = password.length >= 8;
+
+    return hasLetter && hasNumber && hasMinLength;
+  };
+
+  const isPasswordValid = validatePassword(password);
+
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center p-6 relative select-none transition-colors duration-300 ${isLight ? 'bg-[#FAFAFA] text-zinc-800' : 'bg-bg-base text-zinc-300'}`}>
 
@@ -193,7 +219,7 @@ export const UserLoginPage: React.FC = () => {
                   Welcome back
                 </h2>
                 <p className="text-xs text-zinc-500 mt-2 font-sans">
-                  Sign in to continue your estimation practice
+                  Sign in to continue your Guesstimates practice
                 </p>
               </div>
 
@@ -283,6 +309,7 @@ export const UserLoginPage: React.FC = () => {
                     setLastName('');
                     setPassword('');
                     setConfirmPassword('');
+                    setCaptchaToken(null);
                     setMode('signup');
                   }}
                   className={`hover:underline font-bold cursor-pointer transition-colors ${isLight ? 'text-zinc-800 font-black' : 'text-zinc-100 font-black'}`}
@@ -298,7 +325,10 @@ export const UserLoginPage: React.FC = () => {
             <>
               <div className="flex items-center gap-1.5 mb-2">
                 <button
-                  onClick={() => setMode('login')}
+                  onClick={() => {
+                    setCaptchaToken(null);
+                    setMode('login');
+                  }}
                   className={`flex items-center gap-1 text-xs font-semibold font-mono transition-all ${isLight ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-500 hover:text-white'}`}
                 >
                   <ArrowLeft size={13} /> BACK
@@ -310,7 +340,7 @@ export const UserLoginPage: React.FC = () => {
                   Create Profile
                 </h2>
                 <p className="text-xs text-zinc-500 mt-2 font-sans">
-                  Register to track and build Guesstimate challenges
+                  Register to track your Guesstimates practice
                 </p>
               </div>
 
@@ -330,7 +360,7 @@ export const UserLoginPage: React.FC = () => {
                         required
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="e.g. Juliet"
+                        placeholder="e.g. Jack"
                         className={`w-full pl-9 pr-3 py-2.5 rounded-xl outline-none text-sm transition-all duration-300 font-medium ${isLight
                           ? 'bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-400'
                           : 'bg-zinc-950 border border-zinc-850 text-white placeholder:text-zinc-650 focus:border-zinc-500'
@@ -348,7 +378,7 @@ export const UserLoginPage: React.FC = () => {
                       required
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      placeholder="e.g. Capulet"
+                      placeholder="e.g. Sparrow"
                       className={`w-full px-3 py-2.5 rounded-xl outline-none text-sm transition-all duration-300 font-medium ${isLight
                         ? 'bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-400'
                         : 'bg-zinc-950 border border-zinc-850 text-white placeholder:text-zinc-650 focus:border-zinc-500'
@@ -371,7 +401,7 @@ export const UserLoginPage: React.FC = () => {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@company.com"
+                      placeholder="jack@email.com"
                       className={`w-full pl-9 pr-3 py-2.5 rounded-xl outline-none text-sm transition-all duration-300 font-medium ${isLight
                         ? 'bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-400'
                         : 'bg-zinc-950 border border-zinc-850 text-white placeholder:text-zinc-650 focus:border-zinc-500'
@@ -411,13 +441,13 @@ export const UserLoginPage: React.FC = () => {
 
                   {/* Character Based Validation Live Indicator */}
                   <div className="mt-1.5 flex items-center gap-1 text-xs">
-                    {password.length >= 8 ? (
+                    {isPasswordValid ? (
                       <span className="flex items-center gap-1 text-emerald-600 font-semibold font-mono text-[10px]">
-                        <Check size={11} strokeWidth={3} /> Min 8 characters met
+                        <Check size={11} strokeWidth={3} /> Strong password criteria met
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-red-500 font-secondary font-mono text-[10px]">
-                        <AlertCircle size={11} /> Requires 8+ characters ({password.length}/8)
+                      <span className="flex items-center gap-1 text-red-500 font-mono text-[10px]">
+                        <AlertCircle size={11} /> Requires 8+ characters, letters & digits
                       </span>
                     )}
                   </div>
@@ -453,11 +483,28 @@ export const UserLoginPage: React.FC = () => {
                   </div>
                 </div>
 
+                <div className="overflow-hidden rounded-lg items-center flex justify-center">
+                  <HCaptcha
+                    ref={captchaRef}
+                    sitekey={hcaptchaSiteKey}
+                    theme={isLight ? 'light' : 'dark'}
+                    onVerify={(token) => setCaptchaToken(token)}
+                    onExpire={() => {
+                      setCaptchaToken(null);
+                      toast('Security token expired. Please verify again.', { icon: '⚠️' });
+                    }}
+                    onError={() => {
+                      setCaptchaToken(null);
+                      toast.error('Security challenge failed. Please reload or retry.');
+                    }}
+                  />
+                </div>
+
                 {/* Submit action: labels 'Create Profile' */}
                 <button
                   type="submit"
-                  disabled={loading || password.length < 8}
-                  className={`w-full py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer disabled:opacity-40 mt-5 font-mono uppercase tracking-wider ${isLight
+                  disabled={loading || password.length < 8 || !captchaToken}
+                  className={`w-full py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed mt-5 font-mono uppercase tracking-wider ${isLight
                     ? 'bg-zinc-900 hover:bg-zinc-805 text-white shadow-zinc-200/50'
                     : 'bg-white hover:bg-zinc-200 text-black'
                     }`}
@@ -470,7 +517,10 @@ export const UserLoginPage: React.FC = () => {
               <div className={`mt-5 pt-4 border-t text-center text-xs text-zinc-500 font-sans ${isLight ? 'border-zinc-200' : 'border-zinc-850'}`}>
                 <span>Already have a profile? </span>
                 <button
-                  onClick={() => setMode('login')}
+                  onClick={() => {
+                    setCaptchaToken(null);
+                    setMode('login');
+                  }}
                   className={`hover:underline font-bold cursor-pointer transition-colors ${isLight ? 'text-zinc-800 font-black' : 'text-zinc-200 font-black'}`}
                 >
                   Sign In
