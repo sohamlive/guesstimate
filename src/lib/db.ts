@@ -835,14 +835,25 @@ export const db = {
 
   saveNotes: async (userId: string, questionId: string, notes: string): Promise<UserProgress> => {
     if (db.isLive()) {
+      // 1. Fetch existing progress status first to avoid overwriting a 'solved' or 'retry' state
+      const { data: existingProgress } = await supabase!
+        .from('user_progress')
+        .select('status')
+        .eq('user_id', userId)
+        .eq('question_id', questionId)
+        .maybeSingle();
+
+      const targetStatus = existingProgress?.status || 'none';
+
+      // 2. Upsert with the correct status
       const { data, error } = await supabase!
         .from('user_progress')
         .upsert({
           user_id: userId,
           question_id: questionId,
           notes: notes,
-          status: 'none', // Put default none if it doesn't exist, though we normally try not to overwrite status if it exists. 
-          // Let's do a select logic first or handle gracefully in SQL
+          status: targetStatus,
+          updated_at: new Date().toISOString()
         }, { onConflict: 'user_id,question_id' })
         .select()
         .single();
