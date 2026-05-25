@@ -5,6 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Mail, Lock, Eye, EyeOff, LogIn, Key, User, ArrowLeft, Check, Sparkles, AlertCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { trackEvent } from '../lib/analytics';
 
 // Official hCaptcha development/sandbox verification sitekey fallback
 const hcaptchaSiteKey = ((import.meta as any).env?.VITE_HCAPTCHA_SITEKEY as string) || '10000000-ffff-ffff-ffff-ffffffffffff';
@@ -69,6 +70,7 @@ export const UserLoginPage: React.FC = () => {
 
       if (res?.success) {
         toast.success('Sign in successful. Welcome back!');
+        trackEvent('login_success', 'authentication', email);
         if (res?.session?.profile?.role === 'admin') {
           navigate('/admin/dashboard');
         } else {
@@ -76,9 +78,11 @@ export const UserLoginPage: React.FC = () => {
         }
       } else {
         toast.error(res?.error?.message || 'Authentication failed. Please verify credentials.');
+        trackEvent('login_failed', 'authentication', email);
       }
     } catch (err: any) {
       toast.error(err.message || 'There is some login/creating issue. Please try again later.');
+      trackEvent('login_error', 'authentication', email);
     } finally {
       setLoading(false);
     }
@@ -118,11 +122,13 @@ export const UserLoginPage: React.FC = () => {
 
       if (success) {
         toast.success('Registration successful! Welcome to Guesstimate Tracker.');
+        trackEvent('signup_success', 'authentication', email);
         navigate('/app/dashboard');
       } else {
         toast.error(error?.message || 'Failed to complete registration.');
         captchaRef.current?.resetCaptcha();
         setCaptchaToken(null);
+        trackEvent('signup_failed', 'authentication', email);
       }
     } catch (err: any) {
       toast.error(err.message || 'There is some login/creating issue. Please try again later.');

@@ -4,6 +4,7 @@ import { db } from '../lib/db';
 import { X, ThumbsUp, ThumbsDown, Link, BookOpen, RefreshCw, Check, Save } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useTheme } from '../context/ThemeContext';
+import { trackEvent } from '../lib/analytics';
 
 interface WorkspaceModalProps {
   question: Question;
@@ -76,14 +77,17 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
         setGlobalSolved(prev => prev + 1);
         if (status === 'retry') setGlobalRetry(prev => Math.max(0, prev - 1));
         toast.success('Challenged marked as Solved!');
+        trackEvent('mark_solved', 'challenge', question.question);
       } else if (nextStatus === 'retry') {
         setGlobalRetry(prev => prev + 1);
         if (status === 'solved') setGlobalSolved(prev => Math.max(0, prev - 1));
         toast.success('Added to your Retry queue.');
+        trackEvent('mark_retry', 'challenge', question.question);
       } else {
         if (status === 'solved') setGlobalSolved(prev => Math.max(0, prev - 1));
         if (status === 'retry') setGlobalRetry(prev => Math.max(0, prev - 1));
         toast.success('Removed from your Retry queue.');
+        trackEvent('remove_progress', 'challenge', question.question);
       }
 
       onProgressChange();
@@ -97,6 +101,7 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
     try {
       await db.saveNotes(userId, question.id, notes);
       toast.success('Working notes saved successfully.');
+      trackEvent('save_notes', 'challenge_notebook', question.question);
     } catch (err: any) {
       toast.error(err.message || 'Failed to preserve notes.');
     } finally {
@@ -113,15 +118,18 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
         nextVote = null;
         if (type === 'up') setQUpvotes(prev => Math.max(0, prev - 1));
         else setQDownvotes(prev => Math.max(0, prev - 1));
+        trackEvent('remove_vote', 'challenge_vote', question.question);
       } else {
         nextVote = type;
         // Adjusted counters
         if (type === 'up') {
           setQUpvotes(prev => prev + 1);
           if (userVote === 'down') setQDownvotes(prev => Math.max(0, prev - 1));
+          trackEvent('upvote', 'challenge_vote', question.question);
         } else {
           setQDownvotes(prev => prev + 1);
           if (userVote === 'up') setQUpvotes(prev => Math.max(0, prev - 1));
+          trackEvent('downvote', 'challenge_vote', question.question);
         }
       }
 

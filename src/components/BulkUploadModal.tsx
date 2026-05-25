@@ -8,6 +8,7 @@ import {
 import { toast } from 'react-hot-toast';
 import { useTheme } from '../context/ThemeContext';
 import * as XLSX from 'xlsx';
+import { trackEvent } from '../lib/analytics';
 
 interface BulkUploadModalProps {
   isOpen: boolean;
@@ -246,6 +247,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
     XLSX.utils.book_append_sheet(wb, ws, "Questions Template");
     XLSX.writeFile(wb, "guesstimates_bulk_template.xlsx");
     toast.success('Excel Template downloaded!');
+    trackEvent('download_xlsx_template', 'bulk_upload');
   };
 
   const downloadCsvTemplate = () => {
@@ -264,6 +266,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
     link.click();
     document.body.removeChild(link);
     toast.success('CSV Template downloaded!');
+    trackEvent('download_csv_template', 'bulk_upload');
   };
 
   const handleBulkUploadSubmit = async () => {
@@ -327,10 +330,12 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
       }
 
       toast.success(`Success: Successfully uploaded ${successCount} questions into Guesstimates!`);
+      trackEvent('bulk_upload_success', 'bulk_upload', `${successCount} items`);
       onSuccess();
       onClose();
     } catch (err: any) {
       toast.error(err.message || 'An error occurred during bulk operations.');
+      trackEvent('bulk_upload_error', 'bulk_upload', err.message || 'unknown error');
     } finally {
       setUploading(false);
     }
