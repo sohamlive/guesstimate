@@ -8,12 +8,14 @@ import { AdminLoginPage } from './pages/AdminLoginPage';
 import { UserDashboard } from './pages/UserDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { Toaster } from 'react-hot-toast';
+import { AnalyticsTracker } from './lib/analytics';
 
 export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
         <HashRouter>
+          <AnalyticsTracker />
           <Routes>
             {/* Public Views */}
             <Route path="/" element={<PublicHeroPage />} />
