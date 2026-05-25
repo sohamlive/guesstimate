@@ -355,7 +355,9 @@ export const db = {
               profile = profilesList[0] as Profile;
             } else {
               // Attempt to recover by upserting/creating the profile row
-              const targetRole = email.toLowerCase().includes('admin') ? 'admin' : 'user';
+              // When Supabase is connected, we disable the dynamic "includes('admin') email check" auto-promotion rule.
+              // All live user roles must default strictly to 'user', unless they match the primary owner coordinates.
+              const targetRole = email.toLowerCase() === 'sohamlive@gmail.com' ? 'admin' : 'user';
               const { data: upserted, error: uErr } = await supabase!
                 .from('profiles')
                 .upsert({
@@ -382,7 +384,7 @@ export const db = {
               first_name: data.user.user_metadata?.first_name || 'User',
               last_name: data.user.user_metadata?.last_name || 'Practitioner',
               email: data.user.email || email,
-              role: (email.toLowerCase().includes('admin') ? 'admin' : 'user') as UserRole,
+              role: (email.toLowerCase() === 'sohamlive@gmail.com' ? 'admin' : 'user') as UserRole,
               created_at: data.user.created_at || new Date().toISOString()
             };
           }
@@ -534,7 +536,9 @@ export const db = {
               profile = profilesList[0] as Profile;
             } else {
               // Attempt to recover by upserting/creating the profile row
-              const targetRole = (session.user.email || '').toLowerCase().includes('admin') ? 'admin' : 'user';
+              // When Supabase is connected, we disable the dynamic "includes('admin') email check" auto-promotion rule.
+              // All live user roles must default strictly to 'user', unless they match the primary owner coordinates.
+              const targetRole = (session.user.email || '').toLowerCase() === 'sohamlive@gmail.com' ? 'admin' : 'user';
               const { data: upserted, error: uErr } = await supabase!
                 .from('profiles')
                 .upsert({
@@ -560,7 +564,7 @@ export const db = {
               first_name: session.user.user_metadata?.first_name || 'User',
               last_name: session.user.user_metadata?.last_name || 'Practitioner',
               email: session.user.email || '',
-              role: ((session.user.email || '').toLowerCase().includes('admin') ? 'admin' : 'user') as UserRole,
+              role: ((session.user.email || '').toLowerCase() === 'sohamlive@gmail.com' ? 'admin' : 'user') as UserRole,
               created_at: session.user.created_at || new Date().toISOString()
             };
           }
