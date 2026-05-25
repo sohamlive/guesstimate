@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Sparkles, Filter, RefreshCw, BarChart2, Shield, Compass, ChevronRight, Sun, Moon } from 'lucide-react';
+import { Play, Sparkles, Filter, RefreshCw, BarChart2, Shield, Compass, ChevronRight, Sun, Moon, LogIn, } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 export const PublicHeroPage: React.FC = () => {
@@ -36,7 +36,7 @@ export const PublicHeroPage: React.FC = () => {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className={`p-2 border transition-all duration-200 rounded-xl cursor-pointer ${isLight
+              className={`p-2 sm:p-2.5  border transition-all duration-200 rounded-xl cursor-pointer ${isLight
                 ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
                 : 'border-zinc-600/40 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
                 }`}
@@ -48,12 +48,17 @@ export const PublicHeroPage: React.FC = () => {
             {/* Sign In Button - Redesigned to match layout ecosystem */}
             <button
               onClick={() => navigate('/login')}
-              className={`px-4 py-2 border transition-all duration-200 rounded-xl text-sm font-bold cursor-pointer font-mono ${isLight
+              className={`p-2 sm:px-4 sm:py-2 border transition-all duration-200 rounded-xl text-sm font-bold cursor-pointer font-mono flex items-center justify-center gap-2 ${isLight
                 ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
                 : 'border-zinc-600/40 text-zinc-300 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-white'
                 }`}
+              title="Sign In"
             >
-              Sign In
+              {/* Visible only on small mobile screens */}
+              <LogIn size={14} className="block sm:hidden" />
+
+              {/* Hidden on mobile, visible from tablet/desktop onwards */}
+              <span className="hidden sm:inline">Sign In</span>
             </button>
 
           </div>
@@ -133,11 +138,11 @@ export const PublicHeroPage: React.FC = () => {
       <section className={`border-t transition-colors duration-300 py-8 px-6 ${isLight ? 'bg-zinc-100/50 border-zinc-250 text-zinc-850' : 'bg-bg-canvas border-zinc-600/40 text-white'}`}>
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center font-mono">
           <div>
-            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">50+</span>
+            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">100+</span>
             <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Questions</span>
           </div>
           <div>
-            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">5</span>
+            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">6</span>
             <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Categories</span>
           </div>
           <div>
@@ -146,7 +151,7 @@ export const PublicHeroPage: React.FC = () => {
           </div>
           <div>
             <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">100%</span>
-            <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Personal Progress Tracker</span>
+            <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Personal</span>
           </div>
         </div>
       </section>
@@ -274,10 +279,23 @@ export const PublicHeroPage: React.FC = () => {
       </section > */}
 
       {/* Footer banner block */}
-      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-auto shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-500' : 'bg-bg-base border-zinc-600 text-zinc-400'}`}>
-        <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
-          <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
-          <p>PLAY.SIDELOWER.IN</p>
+      <footer className={`border-t py-6 px-6 text-[12px] font-mono tracking-widest mt-auto shrink-0 transition-colors duration-300 ${isLight
+        ? 'bg-zinc-100 border-zinc-200 text-zinc-500'
+        : 'bg-bg-base border-zinc-600 text-zinc-400'
+        }`}>
+        <div className="max-w-6xl w-full mx-auto flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center text-center sm:text-left">
+          <p>&copy; 2026 Soham Banerjee. v1.0</p>
+          <a
+            href="https://play.sidelower.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`tracking-widest font-bold transition-all duration-200 hover:underline underline-offset-4 ${isLight
+              ? 'text-indigo-600 hover:text-indigo-800'
+              : 'text-indigo-400/80 hover:text-indigo-300'
+              }`}
+          >
+            PLAY.SIDELOWER.IN
+          </a>
         </div>
       </footer>
 

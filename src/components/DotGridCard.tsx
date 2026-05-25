@@ -28,7 +28,6 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
 
   const getCardBgClass = () => {
     if (progressStatus === 'solved') {
-      // Solved state uses a subtle white glow in dark mode so it stands out calmly, rather than a colored glow
       return 'card-solved border border-zinc-300 dark:border-zinc-800/80 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-sm dark:shadow-white/[0.02] dark:hover:shadow-white/[0.06]';
     }
 
@@ -36,26 +35,25 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
       case 'Population':
         return 'card-population border border-[#ED946D]/30 hover:border-[#ED946D]/80 shadow-lg shadow-black/30 dark:shadow-[#ED946D]/5 hover:shadow-[#ED946D]/10 dark:hover:shadow-[#ED946D]/20';
 
-      case 'Market Sizing':
+      case 'Market':
         return 'card-market-sizing border border-[#A594DC]/30 hover:border-[#A594DC]/80 shadow-lg shadow-black/30 dark:shadow-[#A594DC]/5 hover:shadow-[#A594DC]/10 dark:hover:shadow-[#A594DC]/20';
 
-      case 'Fermi Estimate':
-        return 'card-fermi-estimate border border-[#76BCB2]/30 hover:border-[#76BCB2]/80 shadow-lg shadow-black/30 dark:shadow-[#76BCB2]/5 hover:shadow-[#76BCB2]/10 dark:hover:shadow-[#76BCB2]/20';
+      case 'Revenue':
+        return 'card-revenue border border-[#86E2D5]/30 hover:border-[#86E2D5]/80 shadow-lg shadow-black/30 dark:shadow-[#86E2D5]/5 hover:shadow-[#86E2D5]/10 dark:hover:shadow-[#86E2D5]/20';
 
-      case 'Scientific':
-        return 'card-scientific border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 dark:shadow-[#74A9DF]/5 hover:shadow-[#74A9DF]/10 dark:hover:shadow-[#74A9DF]/20';
+      case 'Digital':
+        return 'card-digital border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 dark:shadow-[#74A9DF]/5 hover:shadow-[#74A9DF]/10 dark:hover:shadow-[#74A9DF]/20';
+
+      case 'Physical':
+        return 'card-physical border border-[#FCD1DC]/30 hover:border-[#FCD1DC]/80 shadow-lg shadow-black/30 dark:shadow-[#FCD1DC]/5 hover:shadow-[#FCD1DC]/10 dark:hover:shadow-[#FCD1DC]/20';
 
       case 'Product':
-        return 'card-product border border-[#FCD1DC]/30 hover:border-[#FCD1DC]/80 shadow-lg dark:shadow-[#5D3540]/5 dark:hover:shadow-[#5D3540]/20';
+        return 'card-product border border-[#F7E7C4]/30 hover:border-[#F7E7C4]/80 shadow-lg shadow-black/30 dark:shadow-[#F7E7C4]/5 hover:shadow-[#F7E7C4]/10 dark:hover:shadow-[#F7E7C4]/20';
 
-      case 'Unit Economics':
-        return 'card-unit-economics border border-[#F7E7C4]/30 hover:border-[#F7E7C4]/80 shadow-lg dark:shadow-[#584A2E]/5 dark:hover:shadow-[#584A2E]/20';
-
-      case 'Geometric Estimation':
-        return 'card-geometric border border-[#C6ECF0]/30 hover:border-[#C6ECF0]/80 shadow-lg dark:shadow-[#29454E]/5 dark:hover:shadow-[#29454E]/20';
+      case 'Geometry':
+        return 'card-geometric border border-[#C6ECF0]/30 hover:border-[#C6ECF0]/80 shadow-lg shadow-black/30 dark:shadow-[#C6ECF0]/5 hover:shadow-[#C6ECF0]/10 dark:hover:shadow-[#C6ECF0]/20';
 
       default:
-        // Uses a generic soft white/zinc halo in dark mode
         return 'card-default border border-zinc-300 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-lg shadow-black/30 dark:shadow-white/[0.02] hover:shadow-zinc-400/10 dark:hover:shadow-white/[0.08]';
     }
   };

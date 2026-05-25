@@ -284,7 +284,7 @@ export const UserDashboard: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setItemsLimit(12);
               }}
-              placeholder="Search challenges by keyword or tags..."
+              placeholder="Search by keyword or tags..."
               className={`w-full pl-9 pr-4 py-2 text-sm border rounded-xl outline-none transition-colors ${isLight ? 'border-zinc-300 bg-zinc-100 text-black placeholder:text-zinc-400 focus:border-zinc-500' : 'border-zinc-800 bg-zinc-600/40 text-white placeholder:text-zinc-650 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-850'}`}
             />
             {searchQuery && (
@@ -503,7 +503,11 @@ export const UserDashboard: React.FC = () => {
                 const progressStatus: ProgressStatus = progressRow ? progressRow.status : 'none';
 
                 // Determine if new (e.g., created recently, or mock newly marked)
-                const isNew = new Date(q.created_at).getTime() > new Date('2026-03-01').getTime();
+                // const isNew = new Date(q.created_at).getTime() > new Date('2026-03-01').getTime();
+
+                // Calculates 5 days ago in milliseconds and compares it dynamically
+                const fiveDaysAgo = Date.now() - (5 * 24 * 60 * 60 * 1000);
+                const isNew = new Date(q.created_at).getTime() > fiveDaysAgo;
 
                 // Find user vote row
                 const voteRow = userVotes.find(v => v.question_id === q.id);
@@ -542,7 +546,7 @@ export const UserDashboard: React.FC = () => {
                 ) : (
                   <button
                     onClick={handleLoadMore}
-                    className={`px-6 py-2.5 border font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider ${isLight ? 'bg-white border-zinc-300 text-zinc-900 hover:bg-zinc-100' : 'bg-[#121212] border-zinc-800 text-zinc-105 hover:text-white hover:bg-zinc-800'}`}
+                    className={`px-6 py-2.5 border font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider ${isLight ? 'bg-white border-zinc-300 text-zinc-900 hover:bg-zinc-100' : 'bg-zinc-800 border-zinc-800 text-zinc-105 hover:text-white hover:bg-zinc-700'}`}
                   >
                     Load More Questions
                   </button>
@@ -556,12 +560,24 @@ export const UserDashboard: React.FC = () => {
       </main>
 
       {/* FOOTER METRIC NOTE */}
-      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-500' : 'bg-bg-base border-zinc-600 text-zinc-400'}`}>
-        <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
-          <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
-          <p>PLAY.SIDELOWER.IN</p>
+      <footer className={`border-t py-6 px-6 text-[12px] font-mono tracking-widest mt-auto shrink-0 transition-colors duration-300 ${isLight
+        ? 'bg-zinc-100 border-zinc-200 text-zinc-500'
+        : 'bg-bg-base border-zinc-600 text-zinc-400'
+        }`}>
+        <div className="max-w-6xl w-full mx-auto flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center text-center sm:text-left">
+          <p>&copy; 2026 Soham Banerjee. v1.0</p>
+          <a
+            href="https://play.sidelower.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`tracking-widest font-bold transition-all duration-200 hover:underline underline-offset-4 ${isLight
+              ? 'text-indigo-600 hover:text-indigo-800'
+              : 'text-indigo-400/80 hover:text-indigo-300'
+              }`}
+          >
+            PLAY.SIDELOWER.IN
+          </a>
         </div>
-
       </footer>
 
       {/* OVERLAY MODAL: Question Sandbox Workspace */}

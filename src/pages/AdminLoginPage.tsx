@@ -72,7 +72,7 @@ export const AdminLoginPage: React.FC = () => {
         </div>
 
         {/* Login Card */}
-        <div className={`rounded-xl border p-8 w-full relative overflow-hidden transition-all duration-300 shadow-2xl ${isLight ? 'bg-white border-zinc-200 shadow-zinc-200/50' : 'bg-[#121212] border-zinc-800/80'}`}>
+        <div className={`rounded-xl border p-8 w-full relative overflow-hidden transition-all duration-300 shadow-2xl ${isLight ? 'bg-white border-zinc-200 shadow-zinc-200/50' : 'bg-bg-card border-zinc-800/80'}`}>
 
           {/* Admin Tag Badge */}
           <div className={`absolute top-0 right-0 px-4 py-1.5 rounded-bl-xl text-[9px] uppercase font-bold tracking-widest flex items-center gap-1 font-mono transition-colors ${isLight ? 'bg-zinc-150 text-zinc-850' : 'bg-white text-black'}`}>

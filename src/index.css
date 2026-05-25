@@ -118,40 +118,36 @@ body.light ::-webkit-scrollbar-thumb:hover {
 /* Custom card category dot grids - Brightened for Executive Obsidian Base */
 
 .card-population {
-  /* Warm terracotta/orange hue - lifted for clear separation */
   background-color: #3B2A24;
   background-image: radial-gradient(circle, #5C4339 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
 .card-market-sizing {
-  /* Soft amethyst/purple hue - lifted for clean visibility */
   background-color: #29243B;
   background-image: radial-gradient(circle, #443B61 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
-.card-fermi-estimate {
-  /* Sage teal/green hue - lifted for crisp definition */
-  background-color: #222B27;
-  background-image: radial-gradient(circle, #384740 1.5px, transparent 1.5px);
+.card-revenue {
+  background-color: #26362E; 
+  background-image: radial-gradient(circle, #3D574A 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
-.card-scientific {
-  /* Deep steel blue hue - lifted for elegant contrast */
+.card-digital {
   background-color: #232C38;
   background-image: radial-gradient(circle, #38465A 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
-.card-product {
+.card-physical {
   background-color: #3C2229;
   background-image: radial-gradient(circle, #5D3540 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
 
-.card-unit-economics {
+.card-product {
   background-color: #39301E;
   background-image: radial-gradient(circle, #584A2E 1.5px, transparent 1.5px);
   background-size: 16px 16px;
@@ -164,8 +160,7 @@ body.light ::-webkit-scrollbar-thumb:hover {
 }
 
 .card-default {
-  /* Sleek layout slate gray - aligned with your new variables instead of pure black */
-  background-color: #1C2029; /* Matches --color-bg-card exactly */
+  background-color: #1C2029;
   background-image: radial-gradient(circle, #32394B 1.5px, transparent 1.5px);
   background-size: 16px 16px;
 }
@@ -190,22 +185,22 @@ body.light .card-market-sizing {
   background-image: radial-gradient(circle, #E1DBFA 1.5px, transparent 1.5px);
 }
 
-body.light .card-fermi-estimate {
+body.light .card-revenue {
   background-color: #F3FCF9;
   background-image: radial-gradient(circle, #CFEFE7 1.5px, transparent 1.5px);
 }
 
-body.light .card-scientific {
+body.light .card-digital {
   background-color: #F4FAFF;
   background-image: radial-gradient(circle, #D2E7FC 1.5px, transparent 1.5px);
 }
 
-body.light .card-product {
+body.light .card-physical {
   background-color: #FFF5F7;
   background-image: radial-gradient(circle, #FCD1DC 1.5px, transparent 1.5px);
 }
 
-body.light .card-unit-economics {
+body.light .card-product {
   background-color: #FFFBF2;
   background-image: radial-gradient(circle, #F7E7C4 1.5px, transparent 1.5px);
 }

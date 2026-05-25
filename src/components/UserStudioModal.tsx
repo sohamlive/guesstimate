@@ -453,7 +453,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
               onClick={onClose}
               className={`border font-bold py-2 px-5 rounded-lg text-sm transition-all cursor-pointer ${isLight
                 ? 'bg-white border-zinc-250 text-zinc-700 hover:bg-zinc-100'
-                : 'bg-zinc-900 border border-zinc-850 text-zinc-300 hover:bg-zinc-800'
+                : 'bg-zinc-800 border border-zinc-850 text-zinc-300 hover:bg-zinc-700'
                 }`}
             >
               Cancel

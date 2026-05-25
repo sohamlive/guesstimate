@@ -9,7 +9,7 @@ import { BulkUploadModal } from '../components/BulkUploadModal';
 import {
   Users, BarChart2, ShieldAlert, Edit, Trash2, Award, Plus, Upload,
   Search, SlidersHorizontal, RotateCcw, AlertCircle, LogOut, CheckCircle, RefreshCw, BarChart3, ChevronLeft, ChevronRight, HelpCircle, X,
-  Sun, Moon
+  Sun, Moon, LogIn,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -899,10 +899,23 @@ export const AdminDashboard: React.FC = () => {
       </main>
 
       {/* FOOTER ADVERTISEMENT */}
-      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-500' : 'bg-bg-base border-zinc-600 text-zinc-400'}`}>
-        <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
-          <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
-          <p>PLAY.SIDELOWER.IN</p>
+      <footer className={`border-t py-6 px-6 text-[12px] font-mono tracking-widest mt-auto shrink-0 transition-colors duration-300 ${isLight
+        ? 'bg-zinc-100 border-zinc-200 text-zinc-500'
+        : 'bg-bg-base border-zinc-600 text-zinc-400'
+        }`}>
+        <div className="max-w-6xl w-full mx-auto flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center text-center sm:text-left">
+          <p>&copy; 2026 Soham Banerjee. v1.0</p>
+          <a
+            href="https://play.sidelower.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`tracking-widest font-bold transition-all duration-200 hover:underline underline-offset-4 ${isLight
+              ? 'text-indigo-600 hover:text-indigo-800'
+              : 'text-indigo-400/80 hover:text-indigo-300'
+              }`}
+          >
+            PLAY.SIDELOWER.IN
+          </a>
         </div>
       </footer>
 

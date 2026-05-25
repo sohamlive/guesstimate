@@ -603,7 +603,7 @@ export const UserLoginPage: React.FC = () => {
         </div>
 
         {/* Diagnostic controls */}
-        <div className={`mt-6 rounded-xl border p-4 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-lg shadow-zinc-100/50' : 'bg-bg-card border-zinc-800/80'}`}>
+        {/* <div className={`mt-6 rounded-xl border p-4 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-lg shadow-zinc-100/50' : 'bg-bg-card border-zinc-800/80'}`}>
           <span className="text-[10px] font-bold text-zinc-500 block uppercase tracking-widest mb-2 font-mono flex items-center gap-1">
             <Key size={11} className={isLight ? 'text-zinc-700' : 'text-zinc-300'} />
             TESTING CREDENTIALS ( friction-free )
@@ -637,7 +637,7 @@ export const UserLoginPage: React.FC = () => {
               <span>💼 Soham's Email</span>
             </button>
           </div>
-        </div>
+        </div> */}
 
       </div>
     </div>

@@ -298,7 +298,7 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Write your calculations, estimates, core assumptions, and Fermi loops here..."
+                placeholder="Write your core assumptions, how-tos here..."
                 className={`w-full flex-grow p-4 border rounded-xl placeholder-gray-400/80 text-sm outline-none resize-none font-mono leading-relaxed transition-colors ${isLight ? 'bg-white border-gray-300 focus:border-[#2C4EDB] text-gray-800 focus:ring-1 focus:ring-[#2C4EDB]' : 'bg-[#0A0A0A] border-zinc-800 text-zinc-100 focus:border-zinc-555'}`}
               />
               <button
@@ -309,7 +309,7 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
                 {savingNotes ? (
                   <>
                     <RefreshCw size={12} className="animate-spin" />
-                    <span>PRESERVING CALCULATION...</span>
+                    <span>SAVING NOTES...</span>
                   </>
                 ) : (
                   <>
@@ -329,7 +329,7 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
             onClick={() => handleToggleStatus('solved')}
             className={`flex-grow md:flex-none md:w-44 py-2.5 px-4 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer border ${status === 'solved'
               ? 'bg-[#16A34A] border-[#16A34A] text-white shadow-md'
-              : (isLight ? 'bg-white hover:bg-gray-100 text-[#16A34A] border-[#16A34A]/30' : 'bg-zinc-900 border-zinc-800 text-[#16A34A]')
+              : (isLight ? 'bg-white hover:bg-gray-100 text-[#16A34A] border-[#16A34A]/30' : 'bg-zinc-800 border-zinc-700 text-[#16A34A] hover:bg-zinc-700')
               }`}
           >
             <Check size={16} strokeWidth={status === 'solved' ? 3 : 2} />
@@ -340,7 +340,7 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
             onClick={() => handleToggleStatus('retry')}
             className={`flex-grow md:flex-none md:w-44 py-2.5 px-4 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer border ${status === 'retry'
               ? 'bg-[#D97706] border-[#D97706] text-white shadow-md'
-              : (isLight ? 'bg-white hover:bg-gray-100 text-[#D97706] border-[#D97706]/30' : 'bg-zinc-900 border-zinc-800 text-[#D97706]')
+              : (isLight ? 'bg-white hover:bg-gray-100 text-[#D97706] border-[#D97706]/30' : 'bg-zinc-800 border-zinc-700 text-[#D97706] hover:bg-zinc-700')
               }`}
           >
             <RefreshCw size={14} className={status === 'retry' ? 'animate-spin' : ''} />
@@ -349,14 +349,14 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
 
           <button
             onClick={onClose}
-            className={`hidden md:block ml-auto font-semibold py-2.5 px-6 rounded-xl text-sm transition-all cursor-pointer ${isLight ? 'bg-zinc-200 hover:bg-zinc-300 text-zinc-700' : 'bg-zinc-800 hover:bg-zinc-750 text-zinc-100'}`}
+            className={`hidden md:block ml-auto font-semibold py-2.5 px-6 rounded-xl text-sm transition-all cursor-pointer ${isLight ? 'bg-zinc-200 hover:bg-zinc-300 text-zinc-700' : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-100'}`}
           >
             Close
           </button>
 
           <button
             onClick={onClose}
-            className={`md:hidden ml-auto w-12 h-10 font-semibold rounded-xl text-sm flex items-center justify-center transition-all cursor-pointer ${isLight ? 'bg-zinc-200 hover:bg-zinc-300 text-zinc-700' : 'bg-zinc-800 hover:bg-zinc-750 text-zinc-100'}`}
+            className={`md:hidden ml-auto w-12 h-10 font-semibold rounded-xl text-sm flex items-center justify-center transition-all cursor-pointer ${isLight ? 'bg-zinc-200 hover:bg-zinc-300 text-zinc-700' : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-100'}`}
           >
             <X size={16} />
           </button>
