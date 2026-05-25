@@ -1,0 +1,8 @@
+# Robots.txt for Guesstimate Tracker (Soham Banerjee)
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/dashboard
+Disallow: /app/dashboard
+
+Sitemap: https://play.sidelower.in/sitemap.xml
