@@ -231,8 +231,12 @@ export const UserDashboard: React.FC = () => {
     const progressRow = userProgress.find(p => p.question_id === q.id);
     const status: ProgressStatus = progressRow ? progressRow.status : 'none';
 
-    // Show solved filter
-    if (!showSolved && status === 'solved') return false;
+    // Show solved filter -> acts as "Show Solved Only" when active, and hides solved when inactive
+    if (showSolved) {
+      if (status !== 'solved') return false;
+    } else {
+      if (status === 'solved') return false;
+    }
 
     // Show retries only filter
     if (showRetriesOnly && status !== 'retry') return false;
