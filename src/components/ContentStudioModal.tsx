@@ -216,11 +216,11 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fadeIn">
-      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-850' : 'bg-[#0c0c0c] border-zinc-800 text-zinc-350'
+      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-850' : 'bg-bg-card border-zinc-600 text-zinc-350'
         }`}>
 
         {/* Header bar */}
-        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-card'}`}>
+        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-canvas'}`}>
           <span className={`font-serif italic text-lg transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
             {isEditMode ? 'Edit Guesstimate Challenge' : 'Create Guesstimate Challenge'}
           </span>
@@ -273,7 +273,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className={`w-full p-2.5 border rounded-xl outline-none font-mono transition-colors ${isLight
+                className={`w-full p-2.5 border rounded-xl outline-none font-mono text-[12px] transition-colors ${isLight
                   ? 'bg-zinc-50 border-zinc-250 text-zinc-805 focus:bg-white focus:border-zinc-500'
                   : 'bg-zinc-950 border-zinc-800 text-zinc-300 focus:border-zinc-550'
                   }`}
@@ -437,7 +437,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
             {/* Analytics Stats Registry */}
             <div className={`rounded-xl p-4 border transition-colors ${isLight ? 'bg-zinc-50 border-zinc-200' : 'bg-zinc-950 border-zinc-850'
               }`}>
-              <span className="text-xs font-bold text-zinc-500 uppercase block mb-2 font-mono tracking-wider">Metrics Status Registry</span>
+              <span className="text-xs font-bold text-zinc-500 uppercase block mb-2 font-mono tracking-wider">Question Metrics</span>
 
               <div className="grid grid-cols-2 gap-2 text-center text-xs mb-3 font-mono">
                 <div className={`p-2 rounded-lg border transition-all ${isLight ? 'bg-white border-zinc-200 shadow-xs' : 'bg-bg-card border-zinc-805'
@@ -506,7 +506,7 @@ export const ContentStudioModal: React.FC<ContentStudioModalProps> = ({
 
         </div>
         {/* Footer actions */}
-        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center justify-between transition-all duration-300 ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-[#0F0F0F] border-zinc-800'
+        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center justify-between transition-all duration-300 ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-bg-canvas border-zinc-800'
           }`}>
           <div>
             {isEditMode && (

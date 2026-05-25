@@ -166,13 +166,31 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
     }
   };
 
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'N/A';
+      const day = date.getDate();
+      const monthNames = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      return `${day} ${month}, ${year}`;
+    } catch {
+      return 'N/A';
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fadeIn">
-      <div className={`relative w-full max-w-3xl overflow-hidden rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-[#171717] text-zinc-300 border-zinc-800'
+      <div className={`relative w-full max-w-3xl overflow-hidden rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-bg-card text-zinc-300 border-zinc-600'
         }`}>
 
         {/* Header bar */}
-        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-card'}`}>
+        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-canvas'}`}>
           <span className={`font-serif italic text-lg transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
             {isEditMode ? 'Edit User Credentials' : 'Provision New User'}
           </span>
@@ -236,23 +254,36 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
               />
             </div>
 
-            <div className="font-mono">
-              <label className="text-xs font-bold text-zinc-500 uppercase block mb-1.5 tracking-wider font-mono">
-                Password {isEditMode ? '(Read-Only)' : '(Plain Text Visible)'} *
-              </label>
-              <input
-                type="text"
-                required
-                disabled={isEditMode}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="e.g. custom123"
-                className={`w-full p-2.5 border rounded-xl outline-none text-sm font-mono transition-colors ${isLight
-                  ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:border-zinc-200'
-                  : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-550 disabled:bg-bg-card disabled:text-zinc-550 disabled:border-zinc-850'
-                  }`}
-              />
-            </div>
+            {isEditMode ? (
+              <div className="font-mono">
+                <label className="text-xs font-bold text-zinc-500 uppercase block mb-1.5 tracking-wider font-mono">
+                  Date of Profile Creation
+                </label>
+                <div className={`w-full p-2.5 border rounded-xl outline-none text-sm font-mono transition-colors ${isLight
+                  ? 'bg-zinc-100 border-zinc-200 text-zinc-500'
+                  : 'bg-zinc-950 border border-zinc-800 text-zinc-500 bg-zinc-900/40'
+                  }`}>
+                  {userProfile ? formatDate(userProfile.created_at) : 'N/A'}
+                </div>
+              </div>
+            ) : (
+              <div className="font-mono">
+                <label className="text-xs font-bold text-zinc-500 uppercase block mb-1.5 tracking-wider font-mono">
+                  Password (Plain Text Visible) *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="e.g. custom123"
+                  className={`w-full p-2.5 border rounded-xl outline-none text-sm font-mono transition-colors ${isLight
+                    ? 'bg-zinc-50 border-zinc-250 text-zinc-800 focus:bg-white focus:border-zinc-500'
+                    : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-550'
+                    }`}
+                />
+              </div>
+            )}
 
             <div>
               <label className="text-xs font-bold text-zinc-500 uppercase block mb-1.5 tracking-wider font-mono">Authorized Platform Role</label>
@@ -321,7 +352,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
                 ) : (
                   <div className="h-40 flex flex-col items-center justify-center text-center p-4">
                     <p className="text-xs text-zinc-505 leading-relaxed font-mono">
-                      Practising coordinates will populate here once this profile starts logging estimations on active sandboxes.
+                      Practise metrics will populate here once this profile starts logging guesstimates on active questions.
                     </p>
                   </div>
                 )}
@@ -375,7 +406,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
         </div>
 
         {/* Footer actions */}
-        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center justify-between transition-colors duration-300 ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-[#0F0F0F] border-zinc-800'
+        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center justify-between transition-colors duration-300 ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-bg-canvas border-zinc-800'
           }`}>
           <div>
             {isEditMode && (

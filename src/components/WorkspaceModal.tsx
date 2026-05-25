@@ -151,10 +151,10 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-xl flex flex-col max-h-[90vh] transition-colors border ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-[#171717] text-zinc-300 border-zinc-800'}`}>
+      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-xl flex flex-col max-h-[90vh] transition-colors border ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-bg-card text-zinc-300 border-zinc-600'}`}>
 
         {/* Header bar */}
-        <div className={`flex items-center justify-between px-6 py-4 border-b ${isLight ? 'border-[#E5E7EB]' : 'border-zinc-800/80 bg-bg-card'}`}>
+        <div className={`flex items-center justify-between px-6 py-4 border-b ${isLight ? 'border-[#E5E7EB]' : 'border-zinc-800/80 bg-bg-canvas'}`}>
           <div className="flex items-center gap-2">
             <BookOpen className={`${isLight ? 'text-[#1A2E6C]' : 'text-zinc-400'}`} size={20} />
             <span className={`font-serif italic font-bold text-lg ${isLight ? 'text-[#1A2E6C]' : 'text-zinc-100'}`}>Challenge Sandbox</span>
@@ -323,7 +323,7 @@ export const WorkspaceModal: React.FC<WorkspaceModalProps> = ({
         </div>
 
         {/* FOOTER CONTROLS */}
-        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center gap-3 transition-colors ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-[#0F0F0F] border-zinc-800'}`}>
+        <div className={`px-6 py-4 rounded-b-2xl border-t flex items-center gap-3 transition-colors ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-bg-canvas border-zinc-800'}`}>
 
           <button
             onClick={() => handleToggleStatus('solved')}

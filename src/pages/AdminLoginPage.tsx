@@ -51,7 +51,7 @@ export const AdminLoginPage: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center p-6 relative select-none transition-colors duration-300 ${isLight ? 'bg-[#FAFAFA] text-zinc-800' : 'bg-[#0A0A0A] text-zinc-300'}`}>
+    <div className={`min-h-screen flex flex-col items-center justify-center p-6 relative select-none transition-colors duration-300 ${isLight ? 'bg-[#FAFAFA] text-zinc-800' : 'bg-bg-nav/30 text-zinc-300'}`}>
 
       {/* Back button */}
       <Link

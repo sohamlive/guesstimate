@@ -12,41 +12,50 @@ export const PublicHeroPage: React.FC = () => {
     <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300 font-sans ${isLight ? 'bg-[#FAFAFB] text-zinc-700 selection:bg-zinc-200 selection:text-black' : 'bg-[#0A0A0A] text-zinc-300 selection:bg-white selection:text-black'}`}>
 
       {/* Sophisticated Navigation Bar */}
-      <header className={`sticky top-0 z-50 transition-colors duration-300 backdrop-blur-md border-b ${isLight ? 'bg-white/95 border-zinc-200' : 'bg-[#050505]/95 border-zinc-800/80'}`}>
+      <header className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-md border-b ${isLight
+        ? 'bg-white/80 border-zinc-200'
+        : 'bg-bg-navbar border-zinc-600/40 shadow-lg shadow-black/20'
+        }`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+
+          {/* Brand Logo & Title */}
           <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-serif italic font-black text-xl shadow-md ${isLight ? 'bg-zinc-950 text-white' : 'bg-white text-black'}`}>
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-serif italic font-black text-xl shadow-md ${isLight ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-950'
+              }`}>
               G.
             </div>
-            <span className={`font-serif italic text-2xl tracking-tight transition-colors ${isLight ? 'text-zinc-950' : 'text-white'}`}>
+            <span className={`font-serif italic text-2xl tracking-tight transition-colors ${isLight ? 'text-zinc-950' : 'text-zinc-100'
+              }`}>
               Guesstimate Tracker.
             </span>
           </div>
 
+          {/* Actions Action Ribbon */}
           <div className="flex items-center gap-3">
-            {/* <button
-              onClick={toggleTheme}
-              className={`p-2 border transition-all rounded-lg cursor-pointer ${isLight ? 'border-zinc-300 text-zinc-700 hover:bg-zinc-150 hover:text-zinc-950' : 'border-zinc-700 text-zinc-300 hover:bg-zinc-900/80 hover:text-white'}`}
-              title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
-            >
-              {isLight ? <Moon size={16} /> : <Sun size={16} />}
-            </button> */}
+
+            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               className={`p-2 border transition-all duration-200 rounded-xl cursor-pointer ${isLight
                 ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
-                : 'border-zinc-800 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
+                : 'border-zinc-600/40 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
                 }`}
               title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
             >
               {isLight ? <Moon size={14} /> : <Sun size={14} />}
             </button>
+
+            {/* Sign In Button - Redesigned to match layout ecosystem */}
             <button
               onClick={() => navigate('/login')}
-              className={`px-4 py-2 border transition-all rounded-lg text-sm font-semibold cursor-pointer font-mono ${isLight ? 'border-zinc-300 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950' : 'border-zinc-700 text-zinc-300 hover:bg-zinc-900/80 hover:text-white'}`}
+              className={`px-4 py-2 border transition-all duration-200 rounded-xl text-sm font-bold cursor-pointer font-mono ${isLight
+                ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
+                : 'border-zinc-600/40 text-zinc-300 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-white'
+                }`}
             >
               Sign In
             </button>
+
           </div>
         </div>
       </header>
@@ -58,12 +67,12 @@ export const PublicHeroPage: React.FC = () => {
           {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col gap-6 text-left">
 
-            <h1 className={`font-serif italic leading-tight tracking-tight text-4xl sm:text-5xl lg:text-6xl backdrop-blur-[1px] ${isLight ? 'text-zinc-950' : 'text-white'}`}>
+            <h1 className={`font-serif italic leading-tight tracking-tight text-4xl sm:text-5xl lg:text-6xl backdrop-blur-[2px] ${isLight ? 'text-zinc-950' : 'text-white'}`}>
               Sharpen Your <br className="hidden sm:inline" />
               <span className={`not-italic font-sans font-light ${isLight ? 'text-zinc-550' : 'text-zinc-400'}`}>Guesstimate</span> Thinking.
             </h1>
 
-            <p className={`font-sans text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed backdrop-blur-[1px] ${isLight ? 'text-zinc-650' : 'text-zinc-450'}`}>
+            <p className={`font-sans text-sm sm:text-base lg:text-lg max-w-xl leading-relaxed backdrop-blur-[2px] ${isLight ? 'text-zinc-650' : 'text-zinc-450'}`}>
               From Enrico Fermi estimating an atomic blast's yield with scraps of paper in 1945, to modern market-sizing and scientific bounds. This is the home for your back-of-the-envelope calculations. Structure complex problems, filter by complexity, and map your progress.
             </p>
 
@@ -88,10 +97,10 @@ export const PublicHeroPage: React.FC = () => {
               {/* Floating Active Question Card Mock */}
               <div className={`relative rounded-xl border p-6 shadow-2xl z-10 transition-colors duration-300 ${isLight ? 'bg-white border-zinc-300' : 'bg-[#121212] border-zinc-700'}`}>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-550 dark:text-zinc-500">
+                  <span className="text-[12px] uppercase font-mono tracking-wider text-zinc-550 dark:text-zinc-500">
                     MARKET SIZING
                   </span>
-                  <span className="text-[10px] bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2.5 py-0.5 rounded-md font-mono">
+                  <span className="text-[12px] bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2.5 py-0.5 rounded-md font-mono">
                     RETRY
                   </span>
                 </div>
@@ -121,23 +130,23 @@ export const PublicHeroPage: React.FC = () => {
       </section>
 
       {/* Stats Counter Panel Strip */}
-      <section className={`border-y transition-colors duration-300 py-8 px-6 ${isLight ? 'bg-zinc-100/50 border-zinc-250 text-zinc-850' : 'bg-[#050505] border-zinc-800/80 text-white'}`}>
+      <section className={`border-t transition-colors duration-300 py-8 px-6 ${isLight ? 'bg-zinc-100/50 border-zinc-250 text-zinc-850' : 'bg-bg-canvas border-zinc-600/40 text-white'}`}>
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center font-mono">
           <div>
             <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">50+</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Analytical Challenges</span>
+            <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Questions</span>
           </div>
           <div>
-            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">4</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Core Classifications</span>
+            <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">5</span>
+            <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Categories</span>
           </div>
           <div>
             <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">3</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Difficulty Levels</span>
+            <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Difficulty Levels</span>
           </div>
           <div>
             <span className="font-sans italic font-extrabold text-3xl sm:text-4xl block">100%</span>
-            <span className="text-[12px] text-zinc-500 block uppercase tracking-widest mt-3">Personal Progress Tracker</span>
+            <span className="text-[12px] text-zinc-400 block uppercase tracking-widest mt-3">Personal Progress Tracker</span>
           </div>
         </div>
       </section>
@@ -265,30 +274,10 @@ export const PublicHeroPage: React.FC = () => {
       </section > */}
 
       {/* Footer banner block */}
-      <footer className="bg-[#050505] text-zinc-400 py-5 px-6 mt-auto text-center border-t border-zinc-850">
-        <div className="max-w-6xl mx-auto flex flex-col items-center gap-6">
-          {/* <h2 className="font-serif italic text-white text-2xl sm:text-3xl leading-tight">
-            Ready to think in parameters?
-          </h2>
-          <p className="text-zinc-500 text-sm sm:text-base leading-relaxed max-w-lg font-sans">
-            Start logging your estimations, tracking categories, and preparing yourself for Consulting Case Study interviews immediately.
-          </p>
-          <button
-            onClick={() => navigate('/login')}
-            className="px-8 py-3.5 bg-white text-black font-semibold rounded-lg text-sm hover:bg-zinc-200 transition-all cursor-pointer flex items-center gap-2 font-mono"
-          >
-            <span>Access Guesstimate Library</span>
-            <ChevronRight size={14} />
-          </button> */}
-
-          {/* <div className="mt-1 pt-4 border-t border-zinc-850 w-full text-[10px] text-zinc-650 font-mono flex items-center justify-between">
-            <div>&copy; 2026 Soham Banerjee. Version 1.0</div>
-            <div>PLAY.SIDELOWER.IN</div>
-          </div> */}
-          <div className="mt-0 pt-3 w-full text-[12px] text-zinc-650 font-mono flex items-center justify-between">
-            <div>&copy; 2026 Soham Banerjee. Version 1.0</div>
-            <div>PLAY.SIDELOWER.IN</div>
-          </div>
+      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-auto shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-500' : 'bg-bg-base border-zinc-600 text-zinc-400'}`}>
+        <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
+          <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
+          <p>PLAY.SIDELOWER.IN</p>
         </div>
       </footer>
 

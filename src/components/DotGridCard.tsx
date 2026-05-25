@@ -45,8 +45,16 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
       case 'Scientific':
         return 'card-scientific border border-[#74A9DF]/30 hover:border-[#74A9DF]/80 shadow-lg shadow-black/30 dark:shadow-[#74A9DF]/5 hover:shadow-[#74A9DF]/10 dark:hover:shadow-[#74A9DF]/20';
 
+      case 'Product':
+        return 'card-product border border-[#FCD1DC]/30 hover:border-[#FCD1DC]/80 shadow-lg dark:shadow-[#5D3540]/5 dark:hover:shadow-[#5D3540]/20';
+
+      case 'Unit Economics':
+        return 'card-unit-economics border border-[#F7E7C4]/30 hover:border-[#F7E7C4]/80 shadow-lg dark:shadow-[#584A2E]/5 dark:hover:shadow-[#584A2E]/20';
+
+      case 'Geometric Estimation':
+        return 'card-geometric border border-[#C6ECF0]/30 hover:border-[#C6ECF0]/80 shadow-lg dark:shadow-[#29454E]/5 dark:hover:shadow-[#29454E]/20';
+
       default:
-        // Fixed the invalid 'hover:border-zinc-450' to standard 'hover:border-zinc-400'
         // Uses a generic soft white/zinc halo in dark mode
         return 'card-default border border-zinc-300 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-lg shadow-black/30 dark:shadow-white/[0.02] hover:shadow-zinc-400/10 dark:hover:shadow-white/[0.08]';
     }
@@ -91,7 +99,7 @@ export const DotGridCard: React.FC<DotGridCardProps> = ({
           {progressStatus === 'retry' && (
             <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md border animate-pulse ${isLight
               ? 'text-[#B45309] bg-[#FEF3C7] border-[#B45309]/30'
-              : 'text-[#F59E0B] bg-[#F59E0B]/10 border-[#F59E0B]/25'
+              : 'text-[#F59E0B] bg-[#F59E0B]/17 border-[#F59E0B]/25'
               }`}>
               <RefreshCw size={10} className="animate-spin" style={{ animationDuration: '4s' }} /> RETRY
             </span>

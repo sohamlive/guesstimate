@@ -8,13 +8,16 @@
   --font-mono: "JetBrains Mono", monospace;
 
   /* Core Palette for Sophisticated Dark */
-  --color-bg-base: #0A0A0A;
-  --color-bg-canvas: #0D0D0D;
-  --color-bg-nav: #050505;
-  --color-bg-aside: #080808;
-  --color-bg-card: #121212;
-  --color-bg-surface: #141414;
-  --color-bg-muted: #1A1A1A;
+--color-bg-base:    #0B0C0E; /* Deep, cool charcoal ground floor */
+  --color-bg-canvas:  #0F1115; /* Main dashboard canvas & dot grid surface */
+  --color-bg-aside:   #13161C; /* Sidebar backdrop */
+  
+  /* HIGHLY SOPHISTICATED LAYER: Clean, desaturated elevated tones */
+  --color-bg-nav:     #20242E;
+  --color-bg-card:    #1C2029;
+  --color-bg-surface: #242936;
+  --color-bg-muted:   #32394B;
+  --color-bg-navbar: #1B1D27;
 
   --color-brand-primary: #FFFFFF;
   --color-brand-primary-hover: #E4E4E7;
@@ -26,7 +29,8 @@
 
 /* Custom Base styles to match Sophisticated Dark & Light */
 body {
-  background-color: #0A0A0A;
+  /* background-color: #0A0A0A; */
+  background-color: #0F1115;
   color: #D4D4D8;
   /* zinc-300 */
   font-family: var(--font-sans);
@@ -72,7 +76,7 @@ body.light ::-webkit-scrollbar-thumb:hover {
 }
 
 /* Custom card category dot grids - modified to look premium dark in Sophisticated Dark */
-.card-population {
+/* .card-population {
   background-color: #241B18;
   background-image: radial-gradient(circle, #3D2D28 1.5px, transparent 1.5px);
   background-size: 16px 16px;
@@ -100,15 +104,79 @@ body.light ::-webkit-scrollbar-thumb:hover {
   background-color: #0E0E0E;
   background-image: radial-gradient(circle, #27272A 1.5px, transparent 1.5px);
   background-size: 16px 16px;
-}
+} */
 
 /* Solved states force clean, desaturated, receding visual cues */
-.card-solved {
+/* .card-solved {
   background-color: #191920;
   background-image: radial-gradient(circle, #2A2A30 1.5px, transparent 1.5px);
   background-size: 16px 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   opacity: 0.9;
+} */
+
+/* Custom card category dot grids - Brightened for Executive Obsidian Base */
+
+.card-population {
+  /* Warm terracotta/orange hue - lifted for clear separation */
+  background-color: #3B2A24;
+  background-image: radial-gradient(circle, #5C4339 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-market-sizing {
+  /* Soft amethyst/purple hue - lifted for clean visibility */
+  background-color: #29243B;
+  background-image: radial-gradient(circle, #443B61 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-fermi-estimate {
+  /* Sage teal/green hue - lifted for crisp definition */
+  background-color: #222B27;
+  background-image: radial-gradient(circle, #384740 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-scientific {
+  /* Deep steel blue hue - lifted for elegant contrast */
+  background-color: #232C38;
+  background-image: radial-gradient(circle, #38465A 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-product {
+  background-color: #3C2229;
+  background-image: radial-gradient(circle, #5D3540 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-unit-economics {
+  background-color: #39301E;
+  background-image: radial-gradient(circle, #584A2E 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-geometric {
+  background-color: #1A2D33;
+  background-image: radial-gradient(circle, #29454E 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+.card-default {
+  /* Sleek layout slate gray - aligned with your new variables instead of pure black */
+  background-color: #1C2029; /* Matches --color-bg-card exactly */
+  background-image: radial-gradient(circle, #32394B 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+/* Solved states force clean, desaturated, receding visual cues */
+.card-solved {
+  background-color: #1d1f26; 
+  background-image: radial-gradient(circle, #292E3D 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0.85; /* Slightly dropped to visually distinguish it as a completed task */
 }
 
 /* Light theme card overrides */
@@ -130,6 +198,21 @@ body.light .card-fermi-estimate {
 body.light .card-scientific {
   background-color: #F4FAFF;
   background-image: radial-gradient(circle, #D2E7FC 1.5px, transparent 1.5px);
+}
+
+body.light .card-product {
+  background-color: #FFF5F7;
+  background-image: radial-gradient(circle, #FCD1DC 1.5px, transparent 1.5px);
+}
+
+body.light .card-unit-economics {
+  background-color: #FFFBF2;
+  background-image: radial-gradient(circle, #F7E7C4 1.5px, transparent 1.5px);
+}
+
+body.light .card-geometric {
+  background-color: #F2FBFC;
+  background-image: radial-gradient(circle, #C6ECF0 1.5px, transparent 1.5px);
 }
 
 body.light .card-default {
@@ -155,16 +238,26 @@ body.light .card-solved {
 }
 
 .hero-dot-drift {
-  background-color: #000000;
-  /* Fuzzy adjustment: Solid color until 1.5px, then smoothly fades out to transparent by 5px */
-  background-image: radial-gradient(circle at center, #7877c64d 1.5px, #7876c626 3.5px, transparent 5px);
+  /* Dynamically pulls your new, lighter canvas background variable */
+  background-color: #131317; 
+  background-image: radial-gradient(
+    circle at center, 
+    #8b5cf68c 2px, 
+    #8b5cf626 4px, 
+    transparent 6px
+  );
   background-size: 24px 24px;
-  animation: bgDrift 10s linear infinite;
+  animation: bgDrift 10s linear infinite; 
   transition: background-color 0.3s ease;
 }
 
 body.light .hero-dot-drift {
+  /* Dynamic light background fallbacks */
   background-color: #FAFAFB;
-  /* Light mode alternative: Soft slate-indigo glow shadow */
-  background-image: radial-gradient(circle at center, #5a5d934d 1.5px, #5a5d931a 3.5px, transparent 5px);
+  background-image: radial-gradient(
+    circle at center, 
+    #5a5d9366 1.5px, 
+    #5a5d931a 4px, 
+    transparent 6px
+  );
 }

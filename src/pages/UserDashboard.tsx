@@ -253,10 +253,13 @@ export const UserDashboard: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight ? 'bg-[#FAFAFB] text-zinc-700' : 'bg-bg-base text-zinc-300'}`}>
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight
+      ? 'bg-white/80 border-zinc-200'
+      : 'bg-bg-base/50 border-zinc-600/40 shadow-lg shadow-black/20'
+      }`}>
 
       {/* Dynamic Header Navbar */}
-      <nav className={`border-b transition-colors duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-nav border-zinc-850/80'}`}>
+      <nav className={`sticky top-0 z-40 border-b transition-colors duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-navbar border-zinc-600/40'}`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
 
           {/* Logo */}
@@ -282,7 +285,7 @@ export const UserDashboard: React.FC = () => {
                 setItemsLimit(12);
               }}
               placeholder="Search challenges by keyword or tags..."
-              className={`w-full pl-9 pr-4 py-2 text-sm border rounded-xl outline-none transition-colors ${isLight ? 'border-zinc-350 bg-zinc-100 text-black placeholder:text-zinc-400 focus:border-zinc-500' : 'border-zinc-800 bg-zinc-600/40 text-white placeholder:text-zinc-650 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-850'}`}
+              className={`w-full pl-9 pr-4 py-2 text-sm border rounded-xl outline-none transition-colors ${isLight ? 'border-zinc-300 bg-zinc-100 text-black placeholder:text-zinc-400 focus:border-zinc-500' : 'border-zinc-800 bg-zinc-600/40 text-white placeholder:text-zinc-650 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-850'}`}
             />
             {searchQuery && (
               <button
@@ -301,8 +304,8 @@ export const UserDashboard: React.FC = () => {
             <button
               onClick={toggleTheme}
               className={`p-2 border transition-all duration-200 rounded-xl cursor-pointer ${isLight
-                ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
-                : 'border-zinc-800 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
+                ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900 hover:border-zinc-400/50'
+                : 'border-zinc-600/40 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
                 }`}
               title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
             >
@@ -333,7 +336,7 @@ export const UserDashboard: React.FC = () => {
               onClick={logout}
               className={`p-2 border rounded-xl transition-all duration-200 cursor-pointer ${isLight
                 ? 'bg-zinc-100 border-zinc-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-zinc-600'
-                : 'bg-zinc-900/50 border-zinc-800 hover:bg-red-950/30 hover:border-red-900/50 hover:text-red-400 text-zinc-400'
+                : 'bg-zinc-900/40 border-zinc-600/40 hover:bg-red-950/30 hover:border-red-900/50 hover:text-red-400 text-zinc-400'
                 }`}
               title="Sign Out"
             >
@@ -392,7 +395,7 @@ export const UserDashboard: React.FC = () => {
                     setSelectedDifficulty(e.target.value);
                     setItemsLimit(12);
                   }}
-                  className={`p-1.5 pr-6 rounded-lg text-xs outline-none appearance-none cursor-pointer transition-colors font-mono ${isLight ? 'bg-white border border-zinc-300 text-zinc-800 hover:bg-zinc-50 focus:border-zinc-550' : 'bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-850 focus:border-zinc-500'}`}
+                  className={`p-1.5 pr-6 rounded-lg text-xs outline-none appearance-none cursor-pointer transition-colors font-mono ${isLight ? 'bg-white border border-zinc-300 text-zinc-800 hover:bg-zinc-50 focus:border-zinc-550' : 'bg-zinc-900 border border-zinc-600/40 text-zinc-300 hover:bg-zinc-850 focus:border-zinc-500'}`}
                 >
                   <option value="All">All Levels</option>
                   <option value="Easy">Easy</option>
@@ -442,7 +445,7 @@ export const UserDashboard: React.FC = () => {
             {/* Reset Stats Icon Button */}
             <button
               onClick={handleResetFilters}
-              className={`p-1.5 border hover:text-white rounded-lg cursor-pointer transition-colors ${isLight ? 'bg-white border-zinc-300 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800'}`}
+              className={`p-1.5 border hover:text-white rounded-lg cursor-pointer transition-colors ${isLight ? 'bg-white border-zinc-300 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900' : 'bg-zinc-900 border-zinc-600/40 text-zinc-400 hover:bg-zinc-800'}`}
               title="Reset All Filters"
             >
               <RotateCcw size={12} />
@@ -539,9 +542,9 @@ export const UserDashboard: React.FC = () => {
                 ) : (
                   <button
                     onClick={handleLoadMore}
-                    className={`px-6 py-2.5 border font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider ${isLight ? 'bg-white border-zinc-300 text-zinc-900 hover:bg-zinc-100' : 'bg-bg-card border-zinc-800 text-zinc-105 hover:text-white hover:bg-zinc-800'}`}
+                    className={`px-6 py-2.5 border font-semibold rounded-lg text-xs transition-all shadow-sm cursor-pointer whitespace-nowrap font-mono uppercase tracking-wider ${isLight ? 'bg-white border-zinc-300 text-zinc-900 hover:bg-zinc-100' : 'bg-[#121212] border-zinc-800 text-zinc-105 hover:text-white hover:bg-zinc-800'}`}
                   >
-                    Load More Calculations
+                    Load More Questions
                   </button>
                 )}
               </div>
@@ -553,7 +556,7 @@ export const UserDashboard: React.FC = () => {
       </main>
 
       {/* FOOTER METRIC NOTE */}
-      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-250 text-zinc-550' : 'bg-bg-nav border-zinc-850/80 text-zinc-650'}`}>
+      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-500' : 'bg-bg-base border-zinc-600 text-zinc-400'}`}>
         <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
           <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
           <p>PLAY.SIDELOWER.IN</p>

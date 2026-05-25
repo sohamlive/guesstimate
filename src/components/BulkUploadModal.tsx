@@ -350,11 +350,11 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/65 backdrop-blur-md animate-fadeIn">
-      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-[#171717] text-zinc-300 border-zinc-800'
+      <div className={`relative w-full max-w-4xl overflow-hidden rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border transition-all duration-300 ${isLight ? 'bg-white text-zinc-800 border-zinc-200' : 'bg-bg-card text-zinc-300 border-zinc-600'
         }`}>
 
         {/* Header bar */}
-        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-card'
+        <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-canvas'
           }`}>
           <div className="flex items-center gap-2">
             <FileSpreadsheet className={`w-5 h-5 ${isLight ? 'text-zinc-800' : 'text-zinc-100'}`} />
@@ -427,7 +427,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
               onClick={() => fileInputRef.current?.click()}
               className={`border-2 border-dashed rounded-2xl p-10 text-center flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-200 ${dragActive
                 ? (isLight ? 'border-zinc-905 bg-zinc-100/60' : 'border-white bg-zinc-900/60')
-                : (isLight ? 'border-zinc-300 bg-zinc-50/50 hover:bg-zinc-50 hover:border-zinc-400' : 'border-zinc-800 bg-bg-card/30 hover:border-zinc-700 hover:bg-bg-card/70')
+                : (isLight ? 'border-zinc-300 bg-zinc-50/50 hover:bg-zinc-50 hover:border-zinc-400' : 'border-zinc-600 bg-bg-card/30 hover:border-zinc-500 hover:bg-bg-canvas/30')
                 }`}
             >
               <input
@@ -571,7 +571,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         </div>
 
         {/* Footer controls bar */}
-        <div className={`flex items-center justify-between px-6 py-4 border-t transition-colors duration-300 ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-[#0F0F0F] border-zinc-800'
+        <div className={`flex items-center justify-between px-6 py-4 border-t transition-colors duration-300 ${isLight ? 'bg-[#F4F6FA] border-[#E5E7EB]' : 'bg-bg-canvas border-zinc-800'
           }`}>
           <div className="text-xs text-zinc-500">
             {validRowsCount > 0 && (

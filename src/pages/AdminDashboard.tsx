@@ -179,10 +179,12 @@ export const AdminDashboard: React.FC = () => {
   const paginatedProfiles = filteredProfiles.slice((uPage - 1) * rowsPerPage, uPage * rowsPerPage);
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight ? 'bg-[#FAFAFB] text-zinc-700' : 'bg-[#0A0A0A] text-zinc-300'}`}>
-
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col select-none ${isLight
+      ? 'bg-white/80 border-zinc-200'
+      : 'bg-bg-base/50 border-zinc-600/40 shadow-lg shadow-black/20'
+      }`}>
       {/* Header bar */}
-      <nav className={`sticky top-0 z-40 transition-colors duration-300 border-b ${isLight ? 'bg-white border-zinc-200' : 'bg-[#050505] border-zinc-850'}`}>
+      <nav className={`sticky top-0 z-40 transition-colors duration-300 border-b ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-navbar border-zinc-600/40'}`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           <div className="flex items-center gap-4">
@@ -196,11 +198,11 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Tab Swiffer */}
-            <div className={`p-0.5 rounded-xl flex text-xs font-semibold transition-colors border ${isLight ? 'bg-zinc-100 border-zinc-250' : 'bg-zinc-900 border-zinc-800'}`}>
+            <div className={`p-0.5 rounded-xl flex text-xs font-semibold transition-colors border ${isLight ? 'bg-zinc-100 border-zinc-300' : 'bg-zinc-800 border-zinc-600/40'}`}>
               <button
                 onClick={() => setActiveTab('guesstimates')}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'guesstimates'
-                  ? (isLight ? 'bg-zinc-900 text-white font-semibold shadow-sm' : 'bg-white text-black font-semibold shadow-sm')
+                  ? (isLight ? 'bg-zinc-800 text-white font-semibold shadow-sm' : 'bg-white text-black font-semibold shadow-sm')
                   : (isLight ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-400 hover:text-white')
                   }`}
               >
@@ -209,7 +211,7 @@ export const AdminDashboard: React.FC = () => {
               <button
                 onClick={() => setActiveTab('users')}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === 'users'
-                  ? (isLight ? 'bg-zinc-900 text-white font-semibold shadow-sm' : 'bg-white text-black font-semibold shadow-sm')
+                  ? (isLight ? 'bg-zinc-800 text-white font-semibold shadow-sm' : 'bg-white text-black font-semibold shadow-sm')
                   : (isLight ? 'text-zinc-500 hover:text-zinc-900' : 'text-zinc-400 hover:text-white')
                   }`}
               >
@@ -226,7 +228,7 @@ export const AdminDashboard: React.FC = () => {
               onClick={toggleTheme}
               className={`p-2 border transition-all duration-200 rounded-xl cursor-pointer ${isLight
                 ? 'border-zinc-200 text-zinc-600 bg-zinc-50 hover:bg-zinc-100 hover:text-zinc-900'
-                : 'border-zinc-800 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
+                : 'border-zinc-600/40 text-zinc-400 bg-zinc-900/40 hover:bg-zinc-800/60 hover:border-zinc-700 hover:text-amber-400'
                 }`}
               title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
             >
@@ -236,7 +238,7 @@ export const AdminDashboard: React.FC = () => {
               onClick={logout}
               className={`p-2 border rounded-xl transition-all duration-200 cursor-pointer ${isLight
                 ? 'bg-zinc-100 border-zinc-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-zinc-600'
-                : 'bg-zinc-900/50 border-zinc-800 hover:bg-red-950/30 hover:border-red-900/50 hover:text-red-400 text-zinc-400'
+                : 'bg-zinc-900/40 border-zinc-600/40 hover:bg-red-950/30 hover:border-red-900/50 hover:text-red-400 text-zinc-400'
                 }`}
               title="Sign Out"
             >
@@ -262,12 +264,12 @@ export const AdminDashboard: React.FC = () => {
              ========================================================== */
           <div className="flex flex-col gap-6">
             {/* Quick Metrics ribbon of Questions */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-              {/* Card 1: Total Questions - Indigo */}
+              {/* Card 1: Total Questions - Elevated Midnight Indigo */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-zinc-50 border-zinc-200 shadow-sm'
-                : 'bg-[#121214] border-zinc-800 shadow-lg shadow-black/50 dark:shadow-indigo-500/[0.02]'
+                : 'bg-[#222636] border-indigo-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Questions</span>
                 <span className={`font-serif font-bold italic text-2xl block mt-1 ${isLight ? 'text-zinc-950' : 'text-indigo-400'}`}>
@@ -275,10 +277,10 @@ export const AdminDashboard: React.FC = () => {
                 </span>
               </div>
 
-              {/* Card 2: Categories - Purple */}
+              {/* Card 2: Categories - Elevated Deep Plum */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-purple-50/40 border-purple-100 shadow-sm'
-                : 'bg-[#121017] border-purple-950/60 shadow-lg shadow-black/50 dark:shadow-purple-500/[0.02]'
+                : 'bg-[#262236] border-purple-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Categories</span>
                 <span className={`font-serif font-bold italic text-2xl block mt-1 ${isLight ? 'text-purple-900' : 'text-purple-400'}`}>
@@ -286,21 +288,21 @@ export const AdminDashboard: React.FC = () => {
                 </span>
               </div>
 
-              {/* Card 3: Difficulty Split - Amber */}
+              {/* Card 3: Difficulty Split - Elevated Warm Amber */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-amber-50/40 border-amber-100 shadow-sm'
-                : 'bg-[#14110D] border-amber-950/60 shadow-lg shadow-black/50 dark:shadow-amber-500/[0.02]'
+                : 'bg-[#28241F] border-amber-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Difficulty Split</span>
-                <span className={`font-serif font-bold text-lg italic block mt-2.5 truncate ${isLight ? 'text-amber-900' : 'text-amber-400'}`}>
-                  {easyQCount} Easy / {mediumQCount} Medium / {hardQCount} Hard
+                <span className={`font-serif font-bold text-2xl italic block mt-1.5 truncate ${isLight ? 'text-amber-900' : 'text-amber-400'}`}>
+                  {easyQCount} <span className="text-xs font-mono font-normal text-zinc-500">Easy</span> / {mediumQCount} <span className="text-xs font-mono font-normal text-zinc-500">Medium</span> / {hardQCount} <span className="text-xs font-mono font-normal text-zinc-500">Hard</span>
                 </span>
               </div>
 
-              {/* Card 4: Publishing Status - Emerald */}
+              {/* Card 4: Publishing Status - Elevated Muted Emerald */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-emerald-50/40 border-emerald-100 shadow-sm'
-                : 'bg-[#0E1411] border-emerald-950/60 shadow-lg shadow-black/50 dark:shadow-emerald-500/[0.02]'
+                : 'bg-[#1E2824] border-emerald-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Publishing Status</span>
                 <span className={`font-serif font-bold italic text-2xl block mt-1 ${isLight ? 'text-emerald-900' : 'text-emerald-400'}`}>
@@ -311,7 +313,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Database header search filters and add actions */}
-            <div className={`p-4 rounded-xl border transition-all duration-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs ${isLight ? 'bg-white border-zinc-200' : 'bg-[#121212] border-zinc-850/80'}`}>
+            <div className={`p-4 rounded-xl border transition-all duration-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-nav border-zinc-850/80'}`}>
 
               <div className="flex flex-wrap items-center gap-3 flex-grow">
                 {/* Search */}
@@ -325,8 +327,8 @@ export const AdminDashboard: React.FC = () => {
                     onChange={(e) => { setQSearch(e.target.value); setQPage(1); }}
                     placeholder="Search questions text..."
                     className={`w-full pl-8 pr-8 py-2 border rounded-lg outline-none transition-colors ${isLight
-                      ? 'bg-zinc-50 border-zinc-350 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-550'
-                      : 'bg-zinc-950 border border-zinc-800 text-white placeholder:text-zinc-650 focus:border-zinc-500'
+                      ? 'bg-zinc-50 border-zinc-300 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-550'
+                      : 'bg-zinc-950 border border-zinc-600/40 text-white placeholder:text-zinc-650 focus:border-zinc-500'
                       }`}
                   />
                   {qSearch && (
@@ -339,7 +341,7 @@ export const AdminDashboard: React.FC = () => {
                   value={qCategoryFilter}
                   onChange={(e) => { setQCategoryFilter(e.target.value); setQPage(1); }}
                   className={`p-2 border rounded-lg outline-none cursor-pointer font-mono transition-colors ${isLight
-                    ? 'bg-zinc-50 border-zinc-250 text-zinc-850 focus:bg-white focus:border-zinc-550'
+                    ? 'bg-zinc-50 border-zinc-300 text-zinc-850 focus:bg-white focus:border-zinc-550'
                     : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-500'
                     } max-w-[150px]`}
                 >
@@ -354,7 +356,7 @@ export const AdminDashboard: React.FC = () => {
                   value={qDifficultyFilter}
                   onChange={(e) => { setQDifficultyFilter(e.target.value); setQPage(1); }}
                   className={`p-2 border rounded-lg outline-none cursor-pointer font-mono transition-colors ${isLight
-                    ? 'bg-zinc-50 border-zinc-250 text-zinc-850 focus:bg-white focus:border-zinc-550'
+                    ? 'bg-zinc-50 border-zinc-300 text-zinc-850 focus:bg-white focus:border-zinc-550'
                     : 'bg-zinc-950 border border-zinc-800 text-zinc-300 focus:border-zinc-500'
                     }`}
                 >
@@ -368,7 +370,7 @@ export const AdminDashboard: React.FC = () => {
                 <button
                   onClick={handleResetQFilters}
                   className={`p-2 border rounded-lg cursor-pointer transition-colors ${isLight
-                    ? 'bg-zinc-550/10 border-zinc-250 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
+                    ? 'bg-zinc-550/10 border-zinc-300 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
                     : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-805'
                     }`}
                   title="Reset filters"
@@ -382,9 +384,9 @@ export const AdminDashboard: React.FC = () => {
                 {/* Bulk Upload CTA */}
                 <button
                   onClick={() => setShowBulkUploadModal(true)}
-                  className={`py-2.5 px-4 font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-all font-mono uppercase tracking-wider text-xs border ${isLight
-                    ? 'bg-white hover:bg-zinc-50 border-zinc-250 text-zinc-700'
-                    : 'bg-zinc-900 hover:bg-zinc-805 border-zinc-800 text-zinc-350 hover:text-white'
+                  className={`py-2.5 px-4 font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition-all font-mono uppercase tracking-wider text-xs border ${isLight
+                    ? 'bg-white hover:bg-zinc-100 border-zinc-300 text-zinc-700'
+                    : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700 text-zinc-350 hover:text-white'
                     }`}
                   title="Bulk Upload Questions"
                 >
@@ -410,10 +412,10 @@ export const AdminDashboard: React.FC = () => {
 
             </div>
             {/* Questions Inventory Table */}
-            <div className={`border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-sm' : 'bg-[#121212] border-zinc-850'}`}>
+            <div className={`border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 shadow-sm' : 'bg-bg-canvas border-zinc-850'}`}>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm whitespace-nowrap">
-                  <thead className={`text-xs font-bold uppercase font-mono transition-colors ${isLight ? 'bg-zinc-100/80 border-b border-zinc-205 border-zinc-200 text-zinc-500' : 'bg-[#050505] border-b border-zinc-850 text-zinc-500'}`}>
+                  <thead className={`text-xs font-bold uppercase font-mono transition-colors ${isLight ? 'bg-[#F4F6FA] border-b border-zinc-200 text-zinc-500' : 'bg-bg-nav border-b border-zinc-850 text-zinc-500'}`}>
                     <tr>
                       <th className="px-6 py-4">Question</th>
                       <th className="px-6 py-4 text-center">Category</th>
@@ -423,7 +425,7 @@ export const AdminDashboard: React.FC = () => {
                       <th className="px-6 py-4 text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className={`divide-y font-sans transition-colors ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-850 text-zinc-300'}`}>
+                  <tbody className={`divide-y font-sans transition-colors ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-600 text-zinc-300'}`}>
                     {paginatedQuestions.map(q => {
                       // Attempts = solved + retry counts dynamically combined across progress list
                       const qProgress = allProgress.filter(p => p.question_id === q.id);
@@ -436,7 +438,7 @@ export const AdminDashboard: React.FC = () => {
                       };
 
                       return (
-                        <tr key={q.id} className={`transition-colors ${isLight ? 'hover:bg-zinc-50/70' : 'hover:bg-zinc-900/40'}`}>
+                        <tr key={q.id} className={`transition-colors ${isLight ? 'hover:bg-zinc-100/50' : 'hover:bg-zinc-800/90'}`}>
                           <td className={`px-6 py-4 max-w-xl truncate font-medium transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`} title={q.question}>
                             {q.question}
                           </td>
@@ -474,7 +476,7 @@ export const AdminDashboard: React.FC = () => {
                                 }}
                                 className={`p-1 px-2.5 border rounded-md font-semibold text-xs transition-colors cursor-pointer ${isLight
                                   ? 'bg-zinc-50 hover:bg-zinc-100 border-zinc-250 text-zinc-700 font-bold'
-                                  : 'bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-zinc-300'
+                                  : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-800 text-zinc-300'
                                   }`}
                                 title="Edit Question"
                               >
@@ -562,10 +564,10 @@ export const AdminDashboard: React.FC = () => {
             {/* Quick Metrics ribbon of Users */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
-              {/* Card 1: Total Users - Indigo */}
+              {/* Card 1: Total Users - Elevated Midnight Indigo */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-zinc-50 border-zinc-200 shadow-sm'
-                : 'bg-[#121214] border-zinc-800 shadow-lg shadow-black/50 dark:shadow-indigo-500/[0.02]'
+                : 'bg-[#222636] border-indigo-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Users</span>
                 <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-zinc-950' : 'text-indigo-400'}`}>
@@ -573,10 +575,10 @@ export const AdminDashboard: React.FC = () => {
                 </span>
               </div>
 
-              {/* Card 2: Overall Success Rate - Purple */}
+              {/* Card 2: Overall Success Rate - Elevated Deep Plum */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-purple-50/40 border-purple-100 shadow-sm'
-                : 'bg-[#121017] border-purple-950/60 shadow-lg shadow-black/50 dark:shadow-purple-500/[0.02]'
+                : 'bg-[#262236] border-purple-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Overall Success Rate</span>
                 <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-purple-900' : 'text-purple-400'}`}>
@@ -584,10 +586,10 @@ export const AdminDashboard: React.FC = () => {
                 </span>
               </div>
 
-              {/* Card 3: Total Solved Questions - Amber */}
+              {/* Card 3: Total Solved Questions - Elevated Warm Amber */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-amber-50/40 border-amber-100 shadow-sm'
-                : 'bg-[#14110D] border-amber-950/60 shadow-lg shadow-black/50 dark:shadow-amber-500/[0.02]'
+                : 'bg-[#28241F] border-amber-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Solved Questions</span>
                 <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-amber-700' : 'text-amber-400'}`}>
@@ -595,10 +597,10 @@ export const AdminDashboard: React.FC = () => {
                 </span>
               </div>
 
-              {/* Card 4: Total Retry Questions - Emerald */}
+              {/* Card 4: Total Retry Questions - Elevated Muted Emerald */}
               <div className={`p-4 rounded-xl border transition-all duration-300 ${isLight
                 ? 'bg-emerald-50/40 border-emerald-100 shadow-sm'
-                : 'bg-[#0E1411] border-emerald-950/60 shadow-lg shadow-black/50 dark:shadow-emerald-500/[0.02]'
+                : 'bg-[#1E2824] border-emerald-500/20 shadow-md shadow-black/40'
                 }`}>
                 <span className="text-[12px] text-zinc-500 uppercase tracking-widest font-mono font-bold block">Total Retry Questions</span>
                 <span className={`font-serif italic text-2xl block mt-1 ${isLight ? 'text-emerald-700' : 'text-emerald-400'}`}>
@@ -612,7 +614,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
               {/* Component A: Top 5 Solve Questions */}
-              <div className={`border rounded-xl p-5 shadow-sm transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-[#121212] border-zinc-850/80 text-zinc-300'}`}>
+              <div className={`border rounded-xl p-5 shadow-sm transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-zinc-900 border-zinc-850/80 text-zinc-300'}`}>
                 <div className="flex items-center gap-1.5 mb-4 text-zinc-400">
                   <BarChart3 size={15} />
                   <span className={`font-serif italic font-semibold text-sm tracking-wide ${isLight ? 'text-zinc-950' : 'text-white'}`}>Top Guesstimates by Completes</span>
@@ -635,7 +637,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Component B: Top 5 Active Users */}
-              <div className={`border rounded-xl p-5 shadow-sm transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-[#121212] border-zinc-850/80 text-zinc-300'}`}>
+              <div className={`border rounded-xl p-5 shadow-sm transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-zinc-900 border-zinc-850/80 text-zinc-300'}`}>
                 <div className="flex items-center gap-1.5 mb-4 text-zinc-400">
                   <Award size={15} />
                   <span className={`font-serif italic font-semibold text-sm tracking-wide ${isLight ? 'text-zinc-950' : 'text-white'}`}>Top Performing Users</span>
@@ -661,7 +663,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Filters Row of Users */}
-            <div className={`p-4 rounded-xl border transition-all duration-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs ${isLight ? 'bg-white border-zinc-200' : 'bg-[#121212] border-zinc-850/80'}`}>
+            <div className={`p-4 rounded-xl border transition-all duration-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-nav border-zinc-850/80'}`}>
 
               <div className="flex flex-wrap items-center gap-3 flex-grow/1">
                 {/* Search */}
@@ -673,7 +675,7 @@ export const AdminDashboard: React.FC = () => {
                     type="text"
                     value={uSearch}
                     onChange={(e) => { setUSearch(e.target.value); setUPage(1); }}
-                    placeholder="Search by user name or email..."
+                    placeholder="Search by name or email..."
                     className={`w-full pl-8 pr-8 py-2 border rounded-lg outline-none transition-colors font-mono text-xs ${isLight
                       ? 'bg-zinc-50 border-zinc-350 text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:border-zinc-550'
                       : 'bg-zinc-950 border border-zinc-800 text-white placeholder:text-zinc-650 focus:border-zinc-500'
@@ -727,10 +729,10 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Users Comprehensive Table representation with Completion sliders */}
-            <div className={`border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-[#121212] border-zinc-850'}`}>
+            <div className={`border rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-canvas border-zinc-850'}`}>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm whitespace-nowrap">
-                  <thead className={`text-xs font-bold uppercase font-mono transition-colors ${isLight ? 'bg-zinc-100 border-b border-zinc-200 text-zinc-500' : 'bg-[#050505] border-b border-zinc-850 text-zinc-500'}`}>
+                  <thead className={`text-xs font-bold uppercase font-mono transition-colors ${isLight ? 'bg-[#F4F6FA] border-b border-zinc-200 text-zinc-500' : 'bg-[#050505] border-b border-zinc-850 text-zinc-500'}`}>
                     <tr>
                       <th className="px-6 py-4">User Name</th>
                       <th className="px-6 py-4">Email</th>
@@ -742,7 +744,7 @@ export const AdminDashboard: React.FC = () => {
                       <th className="px-6 py-4 text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className={`divide-y font-sans text-xs transition-colors ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-850 text-zinc-300'}`}>
+                  <tbody className={`divide-y font-sans text-xs transition-colors ${isLight ? 'divide-zinc-200 text-zinc-700' : 'divide-zinc-600 text-zinc-300'}`}>
                     {paginatedProfiles.map(u => {
                       const uProgress = allProgress.filter(p => p.user_id === u.id);
 
@@ -765,7 +767,7 @@ export const AdminDashboard: React.FC = () => {
                       const hardPercent = hardTotal.length > 0 ? Math.round((hardSolved / hardTotal.length) * 100) : 0;
 
                       return (
-                        <tr key={u.id} className={`transition-colors ${isLight ? 'hover:bg-zinc-50/70' : 'hover:bg-zinc-900/40'}`}>
+                        <tr key={u.id} className={`transition-colors ${isLight ? 'hover:bg-zinc-100/50' : 'hover:bg-zinc-800/90'}`}>
                           <td className={`px-6 py-4 font-semibold transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
                             {u.first_name} {u.last_name}
                             {u.role === 'admin' && <span className={`ml-1.5 text-[9px] py-0.5 px-1.5 rounded-sm font-mono font-bold transition-colors ${isLight ? 'bg-zinc-150 text-zinc-650' : 'bg-zinc-850 text-zinc-400'}`}>ADMIN</span>}
@@ -812,9 +814,9 @@ export const AdminDashboard: React.FC = () => {
                                   setSelectedUserProfile(u);
                                   setShowUModal(true);
                                 }}
-                                className={`p-1 px-2.5 border rounded-md font-semibold text-[12px] transition-colors cursor-pointer font-mono ${isLight
+                                className={`p-1 px-2.5 border rounded-md font-semibold text-xs transition-colors cursor-pointer font-mono ${isLight
                                   ? 'bg-zinc-50 hover:bg-zinc-100 border-zinc-250 text-zinc-700 font-bold'
-                                  : 'bg-zinc-900 hover:bg-zinc-800 border-zinc-805 border-zinc-805 text-zinc-350'
+                                  : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-800 text-zinc-350'
                                   }`}
                                 title="Edit User"
                               >
@@ -894,13 +896,14 @@ export const AdminDashboard: React.FC = () => {
 
         )}
 
-      </main>      {/* FOOTER ADVERTISEMENT */}
-      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-250 text-zinc-550' : 'bg-[#050505] border-zinc-850/80 text-zinc-650'}`}>
+      </main>
+
+      {/* FOOTER ADVERTISEMENT */}
+      <footer className={`border-t flex justify-between py-4 px-6 text-justify text-[12px] font-mono tracking-widest mt-12 shrink-0 transition-colors duration-300 ${isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-500' : 'bg-bg-base border-zinc-600 text-zinc-400'}`}>
         <div className="max-w-6xl flex justify-between items-center w-full mx-auto">
           <p>&copy; 2026 Soham Banerjee. Version 1.0</p>
           <p>PLAY.SIDELOWER.IN</p>
         </div>
-
       </footer>
 
       {/* ADMINISTRATIVE QUESTION ADD/EDIT CONTENT STUDIO MODAL */}
@@ -988,7 +991,7 @@ export const AdminDashboard: React.FC = () => {
       {/* READ-ONLY OVERLAY MODAL: Specific User Stats breakdown */}
       {readOnlyUStats && (
         <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className={`border rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col relative max-h-[90vh] transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-[#121212] border-zinc-800 text-zinc-350 font-sans'
+          <div className={`border rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col relative max-h-[90vh] transition-all duration-300 ${isLight ? 'bg-white border-zinc-200 text-zinc-700' : 'bg-bg-card border-zinc-600 text-zinc-350 font-sans'
             }`}>
             <button onClick={() => setReadOnlyUStats(null)} className={`absolute top-4 right-4 cursor-pointer transition-colors ${isLight ? 'text-zinc-450 hover:text-zinc-900' : 'text-zinc-500 hover:text-white'
               }`}>

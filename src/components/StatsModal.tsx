@@ -93,7 +93,7 @@ export const StatsModal: React.FC<StatsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-      <div className={`w-full max-w-lg rounded-2xl shadow-xl flex flex-col max-h-[90vh] transition-colors border ${isLight ? 'bg-white border-zinc-200' : 'bg-[#121212] border-zinc-800 text-zinc-350'}`}>
+      <div className={`w-full max-w-lg rounded-2xl shadow-xl flex flex-col max-h-[90vh] transition-colors border ${isLight ? 'bg-white border-zinc-200' : 'bg-bg-card border-zinc-600 text-zinc-350'}`}>
 
         {/* Header bar */}
         <div className={`flex items-center justify-between px-6 py-4 border-b ${isLight ? 'border-[#E5E7EB]' : 'border-zinc-800/80'}`}>
