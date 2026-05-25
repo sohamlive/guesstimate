@@ -8,11 +8,11 @@
 
 Guesstimate Tracker is an elegant, premium, and highly responsive web application designed for framing, solving, and cataloging **Guesstimation problems**, market-sizing challenges, and back-of-the-envelope calculations. Inspired by classic physics logic, commercial case studies, and engineering estimations, it serves as my personal tracker for the same.
 
-👉 **Live Sandbox:** [PLAY.SIDELOWER.IN](https://play.sidelower.in)
+👉 **Live Sandbox:** [PLAY.SIDELOWER.IN/GUESSTIMATE-TRACKER](https://play.sidelower.in/guesstimate-tracker)
 
 ---
 
-## 🛠️ The Vibe Coding & AI Workflow Story
+## The Vibe Coding & AI Workflow Story
 
 This application is a personal project built by me using an intentional, modern (ahem) **AI-Assisted "Vibe Coding" Workflow**. It represents a journey of learning, faltering, and iteratively improving high-fidelity full-stack prototypes.
 
@@ -46,16 +46,16 @@ flowchart TD
 
 ---
 
-## ✨ Features
+## Features
 
-### 👤 User Workspace
+### User Workspace
 * **Notes Space:** An interactive scratchpad overlay (`WorkspaceModal`) to frame estimations, detail numerical assumptions, note sources, and save records.
 * **Smart Filter & Search:** Easily parse guesstimates by keyword, custom categories (e.g., *Market Sizing, Scientific, Fermi Estimate, Population*), difficulty levels (*Easy, Medium, Hard*), and completion states.
 * **Hybrid Progress Tracking:** Mark items as **Solved** or flag them for **Retry** with dynamic status visualizers.
 * **Community Reactions:** Express feedback with native upvoting and downvoting on guesstimate questions.
 * **Personal Analytics Dashboard:** Review your aggregate statistics, completion ratios by difficulty, and total solved counts.
 
-### 🔑 Administrator Dashboard
+### Administrator Dashboard
 * **Dynamic Content Studio:** Add, modify, or deprecate guesstimate challenges through a graphical editor.
 * **Bulk Upload Engine:** Batch-import questions instantly using **Excel (XLSX)**, **CSV**, or structured **JSON** files.
 * **User Management:** *Local Only!* Provision new administrative accounts, register new practitioners, and update existing credentials.
@@ -65,14 +65,14 @@ flowchart TD
   * Most popular guesstimates by solve/retry counts.
 * **Database Reset Controls:** Instantly reset stats or flush RLS parameters per question.
 
-### 🔋 Dual-Engine Data Architecture
+### Dual-Engine Data Architecture
 Guesstimate Tracker features a **hybrid offline/online engine** (`db.ts`):
 1. **Local Offline Driver:** If no backend credentials are provided, the app remains **fully functional** by saving state inside browser `LocalStorage` and pre-seeding mock practitioners and questions.
 2. **Supabase Cloud Driver:** Once configurations are present, it seamlessly unlocks a secure cloud database, dynamic session checks, real-time updates, and Row Level Security (RLS).
 
 ---
 
-## ⚙️ Configuration & Environment Variables
+## Configuration & Environment Variables
 
 Create a `.env` or `.env.local` file in the root of the project to set up the credentials:
 
@@ -93,7 +93,7 @@ VITE_HCAPTCHA_SITEKEY="10000000-ffff-ffff-ffff-ffffffffffff"
 
 ---
 
-## 🚀 Running Locally
+## Running Locally
 
 ### Prerequisites
 * **Node.js** (v18 or higher recommended)
@@ -129,22 +129,22 @@ VITE_HCAPTCHA_SITEKEY="10000000-ffff-ffff-ffff-ffffffffffff"
 
 ---
 
-## 🔑 Demo & Testing Credentials
+## Demo & Testing Credentials
 
 In **Mock Mode** (when no Supabase keys are configured), you can instantly access both user roles using these pre-seeded local credentials:
 
-### 👤 Standard Practitioner User:
+### Standard Practitioner User:
 * **Email:** `user@guesstimate.com`
 * **Password:** `user123`
 * *Note: Any email login except `admin` will auto-register as a Practitioner to keep testing frictionless!*
 
-### 👑 System Administrator:
+### System Administrator:
 * **Email:** `admin@guesstimate.com`
 * **Password:** `admin`
 
 ---
 
-## 📁 File Structure & Architecture
+## File Structure & Architecture
 
 ```text
 guesstimate/
@@ -183,7 +183,7 @@ guesstimate/
 
 ---
 
-## 🌌 Modern Visual Aesthetic
+## Modern Visual Aesthetic
 
 * **Theme Invariant transitions:** Fluid CSS Transitions between Light Mode and sleeeek HSL Dark Mode.
 * **Premium Micro-interactions:** Glassmorphic background blur, drifting grid backgrounds, floating isometric cards, and smooth scale transitions powered by Framer/Motion.
@@ -192,7 +192,7 @@ guesstimate/
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 Created with curiosity, manual backend tuning, and AI Pair Programming by **Soham Banerjee**.
 
