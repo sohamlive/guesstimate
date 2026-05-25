@@ -28,20 +28,16 @@ export const AdminLoginPage: React.FC = () => {
     }
 
     setLoading(true);
-    const { success, error } = await login(email, password);
+    const { success, session: authSession, error } = await login(email, password);
     setLoading(false);
 
     if (success) {
-      // Re-verify role
-      const s = await login(email, password); // session fetched
-      if (s.success) {
-        // Authenticated. Double check if administrative
-        if (email.toLowerCase().includes('admin')) {
-          toast.success('Admin validation confirmed.');
-          navigate('/admin/dashboard');
-        } else {
-          toast.error('Access Denied: You do not have administrative permissions.');
-        }
+      // Authenticated. Check if profile contains administrative role
+      if (authSession?.profile?.role === 'admin') {
+        toast.success('Admin validation confirmed.');
+        navigate('/admin/dashboard');
+      } else {
+        toast.error('Access Denied: You do not have administrative permissions.');
       }
     } else {
       toast.error(error?.message || 'Administrative authentication failed.');
@@ -166,7 +162,7 @@ export const AdminLoginPage: React.FC = () => {
         </div>
 
         {/* Diagnostic Panel */}
-        <div className={`mt-6 rounded-xl border p-4 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-205 shadow-lg shadow-zinc-100/50' : 'bg-[#121212] border-zinc-800/80'}`}>
+        {/* <div className={`mt-6 rounded-xl border p-4 w-full transition-all duration-300 ${isLight ? 'bg-white border-zinc-205 shadow-lg shadow-zinc-100/50' : 'bg-[#121212] border-zinc-800/80'}`}>
           <span className="text-[10px] font-bold text-zinc-500 block uppercase tracking-widest mb-2 font-mono flex items-center gap-1">
             <Key size={11} className={isLight ? 'text-zinc-700' : 'text-zinc-300'} />
             TESTING ADMIN ENTRY
@@ -180,7 +176,7 @@ export const AdminLoginPage: React.FC = () => {
           >
             <span>🛡 Apply Admin Credentials ( admin@ / admin )</span>
           </button>
-        </div>
+        </div> */}
 
       </div>
     </div>

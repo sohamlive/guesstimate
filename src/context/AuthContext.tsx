@@ -5,8 +5,8 @@ import { db } from '../lib/db';
 interface AuthContextType {
   session: AuthSession | null;
   loading: boolean;
-  login: (email: string, password?: string) => Promise<{ success: boolean; error: Error | null }>;
-  signUp: (email: string, password?: string, firstName?: string, lastName?: string) => Promise<{ success: boolean; error: Error | null }>;
+  login: (email: string, password?: string) => Promise<{ success: boolean; session?: AuthSession | null; error: Error | null }>;
+  signUp: (email: string, password?: string, firstName?: string, lastName?: string) => Promise<{ success: boolean; session?: AuthSession | null; error: Error | null }>;
   resetPassword: (email: string) => Promise<{ success: boolean; error: Error | null }>;
   logout: () => Promise<void>;
   updateProfileState: (updated: Partial<Profile>) => void;
@@ -38,14 +38,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { session: s, error } = await db.login(email, password);
       if (error) {
         setLoading(false);
-        return { success: false, error };
+        return { success: false, session: null, error };
       }
       setSession(s);
       setLoading(false);
-      return { success: true, error: null };
+      return { success: true, session: s, error: null };
     } catch (err: any) {
       setLoading(false);
-      return { success: false, error: err };
+      return { success: false, session: null, error: err };
     }
   };
 
@@ -55,14 +55,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { session: s, error } = await db.signUp(email, password, firstName, lastName);
       if (error) {
         setLoading(false);
-        return { success: false, error };
+        return { success: false, session: null, error };
       }
       setSession(s);
       setLoading(false);
-      return { success: true, error: null };
+      return { success: true, session: s, error: null };
     } catch (err: any) {
       setLoading(false);
-      return { success: false, error: err };
+      return { success: false, session: null, error: err };
     }
   };
 
