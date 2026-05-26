@@ -102,7 +102,7 @@ export const UserDashboard: React.FC = () => {
       } else if (nextStatus === 'retry') {
         toast.success('Added to your Retry queue.');
       } else {
-        toast.success('Removed from your Retry queue.');
+        toast.success('Removed from Solve/Retry list.');
       }
 
       // Sync back counters silently
