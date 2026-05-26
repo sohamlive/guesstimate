@@ -10,16 +10,16 @@ import {
 
 const INITIAL_CATEGORIES: Category[] = [
   { id: 'cat-1', name: 'Population' },
-  { id: 'cat-2', name: 'Market Sizing' },
-  { id: 'cat-3', name: 'Fermi Estimate' },
-  { id: 'cat-4', name: 'Scientific' },
+  { id: 'cat-2', name: 'Market' },
+  { id: 'cat-3', name: 'Revenue' },
+  { id: 'cat-4', name: 'Product' },
 ];
 
 const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-1',
     question: 'How many coffee shops are there in Manhattan?',
-    category_id: 'cat-2',
+    category_id: 'cat-1',
     difficulty: 'Medium',
     tags: ['retail', 'nyc', 'coffee'],
     url_1: 'https://en.wikipedia.org/wiki/Manhattan',
@@ -33,7 +33,7 @@ const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-2',
     question: 'How many piano tuners operate in Chicago?',
-    category_id: 'cat-3',
+    category_id: 'cat-2',
     difficulty: 'Hard',
     tags: ['chicago', 'music', 'classic-fermi'],
     url_1: 'https://en.wikipedia.org/wiki/Fermi_problem',
@@ -46,7 +46,7 @@ const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-3',
     question: 'What is the total mass of the Earth\'s atmosphere?',
-    category_id: 'cat-4',
+    category_id: 'cat-1',
     difficulty: 'Hard',
     tags: ['physics', 'earth', 'atmosphere'],
     url_1: 'https://en.wikipedia.org/wiki/Atmosphere_of_Earth',
@@ -59,7 +59,7 @@ const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-4',
     question: 'How many smartphones are sold globally each year?',
-    category_id: 'cat-2',
+    category_id: 'cat-4',
     difficulty: 'Medium',
     tags: ['tech', 'global', 'phones'],
     status: 'Published',
@@ -325,6 +325,149 @@ const mockAuth = {
     return null;
   }
 };
+
+// ==========================================
+// WRITE-AHEAD SYNC QUEUE TYPES & DRIVER
+// ==========================================
+
+export interface SyncQueueItem {
+  id: string;
+  type: 'toggle_progress' | 'save_notes' | 'toggle_vote';
+  userId: string;
+  questionId: string;
+  payload: any;
+  createdAt: string;
+  attempts: number;
+}
+
+let isSyncing = false;
+
+export const processSyncQueue = async (): Promise<void> => {
+  if (isSyncing) return;
+  if (!hasSupabaseConfig() || !supabase) return;
+
+  isSyncing = true;
+  try {
+    const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+    if (queue.length === 0) {
+      isSyncing = false;
+      return;
+    }
+
+    const activeQueue = [...queue];
+    while (activeQueue.length > 0) {
+      const item = activeQueue[0];
+
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        break; // Stop processing if we are explicitly offline
+      }
+
+      try {
+        if (item.type === 'toggle_progress') {
+          const { error } = await supabase
+            .from('user_progress')
+            .upsert({
+              user_id: item.userId,
+              question_id: item.questionId,
+              status: item.payload.status,
+              updated_at: item.createdAt
+            }, { onConflict: 'user_id,question_id' });
+          if (error) throw error;
+
+        } else if (item.type === 'save_notes') {
+          const { data: existingProgress } = await supabase
+            .from('user_progress')
+            .select('status')
+            .eq('user_id', item.userId)
+            .eq('question_id', item.questionId)
+            .maybeSingle();
+
+          const targetStatus = existingProgress?.status || 'none';
+
+          const { error } = await supabase
+            .from('user_progress')
+            .upsert({
+              user_id: item.userId,
+              question_id: item.questionId,
+              notes: item.payload.notes,
+              status: targetStatus,
+              updated_at: item.createdAt
+            }, { onConflict: 'user_id,question_id' });
+          if (error) throw error;
+
+        } else if (item.type === 'toggle_vote') {
+          const direction = item.payload.direction;
+          if (direction === null) {
+            const { error } = await supabase.from('user_votes').delete().eq('user_id', item.userId).eq('question_id', item.questionId);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase
+              .from('user_votes')
+              .upsert({
+                user_id: item.userId,
+                question_id: item.questionId,
+                vote: direction,
+                created_at: item.createdAt
+              }, { onConflict: 'user_id,question_id' });
+            if (error) throw error;
+          }
+
+          // Recalculate upvote & downvote counts
+          const { data: qVotes } = await supabase
+            .from('user_votes')
+            .select('vote')
+            .eq('question_id', item.questionId);
+
+          const upCount = (qVotes || []).filter(v => v.vote === 'up').length;
+          const downCount = (qVotes || []).filter(v => v.vote === 'down').length;
+
+          await supabase
+            .from('questions')
+            .update({ upvotes: upCount, downvotes: downCount })
+            .eq('id', item.questionId);
+        }
+
+        // Successfully processed. Shift out from queue
+        activeQueue.shift();
+        localStorage.setItem('g_sync_queue', JSON.stringify(activeQueue));
+
+      } catch (err: any) {
+        console.error('Error syncing queue item:', item, err);
+        const isNetworkErr = !err.status || err.status >= 500 || err.message?.includes('fetch') || err.message?.includes('network');
+
+        if (isNetworkErr) {
+          break; // Pause and retry on next trigger/timer
+        } else {
+          item.attempts = (item.attempts || 0) + 1;
+          if (item.attempts >= 5) {
+            console.warn(`Item failed 5 times, discarding:`, item);
+            activeQueue.shift();
+          } else {
+            activeQueue[0] = item;
+          }
+          localStorage.setItem('g_sync_queue', JSON.stringify(activeQueue));
+          break;
+        }
+      }
+    }
+  } catch (globalErr) {
+    console.error('Error in write-ahead queue runner:', globalErr);
+  } finally {
+    isSyncing = false;
+  }
+};
+
+// Bind standard Browser listeners to automatically drain the sync backlog when network returns
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    console.log('App is online. Processing Write-Ahead Log sync queue...');
+    processSyncQueue().catch(console.error);
+  });
+  // Auto-sync heartbeat every 20 seconds
+  setInterval(() => {
+    processSyncQueue().catch(console.error);
+  }, 20000);
+}
 
 export const db = {
   // Check if we are operational with live Supabase
@@ -770,122 +913,191 @@ export const db = {
   // ==========================================
 
   getUserProgress: async (userId: string): Promise<UserProgress[]> => {
+    // Proactively trigger background sync of any pending queue changes
+    processSyncQueue().catch(console.error);
+
+    let baseData: UserProgress[] = [];
     if (db.isLive()) {
       const { data, error } = await supabase!.from('user_progress').select('*').eq('user_id', userId);
       if (error) throw error;
-      return data || [];
+      baseData = data || [];
     } else {
       const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
-      return progress.filter(p => p.user_id === userId);
+      baseData = progress.filter(p => p.user_id === userId);
     }
+
+    // Overlay pending local write-ahead sync queue operations
+    const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+    const pendingProgress = queue.filter(item => item.userId === userId && (item.type === 'toggle_progress' || item.type === 'save_notes'));
+    pendingProgress.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    pendingProgress.forEach(item => {
+      let existing = baseData.find(p => p.question_id === item.questionId);
+      if (existing) {
+        if (item.type === 'toggle_progress') {
+          existing.status = item.payload.status;
+          existing.updated_at = item.createdAt;
+        } else if (item.type === 'save_notes') {
+          existing.notes = item.payload.notes;
+          existing.updated_at = item.createdAt;
+        }
+      } else {
+        const newProg: UserProgress = {
+          id: item.id,
+          user_id: item.userId,
+          question_id: item.questionId,
+          status: item.type === 'toggle_progress' ? item.payload.status : 'none',
+          notes: item.type === 'save_notes' ? item.payload.notes : '',
+          updated_at: item.createdAt
+        };
+        baseData.push(newProg);
+      }
+    });
+
+    return baseData;
   },
 
   getAllProgress: async (): Promise<UserProgress[]> => {
+    processSyncQueue().catch(console.error);
+
+    let baseData: UserProgress[] = [];
     if (db.isLive()) {
       const { data, error } = await supabase!.from('user_progress').select('*');
       if (error) throw error;
-      return data || [];
+      baseData = data || [];
     } else {
-      return JSON.parse(localStorage.getItem('g_progress') || '[]') as UserProgress[];
+      baseData = JSON.parse(localStorage.getItem('g_progress') || '[]') as UserProgress[];
     }
+
+    // Overlay pending items
+    const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+    const pendingProgress = queue.filter(item => item.type === 'toggle_progress' || item.type === 'save_notes');
+    pendingProgress.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    pendingProgress.forEach(item => {
+      let existing = baseData.find(p => p.user_id === item.userId && p.question_id === item.questionId);
+      if (existing) {
+        if (item.type === 'toggle_progress') {
+          existing.status = item.payload.status;
+          existing.updated_at = item.createdAt;
+        } else if (item.type === 'save_notes') {
+          existing.notes = item.payload.notes;
+          existing.updated_at = item.createdAt;
+        }
+      } else {
+        const newProg: UserProgress = {
+          id: item.id,
+          user_id: item.userId,
+          question_id: item.questionId,
+          status: item.type === 'toggle_progress' ? item.payload.status : 'none',
+          notes: item.type === 'save_notes' ? item.payload.notes : '',
+          updated_at: item.createdAt
+        };
+        baseData.push(newProg);
+      }
+    });
+
+    return baseData;
   },
 
   toggleProgressStatus: async (userId: string, questionId: string, status: ProgressStatus): Promise<UserProgress> => {
-    if (db.isLive()) {
-      // DB handles insert or update via upsert and composite match (user_id, question_id)
-      const { data, error } = await supabase!
-        .from('user_progress')
-        .upsert({
-          user_id: userId,
-          question_id: questionId,
-          status: status,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'user_id,question_id' })
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
-    } else {
-      const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
-      const idx = progress.findIndex(p => p.user_id === userId && p.question_id === questionId);
+    const timestamp = new Date().toISOString();
 
-      if (idx !== -1) {
-        progress[idx] = {
-          ...progress[idx],
-          status: status,
-          updated_at: new Date().toISOString()
-        };
-        localStorage.setItem('g_progress', JSON.stringify(progress));
-        return progress[idx];
-      } else {
-        const newProg: UserProgress = {
-          id: generateUuid(),
-          user_id: userId,
-          question_id: questionId,
-          status: status,
-          notes: '',
-          updated_at: new Date().toISOString()
-        };
-        progress.push(newProg);
-        localStorage.setItem('g_progress', JSON.stringify(progress));
-        return newProg;
-      }
+    // 1. Immediately write to Local Storage first to enable instant UI response
+    const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
+    const idx = progress.findIndex(p => p.user_id === userId && p.question_id === questionId);
+    let resultProgress: UserProgress;
+
+    if (idx !== -1) {
+      progress[idx] = {
+        ...progress[idx],
+        status: status,
+        updated_at: timestamp
+      };
+      localStorage.setItem('g_progress', JSON.stringify(progress));
+      resultProgress = progress[idx];
+    } else {
+      resultProgress = {
+        id: generateUuid(),
+        user_id: userId,
+        question_id: questionId,
+        status: status,
+        notes: '',
+        updated_at: timestamp
+      };
+      progress.push(resultProgress);
+      localStorage.setItem('g_progress', JSON.stringify(progress));
     }
+
+    if (db.isLive()) {
+      // 2. Wrap within write-ahead sync log entry
+      const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+      queue.push({
+        id: generateUuid(),
+        type: 'toggle_progress',
+        userId,
+        questionId,
+        payload: { status },
+        createdAt: timestamp,
+        attempts: 0
+      });
+      localStorage.setItem('g_sync_queue', JSON.stringify(queue));
+
+      // 3. Initiate async sync handling (unblocking)
+      processSyncQueue().catch(console.error);
+    }
+
+    return resultProgress;
   },
 
   saveNotes: async (userId: string, questionId: string, notes: string): Promise<UserProgress> => {
-    if (db.isLive()) {
-      // 1. Fetch existing progress status first to avoid overwriting a 'solved' or 'retry' state
-      const { data: existingProgress } = await supabase!
-        .from('user_progress')
-        .select('status')
-        .eq('user_id', userId)
-        .eq('question_id', questionId)
-        .maybeSingle();
+    const timestamp = new Date().toISOString();
 
-      const targetStatus = existingProgress?.status || 'none';
+    // 1. Immediately write to Local Storage for offline fallback support
+    const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
+    const idx = progress.findIndex(p => p.user_id === userId && p.question_id === questionId);
+    let resultProgress: UserProgress;
 
-      // 2. Upsert with the correct status
-      const { data, error } = await supabase!
-        .from('user_progress')
-        .upsert({
-          user_id: userId,
-          question_id: questionId,
-          notes: notes,
-          status: targetStatus,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'user_id,question_id' })
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+    if (idx !== -1) {
+      progress[idx] = {
+        ...progress[idx],
+        notes: notes,
+        updated_at: timestamp
+      };
+      localStorage.setItem('g_progress', JSON.stringify(progress));
+      resultProgress = progress[idx];
     } else {
-      const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
-      const idx = progress.findIndex(p => p.user_id === userId && p.question_id === questionId);
-
-      if (idx !== -1) {
-        progress[idx] = {
-          ...progress[idx],
-          notes: notes,
-          updated_at: new Date().toISOString()
-        };
-        localStorage.setItem('g_progress', JSON.stringify(progress));
-        return progress[idx];
-      } else {
-        const newProg: UserProgress = {
-          id: generateUuid(),
-          user_id: userId,
-          question_id: questionId,
-          status: 'none',
-          notes: notes,
-          updated_at: new Date().toISOString()
-        };
-        progress.push(newProg);
-        localStorage.setItem('g_progress', JSON.stringify(progress));
-        return newProg;
-      }
+      resultProgress = {
+        id: generateUuid(),
+        user_id: userId,
+        question_id: questionId,
+        status: 'none',
+        notes: notes,
+        updated_at: timestamp
+      };
+      progress.push(resultProgress);
+      localStorage.setItem('g_progress', JSON.stringify(progress));
     }
+
+    if (db.isLive()) {
+      // 2. Wrap within write-ahead sync log entry
+      const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+      queue.push({
+        id: generateUuid(),
+        type: 'save_notes',
+        userId,
+        questionId,
+        payload: { notes },
+        createdAt: timestamp,
+        attempts: 0
+      });
+      localStorage.setItem('g_sync_queue', JSON.stringify(queue));
+
+      // 3. Trigger async backlog worker
+      processSyncQueue().catch(console.error);
+    }
+
+    return resultProgress;
   },
 
   resetUserStats: async (userId: string): Promise<boolean> => {
@@ -912,95 +1124,139 @@ export const db = {
   // ==========================================
 
   getUserVotes: async (userId: string): Promise<UserVote[]> => {
+    processSyncQueue().catch(console.error);
+
+    let baseData: UserVote[] = [];
     if (db.isLive()) {
       const { data, error } = await supabase!.from('user_votes').select('*').eq('user_id', userId);
       if (error) throw error;
-      return data || [];
+      baseData = data || [];
     } else {
       const votes: UserVote[] = JSON.parse(localStorage.getItem('g_votes') || '[]');
-      return votes.filter(v => v.user_id === userId);
+      baseData = votes.filter(v => v.user_id === userId);
     }
-  },
 
-  getAllVotes: async (): Promise<UserVote[]> => {
-    if (db.isLive()) {
-      const { data, error } = await supabase!.from('user_votes').select('*');
-      if (error) throw error;
-      return data || [];
-    } else {
-      return JSON.parse(localStorage.getItem('g_votes') || '[]');
-    }
-  },
+    const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+    const pendingVotes = queue.filter(item => item.userId === userId && item.type === 'toggle_vote');
+    pendingVotes.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-  toggleVote: async (userId: string, questionId: string, direction: VoteType | null): Promise<void> => {
-    if (db.isLive()) {
-      // In Supabase, delete or insert/update the vote.
+    pendingVotes.forEach(item => {
+      const idx = baseData.findIndex(v => v.question_id === item.questionId);
+      const direction = item.payload.direction;
       if (direction === null) {
-        // delete vote row
-        await supabase!.from('user_votes').delete().eq('user_id', userId).eq('question_id', questionId);
-      } else {
-        // upsert vote
-        await supabase!
-          .from('user_votes')
-          .upsert({
-            user_id: userId,
-            question_id: questionId,
-            vote: direction,
-            created_at: new Date().toISOString()
-          }, { onConflict: 'user_id,question_id' });
-      }
-
-      // Recalculate upvote and downvote counters on the question
-      const { data: votes } = await supabase!
-        .from('user_votes')
-        .select('vote')
-        .eq('question_id', questionId);
-
-      const upCount = (votes || []).filter(v => v.vote === 'up').length;
-      const downCount = (votes || []).filter(v => v.vote === 'down').length;
-
-      await supabase!
-        .from('questions')
-        .update({ upvotes: upCount, downvotes: downCount })
-        .eq('id', questionId);
-
-    } else {
-      const votes: UserVote[] = JSON.parse(localStorage.getItem('g_votes') || '[]');
-      const idx = votes.findIndex(v => v.user_id === userId && v.question_id === questionId);
-
-      const prevVote = idx !== -1 ? votes[idx].vote : null;
-
-      if (direction === null) {
-        if (idx !== -1) {
-          votes.splice(idx, 1);
-        }
+        if (idx !== -1) baseData.splice(idx, 1);
       } else {
         if (idx !== -1) {
-          votes[idx] = {
-            ...votes[idx],
-            vote: direction
-          };
+          baseData[idx].vote = direction;
         } else {
-          votes.push({
-            id: generateUuid(),
-            user_id: userId,
-            question_id: questionId,
+          baseData.push({
+            id: item.id,
+            user_id: item.userId,
+            question_id: item.questionId,
             vote: direction,
-            created_at: new Date().toISOString()
+            created_at: item.createdAt
           });
         }
       }
-      localStorage.setItem('g_votes', JSON.stringify(votes));
+    });
 
-      // Recalculate question counts
-      const questions: Question[] = JSON.parse(localStorage.getItem('g_questions') || '[]');
-      const qIdx = questions.findIndex(q => q.id === questionId);
-      if (qIdx !== -1) {
-        const qVotes = votes.filter(v => v.question_id === questionId);
-        questions[qIdx].upvotes = qVotes.filter(v => v.vote === 'up').length;
-        questions[qIdx].downvotes = qVotes.filter(v => v.vote === 'down').length;
-        localStorage.setItem('g_questions', JSON.stringify(questions));
+    return baseData;
+  },
+
+  getAllVotes: async (): Promise<UserVote[]> => {
+    processSyncQueue().catch(console.error);
+
+    let baseData: UserVote[] = [];
+    if (db.isLive()) {
+      const { data, error } = await supabase!.from('user_votes').select('*');
+      if (error) throw error;
+      baseData = data || [];
+    } else {
+      baseData = JSON.parse(localStorage.getItem('g_votes') || '[]') as UserVote[];
+    }
+
+    const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+    const pendingVotes = queue.filter(item => item.type === 'toggle_vote');
+    pendingVotes.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    pendingVotes.forEach(item => {
+      const idx = baseData.findIndex(v => v.user_id === item.userId && v.question_id === item.questionId);
+      const direction = item.payload.direction;
+      if (direction === null) {
+        if (idx !== -1) baseData.splice(idx, 1);
+      } else {
+        if (idx !== -1) {
+          baseData[idx].vote = direction;
+        } else {
+          baseData.push({
+            id: item.id,
+            user_id: item.userId,
+            question_id: item.questionId,
+            vote: direction,
+            created_at: item.createdAt
+          });
+        }
       }
+    });
+
+    return baseData;
+  },
+
+  toggleVote: async (userId: string, questionId: string, direction: VoteType | null): Promise<void> => {
+    const timestamp = new Date().toISOString();
+
+    // 1. Immediately write to Local Storage first for offline fallback support
+    const votes: UserVote[] = JSON.parse(localStorage.getItem('g_votes') || '[]');
+    const idx = votes.findIndex(v => v.user_id === userId && v.question_id === questionId);
+
+    if (direction === null) {
+      if (idx !== -1) {
+        votes.splice(idx, 1);
+      }
+    } else {
+      if (idx !== -1) {
+        votes[idx] = {
+          ...votes[idx],
+          vote: direction
+        };
+      } else {
+        votes.push({
+          id: generateUuid(),
+          user_id: userId,
+          question_id: questionId,
+          vote: direction,
+          created_at: timestamp
+        });
+      }
+    }
+    localStorage.setItem('g_votes', JSON.stringify(votes));
+
+    // Recalculate local question counts
+    const questions: Question[] = JSON.parse(localStorage.getItem('g_questions') || '[]');
+    const qIdx = questions.findIndex(q => q.id === questionId);
+    if (qIdx !== -1) {
+      const qVotes = votes.filter(v => v.question_id === questionId);
+      questions[qIdx].upvotes = qVotes.filter(v => v.vote === 'up').length;
+      questions[qIdx].downvotes = qVotes.filter(v => v.vote === 'down').length;
+      localStorage.setItem('g_questions', JSON.stringify(questions));
+    }
+
+    if (db.isLive()) {
+      // 2. Wrap within write-ahead sync log entry
+      const queue: SyncQueueItem[] = JSON.parse(localStorage.getItem('g_sync_queue') || '[]');
+      queue.push({
+        id: generateUuid(),
+        type: 'toggle_vote',
+        userId,
+        questionId,
+        payload: { direction },
+        createdAt: timestamp,
+        attempts: 0
+      });
+      localStorage.setItem('g_sync_queue', JSON.stringify(queue));
+
+      // 3. Trigger async sync processing (unblocking)
+      processSyncQueue().catch(console.error);
     }
   },
 
