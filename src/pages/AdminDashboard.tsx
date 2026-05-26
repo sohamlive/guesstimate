@@ -1016,7 +1016,7 @@ export const AdminDashboard: React.FC = () => {
                 }`}>
                 {readOnlyUStats.first_name[0].toUpperCase()}{readOnlyUStats.last_name[0].toUpperCase()}
               </div>
-              <h4 className={`font-serif italic font-medium text-lg transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
+              <h4 className={`font-serif italic font-bold text-lg ${isLight ? 'text-[#1A2E6C]' : 'text-zinc-100'}`}>
                 {readOnlyUStats.first_name} {readOnlyUStats.last_name}
               </h4>
               <span className={`text-[12px] font-mono lowercase tracking-widest block mt-1 ${isLight ? 'text-zinc-450' : 'text-zinc-400'}`}>{readOnlyUStats.email}</span>

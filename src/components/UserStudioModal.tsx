@@ -191,7 +191,7 @@ export const UserStudioModal: React.FC<UserStudioModalProps> = ({
 
         {/* Header bar */}
         <div className={`flex items-center justify-between px-6 py-4 border-b transition-colors duration-300 ${isLight ? 'border-zinc-200' : 'border-zinc-800/80 bg-bg-canvas'}`}>
-          <span className={`font-serif italic text-lg transition-colors ${isLight ? 'text-zinc-900' : 'text-white'}`}>
+          <span className={`font-serif italic font-bold text-lg ${isLight ? 'text-[#1A2E6C]' : 'text-zinc-100'}`}>
             {isEditMode ? 'Edit User Credentials' : 'Provision New User'}
           </span>
           <button
