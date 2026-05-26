@@ -182,6 +182,20 @@ export const UserDashboard: React.FC = () => {
 
   useEffect(() => {
     loadDashboardData();
+    const handleSyncRollback = () => {
+      // Refresh local user progress and states automatically
+      loadDashboardData().catch(console.error);
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('g_sync_rollback', handleSyncRollback);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('g_sync_rollback', handleSyncRollback);
+      }
+    };
   }, [userId]);
 
   const handleCategoryToggle = (catId: string) => {

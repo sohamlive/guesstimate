@@ -3,6 +3,7 @@ import {
   Category, Question, Profile, UserProgress, UserVote,
   Difficulty, QuestionStatus, ProgressStatus, VoteType, UserRole, AuthSession
 } from '../types';
+import { toast } from 'react-hot-toast';
 
 // ==========================================
 // PRE-SEEDED SEED DATA FOR OFFLINE / MOCK DRIVER
@@ -10,16 +11,16 @@ import {
 
 const INITIAL_CATEGORIES: Category[] = [
   { id: 'cat-1', name: 'Population' },
-  { id: 'cat-2', name: 'Market' },
-  { id: 'cat-3', name: 'Revenue' },
-  { id: 'cat-4', name: 'Product' },
+  { id: 'cat-2', name: 'Market Sizing' },
+  { id: 'cat-3', name: 'Fermi Estimate' },
+  { id: 'cat-4', name: 'Scientific' },
 ];
 
 const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-1',
     question: 'How many coffee shops are there in Manhattan?',
-    category_id: 'cat-1',
+    category_id: 'cat-2',
     difficulty: 'Medium',
     tags: ['retail', 'nyc', 'coffee'],
     url_1: 'https://en.wikipedia.org/wiki/Manhattan',
@@ -33,7 +34,7 @@ const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-2',
     question: 'How many piano tuners operate in Chicago?',
-    category_id: 'cat-2',
+    category_id: 'cat-3',
     difficulty: 'Hard',
     tags: ['chicago', 'music', 'classic-fermi'],
     url_1: 'https://en.wikipedia.org/wiki/Fermi_problem',
@@ -46,7 +47,7 @@ const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-3',
     question: 'What is the total mass of the Earth\'s atmosphere?',
-    category_id: 'cat-1',
+    category_id: 'cat-4',
     difficulty: 'Hard',
     tags: ['physics', 'earth', 'atmosphere'],
     url_1: 'https://en.wikipedia.org/wiki/Atmosphere_of_Earth',
@@ -59,7 +60,7 @@ const INITIAL_QUESTIONS: Question[] = [
   {
     id: 'q-4',
     question: 'How many smartphones are sold globally each year?',
-    category_id: 'cat-4',
+    category_id: 'cat-2',
     difficulty: 'Medium',
     tags: ['tech', 'global', 'phones'],
     status: 'Published',
@@ -336,11 +337,82 @@ export interface SyncQueueItem {
   userId: string;
   questionId: string;
   payload: any;
+  prevPayload?: any; // To store previous state for exact rollback
   createdAt: string;
   attempts: number;
 }
 
 let isSyncing = false;
+
+// Helper to revert optimistic changes in Local Storage
+const rollbackLocalStorage = async (item: SyncQueueItem): Promise<void> => {
+  const timestamp = new Date().toISOString();
+  try {
+    if (item.type === 'toggle_progress') {
+      const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
+      const idx = progress.findIndex(p => p.user_id === item.userId && p.question_id === item.questionId);
+      const prevStatus = item.prevPayload?.status || 'none';
+      if (idx !== -1) {
+        progress[idx] = {
+          ...progress[idx],
+          status: prevStatus,
+          updated_at: timestamp
+        };
+        localStorage.setItem('g_progress', JSON.stringify(progress));
+      }
+    } else if (item.type === 'save_notes') {
+      const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
+      const idx = progress.findIndex(p => p.user_id === item.userId && p.question_id === item.questionId);
+      const prevNotes = item.prevPayload?.notes || '';
+      if (idx !== -1) {
+        progress[idx] = {
+          ...progress[idx],
+          notes: prevNotes,
+          updated_at: timestamp
+        };
+        localStorage.setItem('g_progress', JSON.stringify(progress));
+      }
+    } else if (item.type === 'toggle_vote') {
+      const votes: UserVote[] = JSON.parse(localStorage.getItem('g_votes') || '[]');
+      const idx = votes.findIndex(v => v.user_id === item.userId && v.question_id === item.questionId);
+      const prevDirection = item.prevPayload?.direction || null;
+
+      if (prevDirection === null) {
+        if (idx !== -1) {
+          votes.splice(idx, 1);
+        }
+      } else {
+        if (idx !== -1) {
+          votes[idx] = {
+            ...votes[idx],
+            vote: prevDirection
+          };
+        } else {
+          votes.push({
+            id: generateUuid(),
+            user_id: item.userId,
+            question_id: item.questionId,
+            vote: prevDirection,
+            created_at: timestamp
+          });
+        }
+      }
+      localStorage.setItem('g_votes', JSON.stringify(votes));
+
+      // Recalculate local question counts
+      const questions: Question[] = JSON.parse(localStorage.getItem('g_questions') || '[]');
+      const qIdx = questions.findIndex(q => q.id === item.questionId);
+      if (qIdx !== -1) {
+        const qVotes = votes.filter(v => v.question_id === item.questionId);
+        questions[qIdx].upvotes = qVotes.filter(v => v.vote === 'up').length;
+        questions[qIdx].downvotes = qVotes.filter(v => v.vote === 'down').length;
+        localStorage.setItem('g_questions', JSON.stringify(questions));
+      }
+    }
+  } catch (rollbackErr) {
+    console.error('Failed to rollback local storage state:', rollbackErr);
+  }
+};
 
 export const processSyncQueue = async (): Promise<void> => {
   if (isSyncing) return;
@@ -441,6 +513,66 @@ export const processSyncQueue = async (): Promise<void> => {
           item.attempts = (item.attempts || 0) + 1;
           if (item.attempts >= 5) {
             console.warn(`Item failed 5 times, discarding:`, item);
+
+            // Revert changes in local state to prevent visual mismatch
+            await rollbackLocalStorage(item);
+
+            // Fetch the specific question title to reference in the toast
+            let questionTitle = 'Unknown Challenge';
+            try {
+              if (supabase) {
+                const { data } = await supabase.from('questions').select('question').eq('id', item.questionId).maybeSingle();
+                if (data?.question) {
+                  questionTitle = data.question;
+                }
+              }
+            } catch (queryErr) {
+              console.warn('Failed to query fallback question title', queryErr);
+            }
+
+            if (questionTitle === 'Unknown Challenge') {
+              try {
+                const questions: Question[] = JSON.parse(localStorage.getItem('g_questions') || '[]');
+                const questionObj = questions.find(q => q.id === item.questionId);
+                if (questionObj) {
+                  questionTitle = questionObj.question;
+                }
+              } catch (storageErr) {
+                console.warn('Failed reading g_questions fallback', storageErr);
+              }
+            }
+
+            const truncatedTitle = questionTitle.length > 50 ? questionTitle.substring(0, 47) + '...' : questionTitle;
+            let rollbackMsg = `Failed to sync changes for "${truncatedTitle}". We had to revert your changes.`;
+            if (item.type === 'toggle_progress') {
+              rollbackMsg = `Progress sync failed for "${truncatedTitle}". Retries exceeded; state reverted.`;
+            } else if (item.type === 'save_notes') {
+              rollbackMsg = `Draft notes sync failed for "${truncatedTitle}". State reverted to previous draft.`;
+            } else if (item.type === 'toggle_vote') {
+              rollbackMsg = `Vote registration failed for "${truncatedTitle}". Reverted reaction.`;
+            }
+
+            // Fire standard react-hot-toast notification
+            try {
+              toast.error(rollbackMsg, {
+                duration: 6000,
+                position: 'top-center'
+              });
+            } catch (toastErr) {
+              console.warn('Could not render toast on background error:', toastErr);
+            }
+
+            // Dispatch global event for listeners in active views to immediately reload their state
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('g_sync_rollback', {
+                detail: {
+                  questionId: item.questionId,
+                  type: item.type,
+                  message: rollbackMsg
+                }
+              }));
+            }
+
             activeQueue.shift();
           } else {
             activeQueue[0] = item;
@@ -1007,8 +1139,10 @@ export const db = {
     const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
     const idx = progress.findIndex(p => p.user_id === userId && p.question_id === questionId);
     let resultProgress: UserProgress;
+    let prevStatus: ProgressStatus = 'none';
 
     if (idx !== -1) {
+      prevStatus = progress[idx].status;
       progress[idx] = {
         ...progress[idx],
         status: status,
@@ -1038,6 +1172,7 @@ export const db = {
         userId,
         questionId,
         payload: { status },
+        prevPayload: { status: prevStatus },
         createdAt: timestamp,
         attempts: 0
       });
@@ -1057,8 +1192,10 @@ export const db = {
     const progress: UserProgress[] = JSON.parse(localStorage.getItem('g_progress') || '[]');
     const idx = progress.findIndex(p => p.user_id === userId && p.question_id === questionId);
     let resultProgress: UserProgress;
+    let prevNotes = '';
 
     if (idx !== -1) {
+      prevNotes = progress[idx].notes || '';
       progress[idx] = {
         ...progress[idx],
         notes: notes,
@@ -1088,6 +1225,7 @@ export const db = {
         userId,
         questionId,
         payload: { notes },
+        prevPayload: { notes: prevNotes },
         createdAt: timestamp,
         attempts: 0
       });
@@ -1208,6 +1346,7 @@ export const db = {
     // 1. Immediately write to Local Storage first for offline fallback support
     const votes: UserVote[] = JSON.parse(localStorage.getItem('g_votes') || '[]');
     const idx = votes.findIndex(v => v.user_id === userId && v.question_id === questionId);
+    const prevVote = idx !== -1 ? votes[idx].vote : null;
 
     if (direction === null) {
       if (idx !== -1) {
@@ -1250,6 +1389,7 @@ export const db = {
         userId,
         questionId,
         payload: { direction },
+        prevPayload: { direction: prevVote },
         createdAt: timestamp,
         attempts: 0
       });
