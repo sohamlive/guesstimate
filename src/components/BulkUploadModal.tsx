@@ -363,8 +363,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
           }`}>
           <div className="flex items-center gap-2">
             <FileSpreadsheet className={`w-5 h-5 ${isLight ? 'text-zinc-800' : 'text-zinc-100'}`} />
-            <span className={`font-serif italic text-lg font-bold transition-colors ${isLight ? 'text-zinc-900' : 'text-white'
-              }`}>
+            <span className={`font-serif italic font-bold text-lg ${isLight ? 'text-[#1A2E6C]' : 'text-zinc-100'}`}>
               Bulk Upload Questions
             </span>
           </div>
